@@ -1,0 +1,172 @@
+{
+  "summary": {
+    "best_model": "one_class_svm",
+    "best_f1_score": 0.6666666666666666,
+    "models_evaluated": 4,
+    "total_test_samples": 8,
+    "anomaly_rate": 0.5
+  },
+  "model_comparison": {
+    "isolation_forest": {
+      "f1": 0.5,
+      "precision": 0.5,
+      "recall": 0.5,
+      "auc_roc": 0.5,
+      "auc_pr": 0.4380952380952381
+    },
+    "one_class_svm": {
+      "f1": 0.6666666666666666,
+      "precision": 0.5,
+      "recall": 1.0,
+      "auc_roc": 0.9375,
+      "auc_pr": 0.94375
+    },
+    "gnn_autoencoder": {
+      "f1": 0.6666666666666666,
+      "precision": 0.5,
+      "recall": 1.0,
+      "auc_roc": 0.875,
+      "auc_pr": 0.8708333333333332
+    },
+    "ensemble": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "auc_roc": 0.5,
+      "auc_pr": 0.75
+    }
+  },
+  "threshold_analysis": {
+    "isolation_forest": {
+      "f1_score": 0.0,
+      "precision": 0.0,
+      "recall": 0.0
+    },
+    "one_class_svm": {
+      "f1_score": 0.0,
+      "precision": 0.0,
+      "recall": 0.0
+    },
+    "gnn_autoencoder": {
+      "f1_score": 0.0,
+      "precision": 0.0,
+      "recall": 0.0
+    },
+    "ensemble": {
+      "f1_score": 0.0,
+      "precision": 0.0,
+      "recall": 0.0
+    }
+  },
+  "anomaly_type_analysis": {
+    "isolation_forest": {
+      "normal": {
+        "count": 4,
+        "false_positive_rate": 0.5,
+        "specificity": 0.5
+      },
+      "tool_failure_cascades": {
+        "count": 2,
+        "detection_rate": 0.0,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "infinite_loops": {
+        "count": 1,
+        "detection_rate": 1.0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "suboptimal_paths": {
+        "count": 1,
+        "detection_rate": 1.0,
+        "recall": 1.0,
+        "precision": 1.0
+      }
+    },
+    "one_class_svm": {
+      "normal": {
+        "count": 4,
+        "false_positive_rate": 1.0,
+        "specificity": 0.0
+      },
+      "tool_failure_cascades": {
+        "count": 2,
+        "detection_rate": 1.0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "infinite_loops": {
+        "count": 1,
+        "detection_rate": 1.0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "suboptimal_paths": {
+        "count": 1,
+        "detection_rate": 1.0,
+        "recall": 1.0,
+        "precision": 1.0
+      }
+    },
+    "gnn_autoencoder": {
+      "normal": {
+        "count": 4,
+        "false_positive_rate": 1.0,
+        "specificity": 0.0
+      },
+      "tool_failure_cascades": {
+        "count": 2,
+        "detection_rate": 1.0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "infinite_loops": {
+        "count": 1,
+        "detection_rate": 1.0,
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "suboptimal_paths": {
+        "count": 1,
+        "detection_rate": 1.0,
+        "recall": 1.0,
+        "precision": 1.0
+      }
+    },
+    "ensemble": {
+      "normal": {
+        "count": 4,
+        "false_positive_rate": 0.0,
+        "specificity": 1.0
+      },
+      "tool_failure_cascades": {
+        "count": 2,
+        "detection_rate": 0.0,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "infinite_loops": {
+        "count": 1,
+        "detection_rate": 0.0,
+        "recall": 0.0,
+        "precision": 0.0
+      },
+      "suboptimal_paths": {
+        "count": 1,
+        "detection_rate": 0.0,
+        "recall": 0.0,
+        "precision": 0.0
+      }
+    }
+  },
+  "recommendations": [
+    "Use one_class_svm model for deployment (best F1: 0.667)",
+    "isolation_forest: Low precision (0.500) - many false positives",
+    "isolation_forest: Low recall (0.500) - missing anomalies",
+    "one_class_svm: Low precision (0.500) - many false positives",
+    "gnn_autoencoder: Low precision (0.500) - many false positives",
+    "ensemble: Low precision (0.000) - many false positives",
+    "ensemble: Low recall (0.000) - missing anomalies"
+  ]
+}

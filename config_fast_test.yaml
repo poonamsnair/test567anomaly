@@ -1,0 +1,227 @@
+# Fast Test Configuration for AI Agent Trajectory Anomaly Detection System
+
+# Data Generation Configuration
+data_generation:
+  num_normal_trajectories: 150  # Increased for better training
+  trajectory_patterns:
+    simple_linear: {min_nodes: 3, max_nodes: 8, weight: 0.4}
+    branched_analysis: {min_nodes: 5, max_nodes: 12, weight: 0.35}
+    multi_agent_handoffs: {min_nodes: 6, max_nodes: 15, weight: 0.25}
+  
+  # Agent types and their capabilities
+  agent_types:
+    - Planner
+    - Executor
+    - Validator
+    - Coordinator
+  
+  # Tool types available to agents
+  tool_types:
+    - web_search
+    - read_document
+    - analyze_data
+    - write_code
+    - validate_result
+
+# Anomaly Injection Configuration
+anomaly_injection:
+  total_anomalous_trajectories: 75  # Increased for better evaluation
+  anomaly_types:
+    infinite_loops: {severity: critical, ratio: 0.25}
+    suboptimal_paths: {severity: medium, ratio: 0.3}
+    tool_failure_cascades: {severity: high, ratio: 0.25}
+    planning_paralysis: {severity: medium, ratio: 0.2}
+  
+  # Severity level definitions
+  severity_levels:
+    low: {degradation_range: [0.1, 0.2], user_impact: minimal}
+    medium: {degradation_range: [0.2, 0.4], user_impact: noticeable}
+    high: {degradation_range: [0.4, 0.7], user_impact: significant}
+    critical: {degradation_range: [0.7, 1.0], user_impact: system_failure}
+
+# Graph Processing Configuration
+graph_processing:
+  # Node2Vec parameters (simplified)
+  node2vec:
+    dimensions: [32, 64]  # Reduced dimensions
+    walk_length: [10, 20]  # Shorter walks
+    num_walks: [50, 100]  # Fewer walks
+    p: [1.0]  # Single value
+    q: [1.0]  # Single value
+    window: [5]  # Single value
+    min_count: [1]  # Single value
+    workers: 2  # Fewer workers
+  
+  # DeepWalk parameters (simplified)
+  deepwalk:
+    dimensions: [32, 64]  # Reduced dimensions
+    walk_length: [15, 30]  # Shorter walks
+    num_walks: [30, 60]  # Fewer walks
+    window: [5]  # Single value
+    min_count: [0]  # Single value
+    sg: 1  # Skip-gram
+  
+  # GraphSAGE parameters (primary method)
+  graphsage:
+    hidden_dims: [[32, 64], [64, 128]]  # Multiple architectures
+    output_dim: [32, 64]  # Output dimensions
+    learning_rate: [0.001, 0.01]  # Learning rates
+    epochs: [50, 100]  # Training epochs
+    batch_size: [16, 32]  # Batch sizes
+    dropout: [0.1, 0.3]  # Dropout rates
+    aggregator: ['mean', 'max']  # Aggregation methods
+  
+  # Graph-level aggregation methods
+  aggregation_methods:
+    - mean
+    - max
+  
+  # Centrality measures for node importance
+  centrality_measures:
+    - betweenness
+    - closeness
+
+# Feature Engineering Configuration
+feature_engineering:
+  # Structural features (improved set)
+  structural_features:
+    - num_nodes
+    - num_edges
+    - density
+    - diameter
+    - betweenness_centrality
+    - closeness_centrality
+    - clustering_coefficient
+    - average_degree
+    - degree_variance
+  
+  # DAG-specific features (improved set)
+  dag_features:
+    - topological_sort_validation
+    - longest_path_in_dag
+    - dag_depth
+    - branching_factor
+    - leaf_node_ratio
+    - root_to_leaf_paths
+  
+  # Temporal features (improved set)
+  temporal_features:
+    - total_duration
+    - average_node_duration
+    - duration_variance
+    - inter_node_delays
+    - max_concurrent_operations
+    - idle_time_ratio
+  
+  # Semantic features (improved set)
+  semantic_features:
+    - agent_type_counts
+    - handoff_frequency
+    - tool_type_distribution
+    - error_frequency
+    - agent_specialization_index
+    - tool_usage_efficiency
+
+# Model Configuration
+models:
+  # Isolation Forest (improved)
+  isolation_forest:
+    n_estimators: [200, 300]  # Increased for better stability
+    contamination: [0.03, 0.05, 0.08, 0.1]  # More conservative options
+    max_features: [0.5, 0.75, 1.0]  # More feature sampling options
+    max_samples: [0.5, 0.75, 1.0]  # More sample sampling options
+    bootstrap: [true, false]  # Try both bootstrap options
+    random_state: 42
+  
+  # One-Class SVM (improved)
+  one_class_svm:
+    kernel: [rbf, linear, poly]  # Added poly kernel
+    gamma: [scale, auto, 0.1, 0.01]  # More gamma options
+    nu: [0.05, 0.1, 0.15, 0.2]  # More nu options
+    degree: [2, 3]  # For poly kernel
+  
+  # GNN Diffusion Autoencoder (simplified)
+  gnn_autoencoder:
+    hidden_dims: [[32, 64]]  # Single option
+    learning_rate: [0.001]  # Single value
+    dropout: [0.1]  # Single value
+    diffusion_steps: [3]  # Single value
+    batch_size: [16]  # Single value
+    epochs: [50]  # Reduced epochs
+    gnn_types: [GCN]  # Single type
+
+# Evaluation Configuration
+evaluation:
+  # Data splitting
+  data_split:
+    train_ratio: 0.6  # Normal trajectories only
+    validation_ratio: 0.2  # Normal + known anomalies
+    test_ratio: 0.2  # Normal + unknown anomalies
+  
+  # Threshold calibration methods (improved)
+  threshold_calibration:
+    - roc_optimization
+    - pr_optimization
+    - f1_maximization
+    - fixed_percentile_95
+    - knee_point_detection
+  
+  # Evaluation metrics (improved set)
+  metrics:
+    - precision
+    - recall
+    - f1
+    - accuracy
+    - auc_roc
+    - auc_pr
+    - silhouette_score
+    - severity_weighted_performance
+
+# Visualization Configuration
+visualization:
+  # Graph layouts
+  graph_layouts:
+    - spring
+    - hierarchical
+  
+  # Color schemes
+  color_schemes:
+    node_types: viridis
+    agent_types: Set3
+    anomaly_severity: Reds
+  
+  # Figure settings
+  figure_settings:
+    dpi: 150  # Lower DPI for faster generation
+    format: png
+    bbox_inches: tight
+  
+  # Interactive plots
+  interactive:
+    enabled: false  # Disabled for faster testing
+    renderer: browser
+
+# System Configuration
+system:
+  # Parallel processing
+  n_jobs: 2  # Limited for faster testing
+  
+  # Memory management
+  memory_limit_gb: 4  # Lower limit
+  chunk_size: 500  # Smaller chunks
+  
+  # Logging
+  logging:
+    level: INFO
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    file: logs/fast_test.log
+  
+  # Random seed for reproducibility
+  random_seed: 42
+  
+  # Output directories
+  output_dirs:
+    models: results_fast_test/models/
+    charts: results_fast_test/charts/
+    data: results_fast_test/data/
+    logs: results_fast_test/logs/ 

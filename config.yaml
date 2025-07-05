@@ -1,0 +1,347 @@
+# AI Agent Trajectory Anomaly Detection System Configuration
+
+# Data Generation Configuration
+data_generation:
+  num_normal_trajectories: 1000  # Production-scale dataset as per original vision
+  trajectory_patterns:
+    simple_linear: {min_nodes: 5, max_nodes: 10, weight: 0.3}
+    branched_analysis: {min_nodes: 10, max_nodes: 20, weight: 0.25}
+    multi_agent_handoffs: {min_nodes: 15, max_nodes: 25, weight: 0.2}
+    complex_research: {min_nodes: 20, max_nodes: 40, weight: 0.15}
+    error_recovery: {min_nodes: 10, max_nodes: 30, weight: 0.1}
+  
+  # Agent types and their capabilities
+  agent_types:
+    - Planner
+    - Executor
+    - Validator
+    - Coordinator
+  
+  # Tool types available to agents
+  tool_types:
+    - web_search
+    - read_document
+    - prepare_document
+    - analyze_data
+    - deep_research
+    - write_code
+    - memory_store_retrieve
+    - external_api
+
+# Anomaly Injection Configuration
+anomaly_injection:
+  total_anomalous_trajectories: 200  # 20% of normal trajectories for comprehensive evaluation
+  anomaly_types:
+    infinite_loops: {severity: critical, ratio: 0.15}
+    suboptimal_paths: {severity: medium, ratio: 0.15}
+    tool_failure_cascades: {severity: high, ratio: 0.12}
+    planning_paralysis: {severity: medium, ratio: 0.10}
+    memory_inconsistencies: {severity: high, ratio: 0.10}
+    timeout_cascades: {severity: high, ratio: 0.10}
+    handoff_failures: {severity: critical, ratio: 0.08}
+    validation_loops: {severity: medium, ratio: 0.08}
+    context_drift: {severity: low, ratio: 0.07}
+    incomplete_responses: {severity: critical, ratio: 0.05}
+  
+  # Severity level definitions
+  severity_levels:
+    low: {degradation_range: [0.1, 0.2], user_impact: minimal}
+    medium: {degradation_range: [0.2, 0.4], user_impact: noticeable}
+    high: {degradation_range: [0.4, 0.7], user_impact: significant}
+    critical: {degradation_range: [0.7, 1.0], user_impact: system_failure}
+
+# Graph Processing Configuration
+graph_processing:
+  # Node2Vec parameters - Comprehensive hyperparameter tuning as per original vision
+  node2vec:
+    dimensions: [64, 128, 256]
+    walk_length: [30, 50, 80]
+    num_walks: [200, 500, 1000]
+    p: [0.5, 1.0, 2.0]  # Return parameter
+    q: [0.5, 1.0, 2.0]  # In-out parameter
+    window: [5, 10, 15]
+    min_count: [1, 3, 5]
+    workers: 4
+  
+  # DeepWalk parameters - Comprehensive hyperparameter tuning as per original vision
+  deepwalk:
+    dimensions: [64, 128, 256]
+    walk_length: [40, 80, 120]
+    num_walks: [80, 200, 400]
+    window: [5, 10, 15]
+    min_count: [0, 1, 3]
+    sg: 1  # Skip-gram
+  
+  # Graph-level aggregation methods
+  aggregation_methods:
+    - mean
+    - max
+    - sum
+    - weighted_mean
+  
+  # Centrality measures for node importance
+  centrality_measures:
+    - betweenness
+    - closeness
+    - eigenvector
+
+# Feature Engineering Configuration
+feature_engineering:
+  # Feature categories to extract
+  structural_features:
+    - density
+    - diameter
+    - average_shortest_path_length
+    - betweenness_centrality
+    - closeness_centrality
+    - eigenvector_centrality
+    - clustering_coefficient
+    - transitivity
+    - longest_path_length
+    - number_connected_components
+    - node_connectivity
+    - edge_connectivity
+  
+  # DAG-specific features
+  dag_features:
+    - dag_depth
+    - dag_longest_path
+    - level_statistics
+    - branching_factor
+    - parallel_paths
+    - execution_gaps
+    - concurrency_estimate
+    - temporal_consistency
+    - temporal_anomalies
+  
+  # Temporal features
+  temporal_features:
+    - duration_statistics
+    - execution_patterns
+    - timing_anomalies
+    - temporal_sequences
+    - performance_trends
+  
+  # Semantic features
+  semantic_features:
+    - error_patterns
+    - recovery_patterns
+    - agent_behavior
+    - tool_usage_patterns
+    - success_patterns
+  
+  # Graph structure features (essential for GNNs)
+  graph_structure_features:
+    enabled: true
+    adjacency_features: true
+    edge_attribute_features: true
+    degree_features: true
+    connectivity_features: true
+    centrality_distribution_features: true
+    path_features: true
+    topology_features: true
+
+# Model Configuration
+models:
+  # Isolation Forest Configuration
+  isolation_forest:
+    enabled: true
+    hyperparameter_tuning: true
+    
+    # Model parameters
+    n_estimators: [50, 100, 200]
+    contamination: [0.05, 0.1, 0.15]
+    max_features: [0.5, 0.75, 1.0]
+    max_samples: [0.5, 0.75, 1.0]
+    bootstrap: [True, False]
+    random_state: 42
+    
+    # Feature selection to remove irrelevant features
+    feature_selection:
+      enabled: true
+      importance_method: 'comprehensive'  # 'isolation_forest', 'variance', 'correlation', 'comprehensive'
+      selection_method: 'irrelevant_removal'  # 'threshold', 'top_k', 'irrelevant_removal'
+      threshold_percentile: 25.0  # For threshold-based selection
+      min_features: 5  # Minimum number of features to keep
+      max_features_ratio: 0.8  # Maximum ratio of features to keep
+  
+  # One-Class SVM Configuration
+  one_class_svm:
+    enabled: true
+    hyperparameter_tuning: true
+    
+    # Kernel and model parameters
+    kernel: ['rbf']  # Focus on RBF for better performance
+    gamma: ['scale', 'auto', 0.001, 0.01, 0.1]  # RBF kernel parameters
+    nu: [0.05, 0.1, 0.15, 0.2]  # Anomaly fraction
+    
+    # Dimensionality reduction for better RBF performance
+    dimensionality_reduction:
+      enabled: true
+      remove_low_variance: true  # Remove features with variance < 0.01
+      use_pca: true  # Apply PCA for dimensionality reduction
+      max_components: 50  # Maximum PCA components
+      min_components: 5  # Minimum PCA components
+      variance_threshold: 0.95  # Explained variance ratio threshold
+    
+    # Poly and sigmoid kernel parameters (if used)
+    degree: [2, 3]  # For poly kernel
+    coef0: [0.0, 0.1]  # For poly and sigmoid kernels
+  
+  # GNN Autoencoder Configuration
+  gnn_autoencoder:
+    enabled: true
+    hyperparameter_tuning: true
+    validation_split: 0.2
+    
+    # Model architecture
+    hidden_dims: [64, 128, 256]
+    edge_dim: 15  # Enhanced edge feature dimension
+    use_edge_features: true  # Enable edge feature utilization
+    normalize_features: true  # Enable feature normalization
+    gnn_types: ['GCN', 'GAT', 'GraphConv']  # Available GNN layer types
+    
+    # Training parameters
+    learning_rate: [0.001, 0.01]
+    batch_size: [16, 32, 64]
+    epochs: [50, 100, 200]
+    dropout: [0.1, 0.2, 0.3]
+    
+    # Enhanced features
+    diffusion_steps: [3, 5, 7]  # For diffusion processes
+    activation: 'relu'  # Activation function
+    
+    # Early stopping configuration
+    early_stopping:
+      enabled: true
+      patience: [5, 10, 15]
+      min_delta: [1e-6, 1e-5, 1e-4]
+      restore_best_weights: true
+    
+    # Edge feature processing
+    edge_feature_processing:
+      enabled: true
+      encoder_layers: [15, 8, 15]  # Edge encoder architecture
+      attention_mechanism: true  # Use attention for edge importance
+      normalization: true  # Normalize edge features
+
+# Ensemble Configuration
+ensemble:
+  # Weight optimization methods
+  optimization_method: validation_performance  # Options: validation_performance, diversity_maximization, confidence_weighted
+  
+  # Weight constraints
+  weight_constraints:
+    min_weight: 0.0
+    max_weight: 1.0
+    sum_to_one: true
+  
+  # Fusion methods
+  fusion_method: weighted_average  # Options: weighted_average, weighted_median, max_voting
+  
+  # Confidence weighting
+  confidence_weighting: true
+  
+  # Base model selection
+  base_models:
+    - isolation_forest
+    - one_class_svm
+    - gnn_autoencoder
+  
+  # Ensemble-specific parameters
+  parameters:
+    # Minimum number of base models required
+    min_base_models: 2
+    
+    # Maximum number of base models to include
+    max_base_models: 5
+    
+    # Fallback to equal weights if optimization fails
+    fallback_to_equal_weights: true
+    
+    # Weight regularization (prevent overfitting to validation set)
+    weight_regularization: 0.1
+    
+    # Confidence calculation method
+    confidence_method: variance  # Options: variance, agreement, entropy
+
+# Evaluation Configuration
+evaluation:
+  # Data splitting - Unsupervised approach as per original vision
+  data_split:
+    train_ratio: 0.6  # Normal trajectories only for unsupervised learning
+    validation_ratio: 0.2  # Normal + known anomalies for threshold calibration
+    test_ratio: 0.2  # Normal + unknown anomalies for final evaluation
+  
+  # Threshold calibration methods - Comprehensive set as per original vision
+  threshold_calibration:
+    - roc_optimization
+    - pr_optimization
+    - f1_maximization
+    - fixed_percentile_95
+    - knee_point_detection
+  
+  # Evaluation metrics - Comprehensive set as per original vision
+  metrics:
+    - precision
+    - recall
+    - f1
+    - accuracy
+    - auc_roc
+    - auc_pr
+    - silhouette_score
+    - calinski_harabasz_score
+    - davies_bouldin_score
+    - detection_latency
+    - false_positive_clustering
+    - severity_weighted_performance
+
+# Visualization Configuration
+visualization:
+  # Graph layouts
+  graph_layouts:
+    - spring
+    - hierarchical
+    - circular
+  
+  # Color schemes
+  color_schemes:
+    node_types: viridis
+    agent_types: Set3
+    anomaly_severity: Reds
+  
+  # Figure settings
+  figure_settings:
+    dpi: 300
+    format: png
+    bbox_inches: tight
+  
+  # Interactive plots
+  interactive:
+    enabled: true
+    renderer: browser
+
+# System Configuration
+system:
+  # Parallel processing - Production-ready settings
+  n_jobs: -1  # Use all available cores
+  
+  # Memory management - Production-ready settings
+  memory_limit_gb: 16
+  chunk_size: 1000
+  
+  # Logging - Production-ready settings
+  logging:
+    level: INFO
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    file: logs/anomaly_detection.log
+  
+  # Random seed for reproducibility
+  random_seed: 42
+  
+  # Output directories
+  output_dirs:
+    models: models/
+    charts: charts/
+    data: data/
+    logs: logs/
