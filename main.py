@@ -2,7 +2,7 @@
 """
 Main orchestration script for AI Agent Trajectory Anomaly Detection System.
 
-This script coordinates the complete pipeline:
+Coordinates the complete pipeline:
 1. Configuration loading and validation
 2. Synthetic data generation
 3. Anomaly injection
@@ -19,7 +19,6 @@ Usage:
 """
 
 import argparse
-import json
 import logging
 import os
 import sys
@@ -31,182 +30,102 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
+import json
 
-# Add modules to path
-sys.path.append(str(Path(__file__).parent))
-
+# Core pipeline modules
 from modules.anomaly_injection import AnomalyInjector
+from modules.confidence_analysis import ConfidenceAnalyzer
 from modules.data_generation import TrajectoryGenerator
 from modules.evaluation import AnomalyDetectionEvaluator
 from modules.feature_engineering import FeatureExtractor
 from modules.graph_processing import GraphProcessor
 from modules.models import AnomalyDetectionModels
-from modules.utils import (
-    Timer, ensure_directory, load_config, save_pickle, setup_logging
-)
-from modules.visualization import AnomalyDetectionVisualizer
+from modules.utils import Timer, ensure_directory, load_config, save_pickle, setup_logging
+
+# Visualization modules
+from visualisation.visualization import AnomalyDetectionVisualizer
+from visualisation.trajectory_visualization import TrajectoryVisualizer
+from visualisation.model_performance_visualization import ModelPerformanceVisualizer
+from visualisation.embedding_visualization import EmbeddingVisualizer
+from visualisation.anomaly_data_visualization import AnomalyDataVisualizer
 
 
 class AnomalyDetectionPipeline:
     """
     Complete pipeline for AI agent trajectory anomaly detection.
-    
-    This class orchestrates the entire workflow from data generation
-    through model evaluation and visualization.
+    Orchestrates the workflow from data generation through model evaluation and visualization.
     """
-    
     def __init__(self, config_path: str = "config.yaml", output_dir: str = "results"):
-        """
-        Initialize the pipeline.
-        
-        Args:
-            config_path: Path to configuration file
-            output_dir: Output directory for results
-        """
         self.config_path = config_path
         self.output_dir = Path(output_dir)
-        
-        # Ensure output directories exist
-        ensure_directory(str(self.output_dir))
-        ensure_directory(str(self.output_dir / "data"))
-        ensure_directory(str(self.output_dir / "models"))
-        ensure_directory(str(self.output_dir / "charts"))
-        ensure_directory(str(self.output_dir / "logs"))
-        
-        # Load configuration
-        try:
-            self.config = load_config(config_path)
-        except Exception as e:
-            print(f"Error loading configuration: {e}")
-            sys.exit(1)
-        
-        # Setup logging
-        log_file = self.output_dir / "logs" / "anomaly_detection.log"
+        self._setup_directories()
+        self.config = load_config(config_path)
         self.logger = setup_logging(
             log_level=self.config.get('system', {}).get('logging', {}).get('level', 'INFO'),
-            log_file=str(log_file)
+            log_file=str(self.output_dir / "logs" / "anomaly_detection.log")
         )
-        
-        # Initialize components
-        self.trajectory_generator = TrajectoryGenerator(
-            self.config, 
-            self.config.get('system', {}).get('random_seed', 42)
-        )
-        
-        self.anomaly_injector = AnomalyInjector(
-            self.config, 
-            self.config.get('system', {}).get('random_seed', 42)
-        )
-        
+        # Initialize pipeline components
+        self.trajectory_generator = TrajectoryGenerator(self.config, self.config.get('system', {}).get('random_seed', 42))
+        self.anomaly_injector = AnomalyInjector(self.config, self.config.get('system', {}).get('random_seed', 42))
         self.graph_processor = GraphProcessor(self.config)
         self.feature_extractor = FeatureExtractor(self.config)
         self.models = AnomalyDetectionModels(self.config)
         self.evaluator = AnomalyDetectionEvaluator(self.config)
-        self.visualizer = AnomalyDetectionVisualizer(
-            self.config, 
-            str(self.output_dir / "charts")
-        )
-        
-        # Pipeline state
-        self.results = {
-            'pipeline_start_time': datetime.now().isoformat(),
-            'config': self.config,
-            'output_dir': str(self.output_dir)
-        }
-        
+        self.visualizer = AnomalyDetectionVisualizer(self.config, str(self.output_dir / "charts"))
+        self.confidence_analyzer = ConfidenceAnalyzer(self.config, str(self.output_dir / "charts"))
+        self.trajectory_visualizer = TrajectoryVisualizer(self.config, str(self.output_dir / "charts"))
+        self.model_performance_visualizer = ModelPerformanceVisualizer(self.config, str(self.output_dir / "charts"))
+        self.embedding_visualizer = EmbeddingVisualizer(self.config, str(self.output_dir / "charts"))
+        self.anomaly_data_visualizer = AnomalyDataVisualizer(self.config, str(self.output_dir / "charts"))
+        self.results = {'pipeline_start_time': datetime.now().isoformat(), 'config': self.config, 'output_dir': str(self.output_dir)}
         self.logger.info("AnomalyDetectionPipeline initialized")
         self.logger.info("Output directory: %s", self.output_dir)
-    
+
+    def _setup_directories(self):
+        for subdir in ["data", "models", "charts", "logs", "reports"]:
+            ensure_directory(str(self.output_dir / subdir))
+
     def run_complete_pipeline(self) -> Dict[str, Any]:
-        """
-        Run the complete anomaly detection pipeline.
-        
-        Returns:
-            Dictionary containing all results
-        """
         self.logger.info("=" * 80)
         self.logger.info("STARTING AI AGENT TRAJECTORY ANOMALY DETECTION PIPELINE")
         self.logger.info("=" * 80)
-        
         pipeline_timer = Timer().start()
-        
         try:
-            # Step 1: Generate synthetic data
-            self.logger.info("\n[STEP 1/10] Generating synthetic trajectory data...")
             normal_trajectories, anomalous_trajectories = self._generate_synthetic_data()
-            
-            # Step 2: Convert to graphs
-            self.logger.info("\n[STEP 2/10] Converting trajectories to graphs...")
             all_trajectories = normal_trajectories + anomalous_trajectories
             graphs = self._convert_to_graphs(all_trajectories)
-            
-            # Step 3: Generate embeddings
-            self.logger.info("\n[STEP 3/10] Generating graph embeddings...")
             embeddings = self._generate_embeddings(graphs)
-            
-            # Step 4: Extract features
-            self.logger.info("\n[STEP 4/10] Extracting comprehensive features...")
             features_df = self._extract_features(graphs, all_trajectories)
-            
-            # Step 5: Prepare data splits (unsupervised approach)
-            self.logger.info("\n[STEP 5/10] Creating unsupervised data splits...")
             train_df, val_df, test_df = self._create_data_splits(features_df)
-            
-            # Step 6: Train models
-            self.logger.info("\n[STEP 6/10] Training anomaly detection models...")
             model_results = self._train_models(train_df, embeddings)
-            
-            # Step 7: Calibrate thresholds
-            self.logger.info("\n[STEP 7/10] Calibrating detection thresholds...")
             threshold_results = self._calibrate_thresholds(model_results, val_df)
-            
-            # Step 8: Evaluate models
-            self.logger.info("\n[STEP 8/10] Evaluating model performance...")
             evaluation_results = self._evaluate_models(model_results, test_df, threshold_results)
-            
-            # Step 9: Generate visualizations
-            self.logger.info("\n[STEP 9/10] Generating visualizations...")
             visualization_results = self._generate_visualizations(
-                graphs, features_df, model_results, evaluation_results, 
-                normal_trajectories, anomalous_trajectories
+                graphs, features_df, model_results, evaluation_results, normal_trajectories, anomalous_trajectories
             )
-            
-            # Step 10: Save results and generate report
-            self.logger.info("\n[STEP 10/10] Saving results and generating report...")
-            self._save_results_and_report(
-                model_results, evaluation_results, visualization_results
-            )
-            
+            self._save_results_and_report(model_results, evaluation_results, visualization_results)
             pipeline_timer.stop()
-            
-            # Compile final results
             self.results.update({
                 'pipeline_end_time': datetime.now().isoformat(),
                 'total_pipeline_time': pipeline_timer.elapsed(),
                 'normal_trajectories_count': len(normal_trajectories),
                 'anomalous_trajectories_count': len(anomalous_trajectories),
                 'total_trajectories': len(all_trajectories),
-                'features_count': len(features_df.columns) - 3,  # Exclude metadata columns
+                'features_count': len(features_df.columns) - 3,
                 'model_results': model_results,
                 'evaluation_results': evaluation_results,
                 'visualization_results': visualization_results,
                 'success': True
             })
-            
-            self.logger.info("=" * 80)
             self.logger.info("PIPELINE COMPLETED SUCCESSFULLY")
             self.logger.info("Total execution time: %.2f seconds", pipeline_timer.elapsed())
             self.logger.info("Results saved to: %s", self.output_dir)
             self.logger.info("=" * 80)
-            
             return self.results
-            
         except Exception as e:
             pipeline_timer.stop()
-            
             self.logger.error("PIPELINE FAILED: %s", str(e))
             self.logger.error("Traceback: %s", traceback.format_exc())
-            
             self.results.update({
                 'pipeline_end_time': datetime.now().isoformat(),
                 'total_pipeline_time': pipeline_timer.elapsed(),
@@ -214,7 +133,6 @@ class AnomalyDetectionPipeline:
                 'traceback': traceback.format_exc(),
                 'success': False
             })
-            
             return self.results
     
     def _generate_synthetic_data(self) -> tuple:
@@ -401,82 +319,65 @@ class AnomalyDetectionPipeline:
             return train_df, val_df, test_df
     
     def _train_models(self, train_df: pd.DataFrame, embeddings: Dict[str, Any]) -> Dict[str, Any]:
-        """Train all anomaly detection models."""
+        """Train all anomaly detection models (simplified, less repetitive)."""
         model_results = {}
-        
-        # Prepare training data (remove anomaly labels)
         best_embeddings = self._select_best_embeddings(embeddings)
         X_train, feature_names = self.models.prepare_training_data(train_df, best_embeddings)
-        self.train_feature_columns = feature_names  # Store for later splits
-        
+        self.train_feature_columns = feature_names
         self.logger.info("Training data shape: %s", X_train.shape)
         self.logger.info("Training on purely normal trajectories (unsupervised approach)")
-        
-        # Train Isolation Forest
-        try:
-            with Timer() as timer:
-                iso_results = self.models.train_isolation_forest(X_train, hyperparameter_tuning=True)
-                iso_results['training_time'] = timer.elapsed()
-                iso_results['feature_names'] = feature_names
-                model_results['isolation_forest'] = iso_results
-                
-                self.logger.info("Isolation Forest trained in %.2f seconds", timer.elapsed())
-                self.logger.info("Best parameters: %s", iso_results.get('best_params', {}))
-        except Exception as e:
-            self.logger.error("Isolation Forest training failed: %s", e)
-            model_results['isolation_forest'] = {'error': str(e)}
-        
-        # Train One-Class SVM
-        try:
-            with Timer() as timer:
-                svm_results = self.models.train_one_class_svm(X_train, hyperparameter_tuning=True)
-                svm_results['training_time'] = timer.elapsed()
-                svm_results['feature_names'] = feature_names
-                model_results['one_class_svm'] = svm_results
-                
-                self.logger.info("One-Class SVM trained in %.2f seconds", timer.elapsed())
-                self.logger.info("Best parameters: %s", svm_results.get('best_params', {}))
-        except Exception as e:
-            self.logger.error("One-Class SVM training failed: %s", e)
-            model_results['one_class_svm'] = {'error': str(e)}
-        
-        # Train GNN Autoencoder (if available)
-        try:
-            with Timer() as timer:
-                # Load graphs for GNN training - use the correct path
-                graphs_file = self.output_dir / "data" / "trajectory_graphs.pkl"
-                if graphs_file.exists():
-                    graphs = self.graph_processor.load_graphs(str(graphs_file))
-                    
-                    # Train GNN autoencoder on graphs
-                    gnn_results = self.models.train_gnn_autoencoder(graphs, hyperparameter_tuning=True)
-                    gnn_results['training_time'] = timer.elapsed()
-                    gnn_results['feature_names'] = feature_names
-                    model_results['gnn_autoencoder'] = gnn_results
-                    
-                    self.logger.info("GNN Autoencoder trained in %.2f seconds", timer.elapsed())
-                    if 'best_params' in gnn_results:
-                        self.logger.info("Best parameters: %s", gnn_results.get('best_params', {}))
-                    elif 'error' in gnn_results:
-                        self.logger.warning("GNN training error: %s", gnn_results['error'])
-                else:
-                    self.logger.warning("Graph file not found: %s", graphs_file)
-                    model_results['gnn_autoencoder'] = {'error': f'Graph file not found: {graphs_file}'}
-        except Exception as e:
-            self.logger.error("GNN Autoencoder training failed: %s", e)
-            model_results['gnn_autoencoder'] = {'error': str(e)}
-        
-        # Save models
+        # Define model training functions and names
+        model_trainers = [
+            ("isolation_forest", self.models.train_isolation_forest),
+            ("one_class_svm", self.models.train_one_class_svm),
+            ("gnn_autoencoder", lambda X, _: self.models.train_gnn_autoencoder(self.graph_processor.load_graphs(str(self.output_dir / "data" / "trajectory_graphs.pkl")), True) if (self.output_dir / "data" / "trajectory_graphs.pkl").exists() else {"error": "Graph file not found"})
+        ]
+        for name, trainer in model_trainers:
+            try:
+                with Timer() as timer:
+                    if name == "gnn_autoencoder":
+                        result = trainer(X_train, feature_names)
+                    else:
+                        result = trainer(X_train, True)
+                    result['training_time'] = timer.elapsed()
+                    result['feature_names'] = feature_names
+                    model_results[name] = result
+                    self.logger.info(f"{name.replace('_', ' ').title()} trained in %.2f seconds", timer.elapsed())
+                    if 'best_params' in result:
+                        self.logger.info("Best parameters: %s", result.get('best_params', {}))
+            except Exception as e:
+                self.logger.error(f"{name.replace('_', ' ').title()} training failed: %s", e)
+                model_results[name] = {'error': str(e)}
+        # Ensemble model (if at least 2 base models succeeded)
+        successful_models = {k: v for k, v in model_results.items() if 'error' not in v}
+        if len(successful_models) >= 2:
+            try:
+                val_size = min(100, len(X_train) // 5)
+                val_indices = np.random.choice(len(X_train), val_size, replace=False)
+                val_features = X_train[val_indices]
+                val_labels = np.zeros(len(val_features))
+                with Timer() as timer:
+                    ensemble_results = self.models.train_ensemble_model(successful_models, val_features, val_labels)
+                    if ensemble_results:
+                        ensemble_results['training_time'] = timer.elapsed()
+                        ensemble_results['feature_names'] = feature_names
+                        model_results['ensemble_model'] = ensemble_results
+                        self.logger.info("Ensemble model trained in %.2f seconds", timer.elapsed())
+                        if 'weights' in ensemble_results:
+                            self.logger.info("Ensemble weights: %s", ensemble_results['weights'])
+            except Exception as e:
+                self.logger.error("Ensemble model training failed: %s", e)
+                model_results['ensemble_model'] = {'error': str(e)}
+        else:
+            self.logger.info("Skipping ensemble training - need at least 2 successful base models (have %d)", len(successful_models))
         ensure_directory(str(self.output_dir / "models"))
         self.models.save_models(model_results, str(self.output_dir / "models" / "trained_models_complete.pkl"))
-        
         self.results['model_training'] = {
             'models_trained': len([k for k, v in model_results.items() if 'error' not in v]),
             'models_failed': len([k for k, v in model_results.items() if 'error' in v]),
             'training_features': X_train.shape[1],
             'training_samples': X_train.shape[0]
         }
-        
         return model_results
     
     def _select_best_embeddings(self, embeddings: Dict[str, Any]) -> Optional[Dict[str, np.ndarray]]:
@@ -645,9 +546,12 @@ class AnomalyDetectionPipeline:
             evaluation_report = self.evaluator.generate_evaluation_report(combined_results)
             
             # Save evaluation results
+            reports_dir = self.output_dir / "reports"
+            reports_dir.mkdir(exist_ok=True)
+            
             self.evaluator.export_results(
                 evaluation_report, 
-                str(self.output_dir / "evaluation_report.json")
+                str(reports_dir / "evaluation_report.json")
             )
             
             evaluation_results['evaluation_report'] = evaluation_report
@@ -658,117 +562,60 @@ class AnomalyDetectionPipeline:
         
         return evaluation_results
     
-    def _generate_visualizations(self, graphs: List, features_df: pd.DataFrame, 
-                               model_results: Dict[str, Any], evaluation_results: Dict[str, Any],
-                               normal_trajectories: List, anomalous_trajectories: List) -> Dict[str, Any]:
-        """Generate comprehensive visualizations."""
+    def _generate_visualizations(self, graphs, features_df, model_results, evaluation_results, normal_trajectories, anomalous_trajectories):
+        """Generate all visualizations in a simple, loop-based way, including individual trajectory charts."""
         visualization_results = {}
-        
+        test_df = pd.read_csv(self.output_dir / "data" / "test_split.csv")
+        test_features, _ = self.models.prepare_training_data(test_df)
+        test_features_for_confidence, _ = self.models.prepare_training_data(test_df, feature_columns=self.train_feature_columns)
+        viz_tasks = [
+            ("embedding_visualization", lambda: self.embedding_visualizer.plot_tsne_embeddings(embeddings, features_df['is_anomalous'].astype(int).values) if (embeddings := self._select_best_embeddings(self.results.get('embeddings', {}))) is not None and 'is_anomalous' in features_df.columns else None),
+            ("trajectory_examples", lambda: self.trajectory_visualizer.plot_trajectory_examples(graphs, list(range(len(normal_trajectories))), [i + len(normal_trajectories) for i in range(len(anomalous_trajectories))])),
+            ("performance_comparison", lambda: self.model_performance_visualizer.plot_model_performance_comparison(model_results)),
+            ("roc_curves", lambda: self.visualizer.plot_roc_curves(model_results, test_df, test_features)),
+            ("pr_curves", lambda: self.visualizer.plot_precision_recall_curves(model_results, test_df, test_features)),
+            ("feature_importance", lambda: self.visualizer.plot_feature_importance(features_df)),
+            ("anomaly_distribution", lambda: self.anomaly_data_visualizer.plot_anomaly_distribution(test_df)),
+            ("ensemble_weights", lambda: self.visualizer.plot_ensemble_weights(model_results['ensemble_model']) if 'ensemble_model' in model_results and 'error' not in model_results['ensemble_model'] else None),
+            ("ensemble_performance", lambda: self.visualizer.plot_ensemble_performance_comparison(model_results) if 'ensemble_model' in model_results and 'error' not in model_results['ensemble_model'] else None),
+            ("confidence_distributions", lambda: self.confidence_analyzer.plot_confidence_distributions(model_results, test_df, test_features_for_confidence)),
+            ("confidence_vs_performance", lambda: self.confidence_analyzer.plot_confidence_vs_performance(model_results, test_df, test_features_for_confidence)),
+            ("calibration_analysis", lambda: self.confidence_analyzer.plot_calibration_analysis(model_results, test_df, test_features_for_confidence)),
+            ("confidence_error_analysis", lambda: self.confidence_analyzer.plot_confidence_error_analysis(model_results, test_df, test_features_for_confidence)),
+            ("comprehensive_confidence_analysis", lambda: self.confidence_analyzer.generate_comprehensive_confidence_report(model_results, test_df, test_features_for_confidence)),
+            ("summary_report", lambda: self.visualizer.generate_summary_report(self.results)),
+        ]
+        for name, func in viz_tasks:
+            try:
+                with Timer() as timer:
+                    result = func()
+                    if result is not None:
+                        visualization_results[name] = {'file': result, 'generation_time': timer.elapsed()}
+                        self.logger.info(f"Generated {name.replace('_', ' ')}")
+            except Exception as e:
+                self.logger.warning(f"{name.replace('_', ' ').title()} failed: %s", e)
+        # --- New: Generate individual trajectory charts ---
         try:
-            # Identify normal and anomalous trajectory indices
-            normal_indices = [i for i, traj in enumerate(normal_trajectories)]
-            anomalous_indices = [i + len(normal_trajectories) for i in range(len(anomalous_trajectories))]
-            
-            # Plot trajectory examples
-            try:
-                with Timer() as timer:
-                    trajectory_plot = self.visualizer.plot_trajectory_examples(
-                        graphs, normal_indices, anomalous_indices
-                    )
-                    visualization_results['trajectory_examples'] = {
-                        'file': trajectory_plot,
-                        'generation_time': timer.elapsed()
-                    }
-                    self.logger.info("Generated trajectory examples plot")
-            except Exception as e:
-                self.logger.warning("Trajectory examples plot failed: %s", e)
-            
-            # Plot model performance comparison
-            try:
-                with Timer() as timer:
-                    performance_plot = self.visualizer.plot_model_performance_comparison(
-                        {k: v for k, v in model_results.items() if k in evaluation_results}
-                    )
-                    visualization_results['performance_comparison'] = {
-                        'file': performance_plot,
-                        'generation_time': timer.elapsed()
-                    }
-                    self.logger.info("Generated model performance comparison")
-            except Exception as e:
-                self.logger.warning("Performance comparison plot failed: %s", e)
-            
-            # Plot ROC curves
-            try:
-                # Prepare test data for ROC curves
-                test_df = pd.read_csv(self.output_dir / "data" / "test_split.csv")
-                test_features, _ = self.models.prepare_training_data(test_df)
-                
-                with Timer() as timer:
-                    roc_plot = self.visualizer.plot_roc_curves(
-                        model_results, test_df, test_features
-                    )
-                    visualization_results['roc_curves'] = {
-                        'file': roc_plot,
-                        'generation_time': timer.elapsed()
-                    }
-                    self.logger.info("Generated ROC curves")
-            except Exception as e:
-                self.logger.warning("ROC curves plot failed: %s", e)
-            
-            # Plot Precision-Recall curves
-            try:
-                with Timer() as timer:
-                    pr_plot = self.visualizer.plot_precision_recall_curves(
-                        model_results, test_df, test_features
-                    )
-                    visualization_results['pr_curves'] = {
-                        'file': pr_plot,
-                        'generation_time': timer.elapsed()
-                    }
-                    self.logger.info("Generated Precision-Recall curves")
-            except Exception as e:
-                self.logger.warning("Precision-Recall curves plot failed: %s", e)
-            
-            # Plot feature importance
-            try:
-                with Timer() as timer:
-                    feature_plot = self.visualizer.plot_feature_importance(features_df)
-                    visualization_results['feature_importance'] = {
-                        'file': feature_plot,
-                        'generation_time': timer.elapsed()
-                    }
-                    self.logger.info("Generated feature importance analysis")
-            except Exception as e:
-                self.logger.warning("Feature importance plot failed: %s", e)
-            
-            # Plot anomaly distribution
-            try:
-                with Timer() as timer:
-                    anomaly_plot = self.visualizer.plot_anomaly_distribution(test_df)
-                    visualization_results['anomaly_distribution'] = {
-                        'file': anomaly_plot,
-                        'generation_time': timer.elapsed()
-                    }
-                    self.logger.info("Generated anomaly distribution plot")
-            except Exception as e:
-                self.logger.warning("Anomaly distribution plot failed: %s", e)
-            
-            # Generate summary report
-            try:
-                with Timer() as timer:
-                    summary_report = self.visualizer.generate_summary_report(self.results)
-                    visualization_results['summary_report'] = {
-                        'file': summary_report,
-                        'generation_time': timer.elapsed()
-                    }
-                    self.logger.info("Generated summary report")
-            except Exception as e:
-                self.logger.warning("Summary report generation failed: %s", e)
-            
+            traj_dir = self.output_dir / "charts" / "trajectories"
+            traj_dir.mkdir(parents=True, exist_ok=True)
+            # Only plot a few normal and a few anomalous trajectories
+            num_examples = 3
+            selected_normals = normal_trajectories[:num_examples]
+            selected_anomalies = anomalous_trajectories[:num_examples]
+            for i, traj in enumerate(selected_normals):
+                out_name = f"normal_trajectory_{i+1}"
+                self.trajectory_visualizer.plot_enhanced_trajectory(traj, output_path=out_name)
+            for i, traj in enumerate(selected_anomalies):
+                out_name = f"anomalous_trajectory_{i+1}"
+                self.trajectory_visualizer.plot_enhanced_trajectory(traj, output_path=out_name)
+            visualization_results["individual_trajectories"] = {
+                "directory": str(traj_dir),
+                "normal_count": len(selected_normals),
+                "anomalous_count": len(selected_anomalies)
+            }
+            self.logger.info(f"Generated {len(selected_normals)} normal and {len(selected_anomalies)} anomalous trajectory charts in {traj_dir}")
         except Exception as e:
-            self.logger.error("Visualization generation failed: %s", e)
-            visualization_results['error'] = str(e)
-        
+            self.logger.warning(f"Failed to generate individual trajectory charts: {e}")
         return visualization_results
     
     def _save_results_and_report(self, model_results: Dict[str, Any], 
@@ -776,6 +623,10 @@ class AnomalyDetectionPipeline:
                                visualization_results: Dict[str, Any]) -> None:
         """Save final results and generate comprehensive report."""
         try:
+            # Ensure reports directory exists
+            reports_dir = self.output_dir / "reports"
+            reports_dir.mkdir(exist_ok=True)
+            
             # Save complete results
             complete_results = {
                 'pipeline_results': self.results,
@@ -784,7 +635,7 @@ class AnomalyDetectionPipeline:
                 'visualization_results': visualization_results
             }
             
-            save_pickle(complete_results, str(self.output_dir / "complete_results.pkl"))
+            save_pickle(complete_results, str(reports_dir / "complete_results.pkl"))
             
             # Export JSON summary
             json_results = {
@@ -798,7 +649,7 @@ class AnomalyDetectionPipeline:
                 'detailed_results': complete_results
             }
             
-            with open(str(self.output_dir / "results_summary.json"), 'w') as f:
+            with open(str(reports_dir / "results_summary.json"), 'w') as f:
                 json.dump(json_results, f, indent=2, default=str)
             
             # Generate markdown report
@@ -825,6 +676,10 @@ class AnomalyDetectionPipeline:
     
     def _generate_markdown_report(self, complete_results: Dict[str, Any]) -> None:
         """Generate a comprehensive markdown report."""
+        # Ensure reports directory exists
+        reports_dir = self.output_dir / "reports"
+        reports_dir.mkdir(exist_ok=True)
+        
         report_lines = []
         
         report_lines.append("# AI Agent Trajectory Anomaly Detection - Results Report")
@@ -924,7 +779,7 @@ class AnomalyDetectionPipeline:
         
         # Write report
         report_content = "\n".join(report_lines)
-        with open(self.output_dir / "analysis_report.md", 'w') as f:
+        with open(reports_dir / "analysis_report.md", 'w') as f:
             f.write(report_content)
         
         self.logger.info("Generated comprehensive markdown report")
@@ -999,8 +854,8 @@ Examples:
                 print(f"Best model: {best_model} (F1: {best_f1:.3f})")
             
             print("\nKey files generated:")
-            print(f"  - Analysis report: {args.output_dir}/analysis_report.md")
-            print(f"  - Results summary: {args.output_dir}/results_summary.json")
+            print(f"  - Analysis report: {args.output_dir}/reports/analysis_report.md")
+            print(f"  - Results summary: {args.output_dir}/reports/results_summary.json")
             print(f"  - Charts: {args.output_dir}/charts/")
             print("="*80)
             

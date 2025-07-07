@@ -906,16 +906,32 @@ class GraphProcessor:
         return all_embeddings
     
     def _create_graphsage_model(self, sample_data, params: Dict):
-        """Create GraphSAGE model."""
+        """Create GraphSAGE model with consistent input dimension handling."""
         # Determine input dimension from node features
         if hasattr(sample_data, 'x') and sample_data.x is not None:
             input_dim = sample_data.x.shape[1]
         else:
             input_dim = 15  # Default based on node features
         
+        # Store input dimension in params for consistency
+        params['input_dim'] = input_dim
+        
         hidden_dims = params['hidden_dims']
         output_dim = params['output_dim']
         dropout = params['dropout']
+        
+        # Adjust hidden dimensions if they're too large compared to input
+        if input_dim < 20:
+            adjusted_hidden_dims = []
+            for dim in hidden_dims:
+                if dim > input_dim * 2:
+                    adjusted_dim = max(input_dim, dim // 2)
+                    logger.warning("GraphSAGE hidden dimension %d is very large compared to input %d, reducing to %d", 
+                                  dim, input_dim, adjusted_dim)
+                    adjusted_hidden_dims.append(adjusted_dim)
+                else:
+                    adjusted_hidden_dims.append(dim)
+            hidden_dims = adjusted_hidden_dims
         
         return GraphSAGEModel(input_dim, hidden_dims, output_dim, dropout)
     
@@ -962,20 +978,28 @@ class GraphProcessor:
         return model
 
     def _convert_to_torch_geometric(self, graphs: List[Any]) -> List[Any]:
-        """Convert NetworkX graphs to PyTorch Geometric Data objects (copied from models.py)."""
+        """Convert NetworkX graphs to PyTorch Geometric Data objects with consistent dimensions."""
         try:
             import torch
             from torch_geometric.data import Data
         except ImportError:
             logger.warning("PyTorch Geometric not available for conversion.")
             return []
+        
         torch_graphs = []
+        expected_dim = None
+        
         for graph in graphs:
             try:
                 if len(graph.nodes) == 0:
                     continue
+                if len(graph.nodes) < 2:
+                    logger.debug("Skipping graph with only %d nodes", len(graph.nodes))
+                    continue
+                    
                 node_features = []
                 node_mapping = {node: i for i, node in enumerate(graph.nodes())}
+                
                 for node in graph.nodes():
                     node_data = graph.nodes[node]
                     features = [
@@ -993,6 +1017,21 @@ class GraphProcessor:
                     for nt in node_types:
                         features.append(1.0 if node_type == nt else 0.0)
                     node_features.append(features)
+                
+                # Ensure consistent feature dimension
+                if expected_dim is None:
+                    expected_dim = len(node_features[0])
+                
+                for i in range(len(node_features)):
+                    feat = node_features[i]
+                    if len(feat) > expected_dim:
+                        # Truncate to expected dimension
+                        node_features[i] = feat[:expected_dim]
+                    elif len(feat) < expected_dim:
+                        # Pad with zeros to expected dimension
+                        padding = [0.0] * (expected_dim - len(feat))
+                        node_features[i] = feat + padding
+                
                 edge_indices = []
                 edge_attrs = []
                 for u, v, edge_data in graph.edges(data=True):
@@ -1006,17 +1045,21 @@ class GraphProcessor:
                             float(edge_data.get('weight', 1.0))
                         ]
                         edge_attrs.append(edge_attr)
+                
                 if not edge_indices:
                     edge_indices = [[i, i] for i in range(len(node_features))]
                     edge_attrs = [[0.0, 1.0, 1.0, 1.0, 1.0] for _ in range(len(node_features))]
+                
                 x = torch.tensor(node_features, dtype=torch.float)
                 edge_index = torch.tensor(edge_indices, dtype=torch.long).t().contiguous()
                 edge_attr = torch.tensor(edge_attrs, dtype=torch.float)
                 data = Data(x=x, edge_index=edge_index, edge_attr=edge_attr)
                 torch_graphs.append(data)
+                
             except Exception as e:
                 logger.warning(f"Failed to convert graph: {e}")
                 continue
+        
         logger.info(f"Converted {len(torch_graphs)} graphs to PyTorch Geometric format (GraphProcessor)")
         return torch_graphs
 

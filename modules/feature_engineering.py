@@ -65,6 +65,7 @@ class FeatureExtractor:
         
         # Convert to numeric, but preserve non-numeric columns
         numeric_columns = []
+        updated_columns = {}
         for col in features_df.columns:
             if col in ['graph_id', 'is_anomalous', 'success']:
                 continue  # Skip non-numeric columns
@@ -77,34 +78,28 @@ class FeatureExtractor:
         # Handle NaN and Inf values more carefully
         for col in numeric_columns:
             col_data = features_df[col]
-            
-            # Count invalid values
             nan_count = col_data.isna().sum()
             inf_count = np.isinf(col_data).sum()
-            
             if nan_count > 0 or inf_count > 0:
                 logger.info(f"Column {col}: {nan_count} NaN, {inf_count} Inf values")
-                
-                # For columns with many invalid values, use median imputation
                 if nan_count + inf_count > len(col_data) * 0.5:
-                    # More than 50% invalid values - use median
                     median_val = col_data.replace([np.inf, -np.inf], np.nan).median()
                     if pd.isna(median_val):
                         median_val = 0.0
-                    features_df[col] = col_data.replace([np.inf, -np.inf], np.nan).fillna(median_val)
+                    updated_columns[col] = col_data.replace([np.inf, -np.inf], np.nan).fillna(median_val)
                     logger.info(f"Column {col}: Used median imputation ({median_val:.4f})")
                 else:
-                    # Less than 50% invalid values - use more sophisticated imputation
-                    # Replace inf with large finite values
                     col_data = col_data.replace([np.inf, -np.inf], np.nan)
-                    
-                    # Use median for NaN values
                     median_val = col_data.median()
                     if pd.isna(median_val):
                         median_val = 0.0
-                    
-                    features_df[col] = col_data.fillna(median_val)
+                    updated_columns[col] = col_data.fillna(median_val)
                     logger.info(f"Column {col}: Used median imputation for NaN values")
+        # Apply all updates at once to avoid fragmentation
+        for col, new_col in updated_columns.items():
+            features_df[col] = new_col
+        # Defragment DataFrame
+        features_df = features_df.copy()
         
         # Final validation
         numeric_data = features_df[numeric_columns]

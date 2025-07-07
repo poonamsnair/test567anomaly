@@ -137,7 +137,13 @@ class AnomalyInjector:
         anomalous_trajectory.anomaly_types.add(anomaly_type)
         
         # Get severity level for this anomaly type
-        severity = SeverityLevel(self.anomaly_types[anomaly_type.value]['severity'])
+        severity_str = self.anomaly_types[anomaly_type.value]['severity']
+        try:
+            severity = SeverityLevel(severity_str)
+        except ValueError:
+            # Fallback to medium if severity string is invalid
+            logger.warning(f"Invalid severity level '{severity_str}', using MEDIUM")
+            severity = SeverityLevel.MEDIUM
         anomalous_trajectory.anomaly_severity = severity
         
         # Apply the specific anomaly injection method
