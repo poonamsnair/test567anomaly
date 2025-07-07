@@ -630,13 +630,16 @@ class AnomalyDetectionEvaluator:
         # Threshold analysis
         if 'threshold_results' in results:
             threshold_analysis = {}
-            for method, metrics in results['threshold_results'].items():
-                threshold_analysis[method] = {
-                    'f1_score': metrics.get('f1', 0.0),
-                    'precision': metrics.get('precision', 0.0),
-                    'recall': metrics.get('recall', 0.0)
-                }
-            
+            # threshold_results is a dict: model_name -> method -> {test_metrics, ...}
+            for model_name, method_dict in results['threshold_results'].items():
+                for method, method_data in method_dict.items():
+                    # Use test_metrics if available, else fallback to metrics
+                    metrics = method_data.get('test_metrics') or method_data.get('metrics', {})
+                    threshold_analysis[f"{model_name}:{method}"] = {
+                        'f1_score': metrics.get('f1', 0.0),
+                        'precision': metrics.get('precision', 0.0),
+                        'recall': metrics.get('recall', 0.0)
+                    }
             report['threshold_analysis'] = threshold_analysis
         
         # Anomaly type analysis

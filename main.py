@@ -98,7 +98,7 @@ class AnomalyDetectionPipeline:
             features_df = self._extract_features(graphs, all_trajectories)
             train_df, val_df, test_df = self._create_data_splits(features_df)
             model_results = self._train_models(train_df, embeddings)
-            threshold_results = self._calibrate_thresholds(model_results, val_df)
+            threshold_results = self._calibrate_thresholds(model_results, val_df, test_df)
             evaluation_results = self._evaluate_models(model_results, test_df, threshold_results)
             visualization_results = self._generate_visualizations(
                 graphs, features_df, model_results, evaluation_results, normal_trajectories, anomalous_trajectories
@@ -326,12 +326,36 @@ class AnomalyDetectionPipeline:
         self.train_feature_columns = feature_names
         self.logger.info("Training data shape: %s", X_train.shape)
         self.logger.info("Training on purely normal trajectories (unsupervised approach)")
+        
+        # Load all graphs and filter for training set
+        all_graphs = []
+        train_graphs = []
+        if (self.output_dir / "data" / "trajectory_graphs.pkl").exists():
+            all_graphs = self.graph_processor.load_graphs(str(self.output_dir / "data" / "trajectory_graphs.pkl"))
+            
+            # Filter graphs to only include those in the training set
+            if 'graph_id' in train_df.columns:
+                # Map train_df graph_ids to graph indices
+                train_graph_ids = set(train_df['graph_id'].tolist())
+                train_graphs = []
+                for i, graph in enumerate(all_graphs):
+                    graph_id = f"graph_{i}"
+                    if graph_id in train_graph_ids:
+                        train_graphs.append(graph)
+                self.logger.info("Filtered %d graphs for GNN training from %d total graphs", 
+                               len(train_graphs), len(all_graphs))
+            else:
+                # Fallback: assume train_df order matches graph order
+                train_graphs = all_graphs[:len(train_df)]
+                self.logger.info("Using first %d graphs for GNN training (fallback method)", len(train_graphs))
+        
         # Define model training functions and names
         model_trainers = [
             ("isolation_forest", self.models.train_isolation_forest),
             ("one_class_svm", self.models.train_one_class_svm),
-            ("gnn_autoencoder", lambda X, _: self.models.train_gnn_autoencoder(self.graph_processor.load_graphs(str(self.output_dir / "data" / "trajectory_graphs.pkl")), True) if (self.output_dir / "data" / "trajectory_graphs.pkl").exists() else {"error": "Graph file not found"})
+            ("gnn_autoencoder", lambda X, _: self.models.train_gnn_autoencoder(train_graphs, True) if train_graphs else {"error": "No training graphs available"})
         ]
+        
         for name, trainer in model_trainers:
             try:
                 with Timer() as timer:
@@ -348,6 +372,7 @@ class AnomalyDetectionPipeline:
             except Exception as e:
                 self.logger.error(f"{name.replace('_', ' ').title()} training failed: %s", e)
                 model_results[name] = {'error': str(e)}
+        
         # Ensemble model (if at least 2 base models succeeded)
         successful_models = {k: v for k, v in model_results.items() if 'error' not in v}
         if len(successful_models) >= 2:
@@ -370,13 +395,15 @@ class AnomalyDetectionPipeline:
                 model_results['ensemble_model'] = {'error': str(e)}
         else:
             self.logger.info("Skipping ensemble training - need at least 2 successful base models (have %d)", len(successful_models))
+        
         ensure_directory(str(self.output_dir / "models"))
         self.models.save_models(model_results, str(self.output_dir / "models" / "trained_models_complete.pkl"))
         self.results['model_training'] = {
             'models_trained': len([k for k, v in model_results.items() if 'error' not in v]),
             'models_failed': len([k for k, v in model_results.items() if 'error' in v]),
             'training_features': X_train.shape[1],
-            'training_samples': X_train.shape[0]
+            'training_samples': X_train.shape[0],
+            'gnn_training_graphs': len(train_graphs) if train_graphs else 0
         }
         return model_results
     
@@ -414,13 +441,11 @@ class AnomalyDetectionPipeline:
         
         return best_embeddings
     
-    def _calibrate_thresholds(self, model_results: Dict[str, Any], val_df: pd.DataFrame) -> Dict[str, Any]:
-        """Calibrate detection thresholds using validation set."""
+    def _calibrate_thresholds(self, model_results: Dict[str, Any], val_df: pd.DataFrame, test_df: pd.DataFrame) -> Dict[str, Any]:
+        """Calibrate detection thresholds using validation set, then evaluate each threshold on the test set."""
         threshold_results = {}
-        
-        # Prepare validation data (remove anomaly labels for model input)
         val_features, _ = self.models.prepare_training_data(val_df, feature_columns=getattr(self, 'train_feature_columns', None))
-        
+        test_features, _ = self.models.prepare_training_data(test_df, feature_columns=getattr(self, 'train_feature_columns', None))
         for model_name, model_data in model_results.items():
             if 'error' not in model_data:
                 try:
@@ -428,28 +453,26 @@ class AnomalyDetectionPipeline:
                         thresholds = self.evaluator.calibrate_threshold(
                             model_data, val_df, val_features
                         )
-                        
-                        # Evaluate each threshold method
                         method_results = {}
                         for method, threshold in thresholds.items():
-                            metrics = self.evaluator.evaluate_model(
+                            val_metrics = self.evaluator.evaluate_model(
                                 model_data, val_df, val_features, threshold
+                            )
+                            test_metrics = self.evaluator.evaluate_model(
+                                model_data, test_df, test_features, threshold
                             )
                             method_results[method] = {
                                 'threshold': threshold,
-                                'metrics': metrics,
+                                'val_metrics': val_metrics,
+                                'test_metrics': test_metrics,
                                 'calibration_time': timer.elapsed()
                             }
-                        
                         threshold_results[model_name] = method_results
-                        
                         self.logger.info("Thresholds calibrated for %s in %.2f seconds", 
                                        model_name, timer.elapsed())
-                        
                 except Exception as e:
                     self.logger.error("Threshold calibration failed for %s: %s", model_name, e)
                     threshold_results[model_name] = {'error': str(e)}
-        
         return threshold_results
     
     def _evaluate_models(self, model_results: Dict[str, Any], test_df: pd.DataFrame, 

@@ -39,6 +39,85 @@ anomaly_injection:
     high: {degradation_range: [0.4, 0.7], user_impact: significant}
     critical: {degradation_range: [0.7, 1.0], user_impact: system_failure}
 
+# Dataset size thresholds for adaptive hyperparameter selection
+dataset_size_thresholds:
+  small_medium_boundary: 100
+  medium_large_boundary: 300
+
+# Hyperparameter grids for different dataset sizes
+hyperparameter_grids:
+  small_dataset:
+    max_combinations: 3
+    max_combinations_gnn: 2
+    max_combinations_ocsvm: 3
+    isolation_forest:
+      n_estimators: [100, 200]
+      contamination: [0.05, 0.1]
+      max_features: [0.5, 0.75]
+      max_samples: [0.5, 0.75]
+      bootstrap: [false]
+      random_state: [42]
+    one_class_svm:
+      kernel: [rbf, linear]
+      gamma: [scale, auto]
+      nu: [0.1, 0.15]
+      degree: [2]
+    gnn_autoencoder:
+      hidden_dims: [[16, 32], [32, 64]]
+      learning_rate: [0.001, 0.01]
+      dropout: [0.1, 0.2]
+      batch_size: [8, 16]
+      epochs: [30, 50]
+      gnn_type: [GCN]
+  
+  medium_dataset:
+    max_combinations: 5
+    max_combinations_gnn: 3
+    max_combinations_ocsvm: 5
+    isolation_forest:
+      n_estimators: [200, 300]
+      contamination: [0.03, 0.05, 0.08]
+      max_features: [0.5, 0.75, 1.0]
+      max_samples: [0.5, 0.75, 1.0]
+      bootstrap: [true, false]
+      random_state: [42]
+    one_class_svm:
+      kernel: [rbf, linear, poly]
+      gamma: [scale, auto, 0.1]
+      nu: [0.05, 0.1, 0.15]
+      degree: [2, 3]
+    gnn_autoencoder:
+      hidden_dims: [[32, 64], [64, 128]]
+      learning_rate: [0.001, 0.01]
+      dropout: [0.1, 0.2, 0.3]
+      batch_size: [16, 32]
+      epochs: [50, 100]
+      gnn_type: [GCN, GAT]
+  
+  large_dataset:
+    max_combinations: 10
+    max_combinations_gnn: 5
+    max_combinations_ocsvm: 10
+    isolation_forest:
+      n_estimators: [300, 500]
+      contamination: [0.03, 0.05, 0.08, 0.1]
+      max_features: [0.5, 0.75, 1.0]
+      max_samples: [0.5, 0.75, 1.0]
+      bootstrap: [true, false]
+      random_state: [42]
+    one_class_svm:
+      kernel: [rbf, linear, poly]
+      gamma: [scale, auto, 0.1, 0.01]
+      nu: [0.05, 0.1, 0.15, 0.2]
+      degree: [2, 3]
+    gnn_autoencoder:
+      hidden_dims: [[64, 128], [128, 256]]
+      learning_rate: [0.001, 0.01]
+      dropout: [0.1, 0.2, 0.3]
+      batch_size: [32, 64]
+      epochs: [100, 200]
+      gnn_type: [GCN, GAT, GraphConv]
+
 # Graph Processing Configuration
 graph_processing:
   # Node2Vec parameters (simplified)
@@ -131,7 +210,7 @@ models:
     max_features: [0.5, 0.75, 1.0]  # More feature sampling options
     max_samples: [0.5, 0.75, 1.0]  # More sample sampling options
     bootstrap: [true, false]  # Try both bootstrap options
-    random_state: 42
+    random_state: [42]
   
   # One-Class SVM (improved)
   one_class_svm:
@@ -198,30 +277,25 @@ visualization:
   
   # Interactive plots
   interactive:
-    enabled: false  # Disabled for faster testing
+    enabled: false
     renderer: browser
 
 # System Configuration
 system:
-  # Parallel processing
-  n_jobs: 2  # Limited for faster testing
-  
-  # Memory management
-  memory_limit_gb: 4  # Lower limit
-  chunk_size: 500  # Smaller chunks
-  
-  # Logging
-  logging:
-    level: INFO
-    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    file: logs/fast_test.log
-  
-  # Random seed for reproducibility
   random_seed: 42
+  n_jobs: 2  # Reduced for faster processing
+  memory_limit_gb: 4
+  chunk_size: 500
   
   # Output directories
   output_dirs:
+    data: results_fast_test/data/
     models: results_fast_test/models/
     charts: results_fast_test/charts/
-    data: results_fast_test/data/
-    logs: results_fast_test/logs/ 
+    logs: results_fast_test/logs/
+  
+  # Logging configuration
+  logging:
+    level: INFO
+    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    file: logs/fast_test.log 

@@ -21,6 +21,33 @@ from .utils import Timer
 
 logger = logging.getLogger(__name__)
 
+# Configuration constants to replace hardcoded values
+class FeatureConfig:
+    """Configuration constants for feature engineering."""
+    # Infinite value replacement
+    INF_REPLACEMENT_POSITIVE = 1e6
+    INF_REPLACEMENT_NEGATIVE = -1e6
+    
+    # Missing value thresholds
+    MISSING_VALUE_THRESHOLD = 0.5  # If >50% missing, use median imputation
+    
+    # Default values for disconnected graphs
+    DEFAULT_DIAMETER_MULTIPLIER = 1.0  # Use num_nodes - 1 for disconnected graphs
+    
+    # Centrality calculation parameters
+    CENTRALITY_TYPES = ['betweenness_centrality', 'closeness_centrality', 'eigenvector_centrality']
+    
+    # Edge attribute statistics
+    LATENCY_PERCENTILES = [95, 99]
+    
+    # Feature categories for analysis
+    FEATURE_CATEGORIES = {
+        'structural': ['num_nodes', 'num_edges', 'density', 'diameter', 'centrality'],
+        'temporal': ['duration', 'time', 'latency', 'delay', 'gap'],
+        'semantic': ['agent', 'tool', 'error', 'recovery', 'handoff'],
+        'dag': ['dag', 'topological', 'branch', 'level', 'parallel']
+    }
+
 
 class FeatureExtractor:
     """
@@ -60,85 +87,77 @@ class FeatureExtractor:
             features.append(graph_features)
         features_df = pd.DataFrame(features)
         
-        # Improved numeric conversion and NaN/inf handling
+        # Simplified numeric conversion and NaN/inf handling
         logger.info("Processing extracted features...")
+        features_df = self._clean_and_validate_features(features_df)
         
-        # Convert to numeric, but preserve non-numeric columns
+        logger.info("Feature matrix shape: %s", features_df.shape)
+        self._log_feature_statistics(features_df)
+        
+        return features_df
+    
+    def _clean_and_validate_features(self, features_df: pd.DataFrame) -> pd.DataFrame:
+        """Clean and validate feature DataFrame with simplified logic."""
+        # Convert to numeric, preserving non-numeric columns
         numeric_columns = []
-        updated_columns = {}
         for col in features_df.columns:
             if col in ['graph_id', 'is_anomalous', 'success']:
-                continue  # Skip non-numeric columns
+                continue
             try:
                 features_df[col] = pd.to_numeric(features_df[col], errors='coerce')
                 numeric_columns.append(col)
             except Exception:
                 logger.warning(f"Could not convert column {col} to numeric")
         
-        # Handle NaN and Inf values more carefully
+        if not numeric_columns:
+            return features_df
+        
+        # Single-pass cleaning for NaN and Inf values
+        numeric_data = features_df[numeric_columns]
+        
+        # Replace infinite values
+        numeric_data = numeric_data.replace([np.inf, -np.inf], 
+                                          [FeatureConfig.INF_REPLACEMENT_POSITIVE, 
+                                           FeatureConfig.INF_REPLACEMENT_NEGATIVE])
+        
+        # Handle NaN values with median imputation
         for col in numeric_columns:
-            col_data = features_df[col]
-            nan_count = col_data.isna().sum()
-            inf_count = np.isinf(col_data).sum()
-            if nan_count > 0 or inf_count > 0:
-                logger.info(f"Column {col}: {nan_count} NaN, {inf_count} Inf values")
-                if nan_count + inf_count > len(col_data) * 0.5:
-                    median_val = col_data.replace([np.inf, -np.inf], np.nan).median()
+            nan_count = numeric_data[col].isna().sum()
+            if nan_count > 0:
+                if nan_count > len(numeric_data) * FeatureConfig.MISSING_VALUE_THRESHOLD:
+                    # High missing rate - use median
+                    median_val = numeric_data[col].median()
                     if pd.isna(median_val):
                         median_val = 0.0
-                    updated_columns[col] = col_data.replace([np.inf, -np.inf], np.nan).fillna(median_val)
+                    numeric_data[col] = numeric_data[col].fillna(median_val)
                     logger.info(f"Column {col}: Used median imputation ({median_val:.4f})")
                 else:
-                    col_data = col_data.replace([np.inf, -np.inf], np.nan)
-                    median_val = col_data.median()
+                    # Low missing rate - use median for remaining NaN
+                    median_val = numeric_data[col].median()
                     if pd.isna(median_val):
                         median_val = 0.0
-                    updated_columns[col] = col_data.fillna(median_val)
-                    logger.info(f"Column {col}: Used median imputation for NaN values")
-        # Apply all updates at once to avoid fragmentation
-        for col, new_col in updated_columns.items():
-            features_df[col] = new_col
-        # Defragment DataFrame
+                    numeric_data[col] = numeric_data[col].fillna(median_val)
+        
+        # Update DataFrame and defragment
+        features_df[numeric_columns] = numeric_data
         features_df = features_df.copy()
         
-        # Final validation
-        numeric_data = features_df[numeric_columns]
-        if numeric_data.isna().any().any():
-            logger.warning("Still have NaN values after imputation, filling with 0")
-            features_df[numeric_columns] = numeric_data.fillna(0)
-        
-        # Check for infinite values only in numeric columns
-        try:
-            # Convert to numeric to ensure we can check for inf values
-            numeric_values = pd.to_numeric(numeric_data.values.ravel(), errors='coerce')
-            if np.isinf(numeric_values).any():
-                logger.warning("Still have Inf values after imputation, replacing with large finite values")
-                features_df[numeric_columns] = numeric_data.replace([np.inf, -np.inf], [1e6, -1e6])
-        except Exception as e:
-            logger.warning(f"Could not check for infinite values: {e}")
-            # Try a more robust approach
-            for col in numeric_columns:
-                try:
-                    col_data = pd.to_numeric(features_df[col], errors='coerce')
-                    if np.isinf(col_data).any():
-                        logger.warning(f"Column {col} has infinite values, replacing with large finite values")
-                        features_df[col] = col_data.replace([np.inf, -np.inf], [1e6, -1e6])
-                except Exception as col_e:
-                    logger.warning(f"Could not process column {col} for infinite values: {col_e}")
-        
-        logger.info("Feature matrix shape: %s", features_df.shape)
+        return features_df
+    
+    def _log_feature_statistics(self, features_df: pd.DataFrame) -> None:
+        """Log feature statistics for the first 10 numeric columns."""
+        numeric_columns = features_df.select_dtypes(include=[np.number]).columns
         logger.info("Feature statistics:")
-        for col in numeric_columns[:10]:  # Show first 10 columns
+        for col in numeric_columns[:10]:
             try:
                 col_data = features_df[col]
                 if pd.api.types.is_numeric_dtype(col_data):
-                    logger.info(f"  {col}: min={col_data.min():.4f}, max={col_data.max():.4f}, mean={col_data.mean():.4f}, std={col_data.std():.4f}")
+                    logger.info(f"  {col}: min={col_data.min():.4f}, max={col_data.max():.4f}, "
+                              f"mean={col_data.mean():.4f}, std={col_data.std():.4f}")
                 else:
                     logger.info(f"  {col}: non-numeric column")
             except Exception as e:
                 logger.warning(f"  {col}: could not compute statistics - {e}")
-        
-        return features_df
     
     def _extract_graph_features(self, graph: nx.DiGraph, graph_idx: int) -> Dict[str, Any]:
         """Extract all features from a single graph."""
@@ -187,132 +206,208 @@ class FeatureExtractor:
         features['num_edges'] = num_edges
         
         if num_nodes == 0:
-            # Empty graph - return zeros for all structural features
-            empty_features = {}
-            for feat in self.structural_features:
-                empty_features[feat] = 0.0
-            return empty_features
+            return self._get_empty_features(self.structural_features)
+        
+        # Extract features with consolidated error handling
+        features.update(self._extract_basic_structural_features(graph, num_nodes))
+        features.update(self._extract_centrality_features(graph))
+        features.update(self._extract_basic_connectivity_features(graph))
+        
+        return features
+    
+    def _extract_basic_structural_features(self, graph: nx.DiGraph, num_nodes: int) -> Dict[str, Any]:
+        """Extract basic structural features with consolidated error handling."""
+        features = {}
         
         # Density
         if 'density' in self.structural_features:
-            try:
-                features['density'] = nx.density(graph)
-            except Exception:
-                features['density'] = 0.0
+            features['density'] = self._safe_calculation(lambda: nx.density(graph), 0.0)
         
         # Diameter and path lengths
         if any(feat in self.structural_features for feat in ['diameter', 'average_shortest_path_length']):
-            try:
-                if nx.is_weakly_connected(graph) and num_nodes > 1:
-                    undirected = graph.to_undirected()
-                    
-                    if 'diameter' in self.structural_features:
-                        diameter = nx.diameter(undirected)
-                        features['diameter'] = diameter if not np.isinf(diameter) else num_nodes - 1
-                    
-                    if 'average_shortest_path_length' in self.structural_features:
-                        avg_path = nx.average_shortest_path_length(undirected)
-                        features['average_shortest_path_length'] = avg_path if not np.isinf(avg_path) else num_nodes - 1
-                else:
-                    # For disconnected graphs, use reasonable defaults
-                    if 'diameter' in self.structural_features:
-                        features['diameter'] = num_nodes - 1
-                    if 'average_shortest_path_length' in self.structural_features:
-                        features['average_shortest_path_length'] = num_nodes - 1
-            except Exception as e:
-                logger.warning(f"Error calculating diameter/path length: {e}")
+            features.update(self._extract_path_length_features(graph, num_nodes))
+        
+        # Clustering coefficient
+        if 'clustering_coefficient' in self.structural_features:
+            features['clustering_coefficient'] = self._safe_calculation(
+                lambda: np.mean(list(nx.clustering(graph.to_undirected()).values())), 0.0)
+        
+        # Transitivity
+        if 'transitivity' in self.structural_features:
+            features['transitivity'] = self._safe_calculation(
+                lambda: nx.transitivity(graph.to_undirected()), 0.0)
+        
+        # Longest path length
+        if 'longest_path_length' in self.structural_features:
+            features['longest_path_length'] = self._safe_calculation(
+                lambda: self._calculate_longest_path(graph), num_nodes - 1)
+        
+        return features
+    
+    def _extract_path_length_features(self, graph: nx.DiGraph, num_nodes: int) -> Dict[str, Any]:
+        """Extract path length features with proper handling of disconnected graphs."""
+        features = {}
+        default_value = int(num_nodes * FeatureConfig.DEFAULT_DIAMETER_MULTIPLIER) - 1
+        
+        try:
+            if nx.is_weakly_connected(graph) and num_nodes > 1:
+                undirected = graph.to_undirected()
+                
                 if 'diameter' in self.structural_features:
-                    features['diameter'] = num_nodes - 1
+                    diameter = nx.diameter(undirected)
+                    features['diameter'] = diameter if not np.isinf(diameter) else default_value
+                
                 if 'average_shortest_path_length' in self.structural_features:
-                    features['average_shortest_path_length'] = num_nodes - 1
+                    avg_path = nx.average_shortest_path_length(undirected)
+                    features['average_shortest_path_length'] = avg_path if not np.isinf(avg_path) else default_value
+            else:
+                # For disconnected graphs, use reasonable defaults
+                if 'diameter' in self.structural_features:
+                    features['diameter'] = default_value
+                if 'average_shortest_path_length' in self.structural_features:
+                    features['average_shortest_path_length'] = default_value
+        except Exception as e:
+            logger.warning(f"Error calculating path length features: {e}")
+            if 'diameter' in self.structural_features:
+                features['diameter'] = default_value
+            if 'average_shortest_path_length' in self.structural_features:
+                features['average_shortest_path_length'] = default_value
         
-        # Centrality measures
-        centrality_features = [
-            'betweenness_centrality', 'closeness_centrality', 'eigenvector_centrality'
-        ]
+        return features
+    
+    def _extract_centrality_features(self, graph: nx.DiGraph) -> Dict[str, Any]:
+        """Extract centrality features with consolidated logic."""
+        features = {}
         
-        for centrality_type in centrality_features:
+        for centrality_type in FeatureConfig.CENTRALITY_TYPES:
             if centrality_type in self.structural_features:
                 try:
                     centrality_values = self._calculate_centrality(graph, centrality_type)
                     if centrality_values and len(centrality_values) > 0:
                         values_list = list(centrality_values.values())
-                        # Filter out invalid values
                         valid_values = [v for v in values_list if not (np.isnan(v) or np.isinf(v))]
                         if valid_values:
                             features[f'{centrality_type}_mean'] = np.mean(valid_values)
                             features[f'{centrality_type}_std'] = np.std(valid_values)
                             features[f'{centrality_type}_max'] = np.max(valid_values)
                         else:
-                            features[f'{centrality_type}_mean'] = 0.0
-                            features[f'{centrality_type}_std'] = 0.0
-                            features[f'{centrality_type}_max'] = 0.0
+                            features.update(self._get_zero_centrality_features(centrality_type))
                     else:
-                        features[f'{centrality_type}_mean'] = 0.0
-                        features[f'{centrality_type}_std'] = 0.0
-                        features[f'{centrality_type}_max'] = 0.0
+                        features.update(self._get_zero_centrality_features(centrality_type))
                 except Exception as e:
                     logger.warning(f"Error calculating {centrality_type}: {e}")
-                    features[f'{centrality_type}_mean'] = 0.0
-                    features[f'{centrality_type}_std'] = 0.0
-                    features[f'{centrality_type}_max'] = 0.0
+                    features.update(self._get_zero_centrality_features(centrality_type))
         
-        # Clustering coefficient
-        if 'clustering_coefficient' in self.structural_features:
-            try:
-                clustering = nx.clustering(graph.to_undirected())
-                if clustering:
-                    values_list = list(clustering.values())
-                    valid_values = [v for v in values_list if not (np.isnan(v) or np.isinf(v))]
-                    if valid_values:
-                        features['clustering_coefficient'] = np.mean(valid_values)
-                    else:
-                        features['clustering_coefficient'] = 0.0
-                else:
-                    features['clustering_coefficient'] = 0.0
-            except Exception as e:
-                logger.warning(f"Error calculating clustering coefficient: {e}")
-                features['clustering_coefficient'] = 0.0
-        
-        # Transitivity
-        if 'transitivity' in self.structural_features:
-            try:
-                transitivity = nx.transitivity(graph.to_undirected())
-                features['transitivity'] = transitivity if not (np.isnan(transitivity) or np.isinf(transitivity)) else 0.0
-            except Exception as e:
-                logger.warning(f"Error calculating transitivity: {e}")
-                features['transitivity'] = 0.0
-        
-        # Longest path length
-        if 'longest_path_length' in self.structural_features:
-            try:
-                longest_path = self._calculate_longest_path(graph)
-                features['longest_path_length'] = longest_path if not np.isinf(longest_path) else num_nodes - 1
-            except Exception as e:
-                logger.warning(f"Error calculating longest path: {e}")
-                features['longest_path_length'] = num_nodes - 1
+        return features
+    
+    def _get_zero_centrality_features(self, centrality_type: str) -> Dict[str, float]:
+        """Get zero values for centrality features."""
+        return {
+            f'{centrality_type}_mean': 0.0,
+            f'{centrality_type}_std': 0.0,
+            f'{centrality_type}_max': 0.0
+        }
+    
+    def _extract_basic_connectivity_features(self, graph: nx.DiGraph) -> Dict[str, Any]:
+        """Extract basic connectivity features with consolidated error handling."""
+        features = {}
+        num_nodes = len(graph.nodes)
         
         # Connected components
         if 'number_connected_components' in self.structural_features:
-            try:
-                features['number_connected_components'] = nx.number_weakly_connected_components(graph)
-            except Exception as e:
-                logger.warning(f"Error calculating connected components: {e}")
-                features['number_connected_components'] = 1
+            features['number_connected_components'] = self._safe_calculation(
+                lambda: nx.number_weakly_connected_components(graph), 1)
         
         # Node connectivity
         if 'node_connectivity' in self.structural_features:
-            try:
-                if num_nodes > 1:
-                    connectivity = nx.node_connectivity(graph)
-                    features['node_connectivity'] = connectivity if not np.isinf(connectivity) else 0
-                else:
-                    features['node_connectivity'] = 0
-            except Exception as e:
-                logger.warning(f"Error calculating node connectivity: {e}")
+            if num_nodes > 1:
+                features['node_connectivity'] = self._safe_calculation(
+                    lambda: nx.node_connectivity(graph), 0)
+            else:
                 features['node_connectivity'] = 0
         
         return features
+    
+    def _safe_calculation(self, calculation_func, default_value: Any) -> Any:
+        """Safely execute a calculation with error handling."""
+        try:
+            result = calculation_func()
+            if isinstance(result, (int, float)) and (np.isnan(result) or np.isinf(result)):
+                return default_value
+            return result
+        except Exception as e:
+            logger.warning(f"Calculation failed: {e}")
+            return default_value
+    
+    def _get_empty_features(self, feature_list: List[str]) -> Dict[str, float]:
+        """Get empty feature values for a given feature list."""
+        return {feat: 0.0 for feat in feature_list}
+    
+    def get_feature_importance_analysis(self, features_df: pd.DataFrame) -> Dict[str, Any]:
+        """Analyze feature importance and distributions."""
+        analysis = {
+            'feature_count': len(features_df.columns),
+            'feature_categories': {},
+            'missing_values': {},
+            'feature_correlations': {},
+            'feature_distributions': {}
+        }
+        
+        # Categorize features using configuration constants
+        for category, keywords in FeatureConfig.FEATURE_CATEGORIES.items():
+            category_features = []
+            for col in features_df.columns:
+                if any(keyword in col.lower() for keyword in keywords):
+                    category_features.append(col)
+            analysis['feature_categories'][category] = category_features
+        
+        # Missing values analysis
+        for col in features_df.columns.unique():
+            missing_count = features_df[col].isnull().sum()
+            if isinstance(missing_count, pd.Series):
+                missing_count = missing_count.sum()
+            
+            if int(missing_count) > 0:
+                analysis['missing_values'][col] = int(missing_count)
+        
+        # Feature distributions (for numeric features)
+        numeric_features = features_df.select_dtypes(include=[np.number]).columns
+        for feature in numeric_features:
+            if feature != 'graph_id':
+                values = features_df[feature].values
+                # Filter out None values and convert to numeric
+                clean_values = []
+                for v in values:
+                    if np.isscalar(v) and v is not None:
+                        if isinstance(v, (int, float)):
+                            if not (np.isnan(v) or np.isinf(v)):
+                                clean_values.append(float(v))
+                        else:
+                            try:
+                                fv = float(v)
+                                if not (np.isnan(fv) or np.isinf(fv)):
+                                    clean_values.append(fv)
+                            except Exception:
+                                continue
+                
+                if clean_values:
+                    analysis['feature_distributions'][feature] = {
+                        'mean': np.mean(clean_values),
+                        'std': np.std(clean_values),
+                        'min': np.min(clean_values),
+                        'max': np.max(clean_values),
+                        'unique_count': len(np.unique(clean_values))
+                    }
+                else:
+                    analysis['feature_distributions'][feature] = {
+                        'mean': 0.0,
+                        'std': 0.0,
+                        'min': 0.0,
+                        'max': 0.0,
+                        'unique_count': 0
+                    }
+        
+        return analysis
     
     def _extract_dag_features(self, graph: nx.DiGraph) -> Dict[str, Any]:
         """Extract DAG-specific features."""
@@ -736,98 +831,6 @@ class FeatureExtractor:
         
         return features
     
-    def _fill_missing_values(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Fill missing values in the feature DataFrame."""
-        # Fill numeric columns with 0
-        numeric_columns = df.select_dtypes(include=[np.number]).columns
-        df[numeric_columns] = df[numeric_columns].fillna(0)
-        
-        # Fill boolean columns with False
-        bool_columns = df.select_dtypes(include=['bool']).columns
-        df[bool_columns] = df[bool_columns].fillna(False)
-        
-        # Fill object columns with 'unknown'
-        object_columns = df.select_dtypes(include=['object']).columns
-        df[object_columns] = df[object_columns].fillna('unknown')
-        
-        # Replace infinite values with large finite values
-        df.replace([np.inf, -np.inf], [1e6, -1e6], inplace=True)
-        
-        return df
-    
-    def get_feature_importance_analysis(self, features_df: pd.DataFrame) -> Dict[str, Any]:
-        """Analyze feature importance and distributions."""
-        analysis = {
-            'feature_count': len(features_df.columns),
-            'feature_categories': {},
-            'missing_values': {},
-            'feature_correlations': {},
-            'feature_distributions': {}
-        }
-        
-        # Categorize features
-        categories = {
-            'structural': ['num_nodes', 'num_edges', 'density', 'diameter', 'centrality'],
-            'temporal': ['duration', 'time', 'latency', 'delay', 'gap'],
-            'semantic': ['agent', 'tool', 'error', 'recovery', 'handoff'],
-            'dag': ['dag', 'topological', 'branch', 'level', 'parallel']
-        }
-        
-        for category, keywords in categories.items():
-            category_features = []
-            for col in features_df.columns:
-                if any(keyword in col.lower() for keyword in keywords):
-                    category_features.append(col)
-            analysis['feature_categories'][category] = category_features
-        
-        # Missing values analysis
-        for col in features_df.columns.unique():
-            missing_count = features_df[col].isnull().sum()
-            if isinstance(missing_count, pd.Series):
-                missing_count = missing_count.sum()
-            
-            if int(missing_count) > 0:
-                analysis['missing_values'][col] = int(missing_count)
-        
-        # Feature distributions (for numeric features)
-        numeric_features = features_df.select_dtypes(include=[np.number]).columns
-        for feature in numeric_features:
-            if feature != 'graph_id':
-                values = features_df[feature].values
-                # Filter out None values and convert to numeric
-                clean_values = []
-                for v in values:
-                    if np.isscalar(v) and v is not None:
-                        if isinstance(v, (int, float)):
-                            if not (np.isnan(v) or np.isinf(v)):
-                                clean_values.append(float(v))
-                        else:
-                            try:
-                                fv = float(v)
-                                if not (np.isnan(fv) or np.isinf(fv)):
-                                    clean_values.append(fv)
-                            except Exception:
-                                continue
-                
-                if clean_values:
-                    analysis['feature_distributions'][feature] = {
-                        'mean': np.mean(clean_values),
-                        'std': np.std(clean_values),
-                        'min': np.min(clean_values),
-                        'max': np.max(clean_values),
-                        'unique_count': len(np.unique(clean_values))
-                    }
-                else:
-                    analysis['feature_distributions'][feature] = {
-                        'mean': 0.0,
-                        'std': 0.0,
-                        'min': 0.0,
-                        'max': 0.0,
-                        'unique_count': 0
-                    }
-        
-        return analysis
-
     def _extract_graph_structure_features(self, graph: nx.DiGraph) -> Dict[str, Any]:
         """
         Extract raw graph structure features essential for GNNs.

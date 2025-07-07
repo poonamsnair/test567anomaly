@@ -1352,65 +1352,44 @@ class EnsembleAnomalyDetector:
                 logger.debug("Isolation Forest standardized scores range: [%.4f, %.4f]", np.min(scores), np.max(scores))
             elif method == 'one_class_svm':
                 logger.debug("Processing One-Class SVM scores for %s", model_name)
-                # Apply preprocessing
                 scaler = model_data.get('scaler')
                 pca = model_data.get('pca')
                 variance_threshold = model_data.get('variance_threshold')
-                
                 if scaler is None:
                     logger.warning("No scaler found for %s", model_name)
-                    return np.zeros(len(features)), np.zeros(len(features))
-                
-                # Apply preprocessing
-                features_processed = features.copy()
-                
-                if variance_threshold is not None:
-                    features_processed = variance_threshold.transform(features_processed)
-                
-                if pca is not None:
-                    features_processed = pca.transform(features_processed)
-                
-                features_scaled = scaler.transform(features_processed)
-                raw_scores = model.decision_function(features_scaled) # Lower is more anomalous
-                scores = -raw_scores # Negate to make higher more anomalous
-                logger.debug("One-Class SVM standardized scores range: [%.4f, %.4f]", np.min(scores), np.max(scores))
+                    scores = np.zeros(len(features))
+                else:
+                    features_processed = features.copy()
+                    if variance_threshold is not None:
+                        features_processed = variance_threshold.transform(features_processed)
+                    if pca is not None:
+                        features_processed = pca.transform(features_processed)
+                    features_scaled = scaler.transform(features_processed)
+                    raw_scores = model.decision_function(features_scaled) # Lower is more anomalous
+                    scores = -raw_scores # Negate to make higher more anomalous
+                    logger.debug("One-Class SVM standardized scores range: [%.4f, %.4f]", np.min(scores), np.max(scores))
             elif method == 'gnn_autoencoder':
                 logger.debug("Processing GNN Autoencoder scores for %s", model_name)
-                # GNN scores (reconstruction error) are already higher = more anomalous
-                # For GNN models, we need to create dummy graphs from features
-                # This is a fallback when graph data is not available
                 if hasattr(model, 'forward'):
                     try:
                         device = next(model.parameters()).device
-                        
-                        # Get the expected input dimension from the model
                         expected_input_dim = model.encoder_layers[0].in_channels if hasattr(model, 'encoder_layers') and model.encoder_layers else features.shape[1]
-                        
-                        # Ensure input dimension matches model expectation
                         if features.shape[1] != expected_input_dim:
-                            logger.warning("Input dimension mismatch for GNN: expected %d, got %d. Adjusting input.", 
-                                          expected_input_dim, features.shape[1])
-                            
+                            logger.warning("Input dimension mismatch for GNN: expected %d, got %d. Adjusting input.", expected_input_dim, features.shape[1])
                             if features.shape[1] > expected_input_dim:
-                                # Truncate to expected dimension
                                 features_adjusted = features[:, :expected_input_dim]
                             else:
-                                # Pad with zeros to expected dimension
                                 padding = np.zeros((features.shape[0], expected_input_dim - features.shape[1]))
                                 features_adjusted = np.hstack([features, padding])
                         else:
                             features_adjusted = features
-                        
-                        # Create dummy graph structure
                         dummy_x = torch.tensor(features_adjusted, dtype=torch.float).to(device)
                         dummy_edge_index = torch.tensor([[i, i] for i in range(len(features_adjusted))], dtype=torch.long).t().contiguous().to(device)
                         from .models import Data
                         dummy_data = Data(x=dummy_x, edge_index=dummy_edge_index)
-                        
                         with torch.no_grad():
                             reconstructed = model(dummy_data)
                             scores = torch.mean((dummy_x - reconstructed) ** 2, dim=1).cpu().numpy()
-                        
                         logger.debug("GNN Autoencoder scores range: [%.4f, %.4f]", np.min(scores), np.max(scores))
                     except Exception as e:
                         logger.warning("GNN model prediction failed for %s: %s, using fallback scores", model_name, e)
@@ -1421,20 +1400,14 @@ class EnsembleAnomalyDetector:
             else:
                 logger.warning("Unknown model method: %s for %s", method, model_name)
                 scores = np.zeros(len(features))
-            
             # Ensure scores are not all the same
             if np.all(scores == scores[0]):
                 logger.warning("All scores are constant for %s, adding small noise", model_name)
                 scores = scores + np.random.normal(0, 1e-6, size=scores.shape)
-            
-            # Calculate predictions using default threshold (higher score = more anomalous)
-            # This thresholding is mostly for debug logging here, actual thresholding happens in ensemble predict
+            # Always define predictions
             threshold_debug = np.percentile(scores, 90)
-            predictions_debug = (scores > threshold_debug).astype(int)
-            
-            logger.debug("Base model %s: %d anomalies detected out of %d samples (using debug threshold)",
-                        model_name, np.sum(predictions_debug), len(predictions_debug))
-            
+            predictions = (scores > threshold_debug).astype(int)
+            logger.debug("Base model %s: %d anomalies detected out of %d samples (using debug threshold)", model_name, np.sum(predictions), len(predictions))
             return scores, predictions
             
         except Exception as e:
