@@ -91,14 +91,53 @@ class AnomalyDetectionEvaluator:
         
         logger.info("Normal trajectories: %d, Anomalous trajectories: %d", 
                    len(normal_trajectories), len(anomalous_trajectories))
-        
-        # Split normal trajectories
+
+        if self.train_ratio >= 1.0 - 1e-9: # Effectively train_ratio is 1.0
+            logger.warning("Train ratio is ~1.0. All normal data will be used for training. Validation and test sets will only contain anomalous data if present, or be empty.")
+            train_df = normal_trajectories.copy()
+            val_df = pd.DataFrame(columns=features_df.columns) # Empty df with same columns
+            test_df = pd.DataFrame(columns=features_df.columns) # Empty df with same columns
+
+            if len(anomalous_trajectories) > 0:
+                anomalous_val, anomalous_test = train_test_split(
+                    anomalous_trajectories,
+                    train_size=0.5,
+                    random_state=random_state,
+                    shuffle=True
+                )
+                val_df = pd.concat([val_df, anomalous_val], ignore_index=True)
+                test_df = pd.concat([test_df, anomalous_test], ignore_index=True)
+
+            # Shuffle validation and test sets if they have data
+            if not val_df.empty:
+                val_df = val_df.sample(frac=1, random_state=random_state).reset_index(drop=True)
+            if not test_df.empty:
+                test_df = test_df.sample(frac=1, random_state=random_state).reset_index(drop=True)
+
+            logger.info("Data splits created (train_ratio ~1.0):")
+            logger.info("  Train: %d (%.1f%% normal)", len(train_df), 100.0 if not train_df.empty else 0.0)
+            val_normal_perc = 100.0 * (~val_df.get('is_anomalous', pd.Series(dtype=bool))).sum() / len(val_df) if not val_df.empty else 0.0
+            logger.info("  Validation: %d (%.1f%% normal)", len(val_df), val_normal_perc)
+            test_normal_perc = 100.0 * (~test_df.get('is_anomalous', pd.Series(dtype=bool))).sum() / len(test_df) if not test_df.empty else 0.0
+            logger.info("  Test: %d (%.1f%% normal)", len(test_df), test_normal_perc)
+            return train_df, val_df, test_df
+
+        # Proceed with standard splitting if train_ratio < 1.0
         train_size = self.train_ratio
         val_test_size = self.val_ratio + self.test_ratio
-        val_size_adjusted = self.val_ratio / val_test_size
+        if val_test_size == 0: # Should not happen if train_ratio < 1.0 and ratios sum to 1
+             logger.error("Validation and Test ratio sum to 0, but train_ratio is less than 1.0. Check data_split configuration.")
+             # Fallback: Give all remaining to validation, or handle error appropriately
+             # For now, let's prevent ZeroDivisionError by assigning all to normal_val_test to train
+             # This case implies a misconfiguration.
+             normal_train = normal_trajectories
+             normal_val_test = pd.DataFrame(columns=normal_trajectories.columns)
+
+        else:
+            val_size_adjusted = self.val_ratio / val_test_size
         
-        # First split: train vs (val + test)
-        normal_train, normal_val_test = train_test_split(
+            # First split: train vs (val + test)
+            normal_train, normal_val_test = train_test_split(
             normal_trajectories, 
             train_size=train_size,
             random_state=random_state,
@@ -353,11 +392,12 @@ class AnomalyDetectionEvaluator:
                 logger.warning("Failed to calculate clustering metrics: %s", e)
             
             # Custom anomaly detection metrics
-            if 'detection_latency' in self.metrics:
-                metrics['detection_latency'] = self._calculate_detection_latency(test_df, predictions)
+            # Note: User should update their config.yaml if they were using the old metric names.
+            if 'overall_detection_recall' in self.metrics: # Renamed from detection_latency
+                metrics['overall_detection_recall'] = self._calculate_overall_detection_recall(test_df, y_true, predictions)
             
-            if 'false_positive_clustering' in self.metrics:
-                metrics['false_positive_clustering'] = self._calculate_false_positive_clustering(
+            if 'false_discovery_rate' in self.metrics: # Renamed from false_positive_clustering
+                metrics['false_discovery_rate'] = self._calculate_false_discovery_rate(
                     test_df, y_true, predictions
                 )
             
@@ -461,29 +501,40 @@ class AnomalyDetectionEvaluator:
         
         return type_metrics
     
-    def _calculate_detection_latency(self, test_df: pd.DataFrame, predictions: np.ndarray) -> float:
-        """Calculate average detection latency (placeholder implementation)."""
-        # In a real system, this would measure how quickly anomalies are detected
-        # after they start occurring. For this implementation, we'll use a simplified metric.
+    def _calculate_overall_detection_recall(self, test_df: pd.DataFrame, y_true: np.ndarray, predictions: np.ndarray) -> float:
+        """
+        Calculate overall recall of detected anomalies.
+        This was previously named _calculate_detection_latency but its calculation is recall.
+        """
+        # y_true should be passed to ensure consistency with other metric calculations
+        # total_anomalies = test_df.get('is_anomalous', pd.Series([False] * len(test_df))).sum()
+        total_anomalies = np.sum(y_true == 1)
         
-        detected_anomalies = predictions.sum()
-        total_anomalies = test_df.get('is_anomalous', pd.Series([False] * len(test_df))).sum()
+        # Detected anomalies are true positives (prediction is 1 and true is 1)
+        detected_true_anomalies = np.sum((predictions == 1) & (y_true == 1))
         
         if total_anomalies > 0:
-            return detected_anomalies / total_anomalies
-        else:
-            return 1.0
-    
-    def _calculate_false_positive_clustering(self, test_df: pd.DataFrame, 
+            return detected_true_anomalies / total_anomalies
+        elif np.sum(predictions == 1) == 0: # No anomalies and no positive predictions
+             return 1.0 # Perfect score if there were no anomalies to find and none were predicted
+        else: # No true anomalies, but some were predicted
+             return 0.0
+
+
+    def _calculate_false_discovery_rate(self, test_df: pd.DataFrame,
                                            y_true: np.ndarray, predictions: np.ndarray) -> float:
-        """Calculate how clustered false positives are."""
-        # Simple implementation: ratio of false positives to total predictions
+        """
+        Calculate the False Discovery Rate (FDR = FP / (FP + TP) = FP / PRED_P).
+        This is 1 - Precision.
+        Previously named _calculate_false_positive_clustering.
+        """
         false_positives = np.sum((predictions == 1) & (y_true == 0))
-        total_positives = np.sum(predictions)
+        true_positives = np.sum((predictions == 1) & (y_true == 1))
+        total_predicted_positives = false_positives + true_positives # Same as np.sum(predictions == 1)
         
-        if total_positives > 0:
-            return false_positives / total_positives
-        else:
+        if total_predicted_positives > 0:
+            return false_positives / total_predicted_positives
+        else: # No positive predictions, so no false discoveries among them.
             return 0.0
     
     def _calculate_severity_weighted_performance(self, test_df: pd.DataFrame, 

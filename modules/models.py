@@ -33,80 +33,40 @@ from .utils import Timer, ensure_directory
 logger = logging.getLogger(__name__)
 
 
-def _get_dataset_size_params(n_samples: int) -> Dict[str, Any]:
-    """Get adaptive parameters based on dataset size."""
-    if n_samples < 100:
-        return {
-            'isolation_forest': {
-                'n_estimators': [30, 50, 75],
-                'max_samples': [0.5, 0.6, 0.7],
-                'max_features': [0.5, 0.6, 0.7],
-                'contamination': [0.08, 0.1, 0.12],
-                'bootstrap': [False, True]
-            },
-            'one_class_svm': {
-                'kernel': ['linear', 'rbf'],
-                'gamma': ['auto', 'scale', 0.01],
-                'nu': [0.15, 0.2, 0.25]
-            },
-            'gnn_autoencoder': {
-                'hidden_dims': [[16, 32], [32, 64]],
-                'learning_rate': [0.001, 0.005],
-                'dropout': [0.2, 0.3],
-                'batch_size': [4, 8],
-                'epochs': [30, 50],
-                'gnn_type': ['GCN']
-            },
-            'max_combinations': 8
-        }
-    elif n_samples < 300:
-        return {
-            'isolation_forest': {
-                'n_estimators': [50, 75, 100],
-                'max_samples': [0.6, 0.7, 0.8],
-                'max_features': [0.6, 0.7, 0.8],
-                'contamination': [0.08, 0.1, 0.12, 0.15],
-                'bootstrap': [False, True]
-            },
-            'one_class_svm': {
-                'kernel': ['linear', 'rbf'],
-                'gamma': ['auto', 'scale', 0.01],
-                'nu': [0.15, 0.2, 0.25]
-            },
-            'gnn_autoencoder': {
-                'hidden_dims': [[32, 64], [48, 96]],
-                'learning_rate': [0.001, 0.01],
-                'dropout': [0.15, 0.25],
-                'batch_size': [8, 16],
-                'epochs': [50, 75],
-                'gnn_type': ['GCN']
-            },
-            'max_combinations': 16
-        }
+def _get_dataset_size_params(n_samples: int, config: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Get adaptive parameters based on dataset size by reading from the config.
+
+    Args:
+        n_samples: Number of samples in the dataset.
+        config: The main configuration dictionary which should contain 'hyperparameter_grids'.
+
+    Returns:
+        Parameter grid for the determined dataset size.
+    """
+    hyperparam_grids = config.get('hyperparameter_grids', {})
+
+    if n_samples < config.get('dataset_size_thresholds', {}).get('small_medium_boundary', 100):
+        grid_type = 'small_dataset'
+    elif n_samples < config.get('dataset_size_thresholds', {}).get('medium_large_boundary', 300):
+        grid_type = 'medium_dataset'
     else:
-        return {
-            'isolation_forest': {
-                'n_estimators': [75, 100, 150],
-                'max_samples': [0.6, 0.7, 0.8],
-                'max_features': [0.6, 0.7, 0.8],
-                'contamination': [0.05, 0.08, 0.1, 0.12],
-                'bootstrap': [True, False]
-            },
-            'one_class_svm': {
-                'kernel': ['linear', 'rbf'],
-                'gamma': ['auto', 'scale', 0.01],
-                'nu': [0.15, 0.2, 0.25]
-            },
-            'gnn_autoencoder': {
-                'hidden_dims': [[64, 128], [128, 256]],
-                'learning_rate': [0.001, 0.01],
-                'dropout': [0.1, 0.3],
-                'batch_size': [16, 32],
-                'epochs': [50],
-                'gnn_type': ['GCN']
-            },
-            'max_combinations': 24
-        }
+        grid_type = 'large_dataset'
+
+    selected_grid = hyperparam_grids.get(grid_type)
+
+    if selected_grid is None:
+        logger.warning(f"No hyperparameter grid found for '{grid_type}' in config. Falling back to large_dataset defaults if available, else empty.")
+        selected_grid = hyperparam_grids.get('large_dataset', {}) # Fallback strategy
+        if not selected_grid:
+             logger.error(f"Fallback hyperparameter grid 'large_dataset' also not found. Parameter tuning may fail or use hardcoded defaults.")
+             # Minimal fallback to prevent outright crashes, though tuning will be ineffective.
+             return {
+                'isolation_forest': {}, 'one_class_svm': {}, 'gnn_autoencoder': {}, 'max_combinations': 1
+            }
+
+    logger.info(f"Using hyperparameter grid for '{grid_type}' ({n_samples} samples)")
+    return selected_grid
 
 
 def _create_model_result(model: Any, best_params: Dict, training_scores: np.ndarray, 
@@ -125,8 +85,16 @@ def _create_model_result(model: Any, best_params: Dict, training_scores: np.ndar
     return result
 
 
-def _process_categorical_features(df: pd.DataFrame, max_categories: int = 5) -> pd.DataFrame:
-    """Process categorical features with dummy encoding."""
+def _process_categorical_features(df: pd.DataFrame, max_categories_for_dummy: int = 5) -> pd.DataFrame:
+    """
+    Process categorical features with dummy encoding.
+    Args:
+        df: DataFrame to process.
+        max_categories_for_dummy: Maximum number of categories to keep for dummy encoding
+                                   when dataset is small. Other categories become 'other'.
+    Returns:
+        DataFrame with categorical features processed.
+    """
     categorical_columns = df.select_dtypes(include=['object']).columns
     
     for col in categorical_columns:
@@ -137,9 +105,11 @@ def _process_categorical_features(df: pd.DataFrame, max_categories: int = 5) -> 
         
         # Limit categories for small datasets
         unique_values = df[col].nunique()
-        if len(df) < 100 and unique_values > max_categories:
-            logger.debug(f"Limiting dummy encoding for column {col} ({unique_values} unique values)")
-            top_categories = df[col].value_counts().head(max_categories).index
+        # The threshold for "small dataset" (len(df) < 100) is hardcoded here but could also be configurable.
+        if len(df) < 100 and unique_values > max_categories_for_dummy:
+            logger.debug(f"Limiting dummy encoding for column {col} ({unique_values} unique values, "
+                         f"max_categories_for_dummy: {max_categories_for_dummy})")
+            top_categories = df[col].value_counts().head(max_categories_for_dummy).index
             df[col] = df[col].apply(lambda x: x if x in top_categories else 'other')
         
         # Convert to dummy variables
@@ -242,7 +212,9 @@ class AnomalyDetectionModels:
         training_features = features_df[feature_columns].copy() if set(feature_columns).issubset(features_df.columns) else features_df.copy()
         
         # Process categorical features
-        training_features = _process_categorical_features(training_features)
+        # Get max_categories from model_config or use a default
+        max_cat_dummy = self.models_config.get('max_categories_for_dummy_encoding', 5)
+        training_features = _process_categorical_features(training_features, max_cat_dummy)
         
         # Ensure feature consistency
         training_features, feature_columns = _ensure_feature_consistency(training_features, feature_columns)
@@ -286,7 +258,8 @@ class AnomalyDetectionModels:
         
         # Get default parameters based on dataset size
         n_samples = X_scaled.shape[0]
-        size_params = _get_dataset_size_params(n_samples)['isolation_forest']
+        # Pass self.config to access hyperparameter_grids
+        size_params = _get_dataset_size_params(n_samples, self.config).get('isolation_forest', {})
         
         default_params = {
             'n_estimators': size_params['n_estimators'][1],  # Use middle value
@@ -309,9 +282,10 @@ class AnomalyDetectionModels:
         logger.info(f"Tuning Isolation Forest for {n_samples} samples")
         
         # Get parameter grid based on dataset size
-        size_params = _get_dataset_size_params(n_samples)
-        param_grid = size_params['isolation_forest']
-        max_combinations = size_params['max_combinations']
+        # Pass self.config to access hyperparameter_grids
+        size_params_config = _get_dataset_size_params(n_samples, self.config)
+        param_grid = size_params_config.get('isolation_forest', {})
+        max_combinations = size_params_config.get('max_combinations', 10) # Default max_combinations
         
         # Create parameter combinations
         all_combinations = list(ParameterGrid(param_grid))
@@ -352,14 +326,27 @@ class AnomalyDetectionModels:
                     
                     score_variance = np.var(scores)
                     
-                    # Adaptive scoring based on dataset size
-                    if n_samples < 100:
-                        score = sil_score * 0.4 + min(score_variance * 3, 0.3) - max(score_variance * 0.1, 0.1)
-                    elif n_samples < 300:
-                        score = sil_score * 0.5 + min(score_variance * 5, 0.4) - max(score_variance * 0.05, 0.05)
-                    else:
-                        score = sil_score * 0.7 + min(score_variance * 10, 0.3)
+                    # Adaptive scoring heuristic:
+                    # The primary goal is to achieve good cluster separation (high silhouette score)
+                    # for the predicted inliers vs. outliers.
+                    # A secondary goal is to ensure the anomaly scores (`scores`) themselves have some variance;
+                    # too little variance might indicate a degenerate model.
+                    # However, excessively high variance in scores, especially for small datasets,
+                    # might indicate overfitting to a few points, leading to extreme scores.
+                    # The heuristic moderately rewards some variance but penalizes very high variance,
+                    # especially on smaller datasets, to encourage more stable scoring.
+                    # The weights and caps are empirically derived.
+                    if n_samples < 100: # Small dataset
+                        # Higher weight on silhouette, moderate reward for variance, stronger penalty for high variance
+                        score = sil_score * 0.4 + min(score_variance * 3, 0.3) - max(score_variance * 0.1, 0.15)
+                    elif n_samples < 300: # Medium dataset
+                        # Balanced approach
+                        score = sil_score * 0.5 + min(score_variance * 5, 0.4) - max(score_variance * 0.05, 0.1)
+                    else: # Larger dataset
+                        # Higher reliance on silhouette, gentler reward/penalty for variance
+                        score = sil_score * 0.7 + min(score_variance * 10, 0.3) - max(score_variance * 0.02, 0.05)
                 else:
+                    # If only one cluster is predicted (e.g., all normal or all anomalous), assign a low score.
                     score = -1.0
                 
                 if score > best_score:
@@ -397,7 +384,8 @@ class AnomalyDetectionModels:
         
         # Get default parameters based on dataset size
         n_samples = X_scaled.shape[0]
-        size_params = _get_dataset_size_params(n_samples)['one_class_svm']
+        # Pass self.config to access hyperparameter_grids
+        size_params = _get_dataset_size_params(n_samples, self.config).get('one_class_svm', {})
         
         default_params = {
             'kernel': size_params['kernel'][0],  # Use first value
@@ -417,19 +405,24 @@ class AnomalyDetectionModels:
         logger.info(f"Tuning One-Class SVM for {n_samples} samples")
         
         # Get parameter grid
-        size_params = _get_dataset_size_params(n_samples)
-        param_grid = size_params['one_class_svm']
-        
+        # Pass self.config to access hyperparameter_grids
+        size_params_config = _get_dataset_size_params(n_samples, self.config)
+        param_grid = size_params_config.get('one_class_svm', {})
+        # Note: max_combinations for OCSVM tuning was hardcoded to 10.
+        # We'll use the one from config or a default if not specified for consistency.
+        max_combinations = size_params_config.get('max_combinations_ocsvm',
+                                               size_params_config.get('max_combinations', 10))
+
         # Create parameter combinations
         all_combinations = list(ParameterGrid(param_grid))
-        if len(all_combinations) > 10:
+        if len(all_combinations) > max_combinations:
             import random
             random.seed(42)
-            combinations = random.sample(all_combinations, 10)
+            combinations = random.sample(all_combinations, max_combinations)
         else:
             combinations = all_combinations
         
-        logger.info(f"Tuning with {len(combinations)} parameter combinations")
+        logger.info(f"Tuning One-Class SVM with {len(combinations)} parameter combinations (max: {max_combinations})")
         
         best_score = -np.inf
         best_params = None
@@ -452,14 +445,27 @@ class AnomalyDetectionModels:
                     
                     score_variance = np.var(scores)
                     
-                    # Anti-overfitting scoring
-                    if n_samples < 100:
-                        score = sil_score * 0.6 - max(score_variance * 0.2, 0.1)
-                    elif n_samples < 300:
-                        score = sil_score * 0.7 - max(score_variance * 0.1, 0.05)
-                    else:
-                        score = sil_score
+                    # Adaptive scoring heuristic for One-Class SVM:
+                    # Similar to Isolation Forest, prioritize good cluster separation (silhouette score).
+                    # For OCSVM, which defines a boundary around normal data, a very tight boundary might lead
+                    # to high silhouette if it correctly separates some noise, but it might also be overfit.
+                    # A very loose boundary might result in poor separation.
+                    # This heuristic penalizes high score variance more directly than in Isolation Forest,
+                    # as OCSVM decision_function scores can sometimes have extreme values for points far
+                    # from the boundary, potentially indicating overfitting if the boundary is too complex.
+                    # The aim is to find a balance between good separation and a stable, generalizable boundary.
+                    # The weights and caps are empirically derived.
+                    if n_samples < 100: # Small dataset
+                        # Emphasize silhouette, but with a noticeable penalty for high variance
+                        score = sil_score * 0.6 - max(score_variance * 0.2, 0.15)
+                    elif n_samples < 300: # Medium dataset
+                        # Similar emphasis, slightly milder variance penalty
+                        score = sil_score * 0.7 - max(score_variance * 0.1, 0.1)
+                    else: # Larger dataset
+                        # Primarily rely on silhouette score, with a smaller variance penalty
+                        score = sil_score * 0.8 - max(score_variance * 0.05, 0.05)
                 else:
+                    # If only one cluster is predicted, assign a low score.
                     score = -1.0
                 
                 if score > best_score:
@@ -501,7 +507,8 @@ class AnomalyDetectionModels:
         
         # Get default parameters based on dataset size
         n_graphs = len(torch_graphs)
-        size_params = _get_dataset_size_params(n_graphs)['gnn_autoencoder']
+        # Pass self.config to access hyperparameter_grids
+        size_params = _get_dataset_size_params(n_graphs, self.config).get('gnn_autoencoder', {})
         
         default_params = {
             'hidden_dims': size_params['hidden_dims'][0],  # Use first value
@@ -721,59 +728,32 @@ class AnomalyDetectionModels:
     
     def _tune_gnn_autoencoder(self, torch_graphs: List[Data]) -> Dict[str, Any]:
         """Tune GNN autoencoder hyperparameters with small sample optimizations."""
-        gnn_config = self.models_config.get('gnn_autoencoder', {})
-        
-        # Adaptive parameter grid based on dataset size
         n_graphs = len(torch_graphs)
-        
         logger.info("Tuning GNN Autoencoder for %d graphs", n_graphs)
+
+        # Get the appropriate grid from config based on dataset size
+        # This returns the entire grid for that size (IF, OCSVM, GNN params, max_combinations)
+        size_specific_config = _get_dataset_size_params(n_graphs, self.config)
+
+        # Extract GNN specific part and max_combinations
+        param_grid_gnn = size_specific_config.get('gnn_autoencoder', {})
+        if not param_grid_gnn:
+            logger.warning("GNN autoencoder params not found in the selected size_specific_config. Using empty grid.")
+            param_grid_gnn = {} # Ensure it's a dict
+
+        # Max combinations for GNN tuning can be specific or general
+        max_combinations = size_specific_config.get('max_combinations_gnn',
+                                                 size_specific_config.get('max_combinations', 5))
+
+        all_combinations = list(ParameterGrid(param_grid_gnn)) if ParameterGrid and param_grid_gnn else []
         
-        # Adjust parameters for small/medium datasets
-        if n_graphs < 50:
-            # Very small dataset - conservative parameters
-            hidden_dims_range = [[16, 32], [32, 64]]  # Smaller architectures
-            learning_rate_range = [0.001, 0.005]  # Lower learning rates
-            dropout_range = [0.2, 0.3]  # Higher dropout for regularization
-            batch_size_range = [4, 8]  # Smaller batch sizes
-            epochs_range = [30, 50]  # Fewer epochs
-            gnn_type_range = ['GCN']  # Only GCN for simplicity
-        elif n_graphs < 150:
-            # Small dataset - balanced parameters
-            hidden_dims_range = [[32, 64], [48, 96]]  # Medium architectures
-            learning_rate_range = [0.001, 0.01]  # Standard learning rates
-            dropout_range = [0.15, 0.25]  # Moderate dropout
-            batch_size_range = [8, 16]  # Medium batch sizes
-            epochs_range = [50, 75]  # Moderate epochs
-            gnn_type_range = ['GCN']  # Only GCN for stability
-        else:
-            # Medium+ dataset - use full parameter range
-            hidden_dims_range = gnn_config.get('hidden_dims', [[64, 128], [128, 256]])
-            learning_rate_range = gnn_config.get('learning_rate', [0.001, 0.01])
-            dropout_range = gnn_config.get('dropout', [0.1, 0.3])
-            batch_size_range = gnn_config.get('batch_size', [16, 32])
-            epochs_range = [50]  # Reduced for tuning
-            gnn_type_range = gnn_config.get('gnn_types', ['GCN'])
-        
-        # Create parameter grid
-        param_grid = {
-            'hidden_dims': hidden_dims_range,
-            'learning_rate': learning_rate_range,
-            'dropout': dropout_range,
-            'batch_size': batch_size_range,
-            'epochs': epochs_range,
-            'gnn_type': gnn_type_range
-        }
-        
-        # Limit combinations based on dataset size
-        all_combinations = list(ParameterGrid(param_grid)) if ParameterGrid else []
-        
-        if n_graphs < 50:
-            max_combinations = 3  # Very limited for small datasets
-        elif n_graphs < 150:
-            max_combinations = 4  # Limited for small datasets
-        else:
-            max_combinations = 5  # Standard for larger datasets
-        
+        if not all_combinations:
+            logger.warning("No GNN parameter combinations to tune. Skipping GNN tuning.")
+            return {
+                'model': None, 'best_params': None, 'best_score': np.inf,
+                'training_scores': np.array([]), 'method': 'gnn_autoencoder'
+            }
+
         if len(all_combinations) > max_combinations:
             import random
             random.seed(42)  # For reproducibility
@@ -879,18 +859,25 @@ class AnomalyDetectionModels:
         try:
             if method == 'isolation_forest':
                 X_test_scaled = model_results.get('scaler').transform(X_test) if model_results.get('scaler') else X_test
-                scores = model.decision_function(X_test_scaled)
+                # Standardize scores: negate to make higher scores more anomalous
+                scores = -model.decision_function(X_test_scaled)
+                # Default threshold percentile might need adjustment based on negated scores,
+                # e.g., percentile of 15 for original scores becomes 85 for negated scores.
+                # For now, we assume threshold is externally calibrated or this default is acceptable.
                 if threshold is None:
-                    threshold = np.percentile(scores, 85)
-                predictions = (scores < threshold).astype(int)
+                    # If lower scores were anomalous (e.g., 15th percentile),
+                    # then for negated scores, higher scores are anomalous (85th percentile).
+                    threshold = np.percentile(scores, 85) # Keep consistent with "higher is anomalous"
                 
             elif method == 'one_class_svm':
                 X_test_scaled = model_results.get('scaler').transform(X_test) if model_results.get('scaler') else X_test
-                scores = model.decision_function(X_test_scaled)
+                # Standardize scores: negate to make higher scores more anomalous
+                scores = -model.decision_function(X_test_scaled)
                 if threshold is None:
-                    threshold = np.percentile(scores, 95)
-                predictions = (scores < threshold).astype(int)
-                
+                    # If lower scores were anomalous (e.g., 5th percentile for OCSVM),
+                    # then for negated scores, higher scores are anomalous (95th percentile).
+                    threshold = np.percentile(scores, 95) # Keep consistent with "higher is anomalous"
+
             elif method == 'gnn_autoencoder':
                 if isinstance(X_test, list):
                     return self.predict_anomalies_graphs(model_results, X_test, threshold)
@@ -917,13 +904,15 @@ class AnomalyDetectionModels:
                     scores = np.random.random(len(X_test))
                 
                 if threshold is None:
-                    threshold = np.percentile(scores, 90)
-                predictions = (scores > threshold).astype(int)
-                
+                    threshold = np.percentile(scores, 90) # Higher score is anomalous
+                # Universal prediction logic after score standardization
             else:
                 logger.warning(f"Unknown model method: {method}")
                 scores = np.zeros(len(X_test))
-                predictions = np.zeros(len(X_test))
+                # predictions will also be all zeros
+
+            # Universal prediction logic: higher scores are anomalous
+            predictions = (scores > threshold).astype(int)
             
             # Add noise if scores are constant
             scores = _add_noise_if_constant(scores)
@@ -1355,10 +1344,12 @@ class EnsembleAnomalyDetector:
                 return np.zeros(len(features)), np.zeros(len(features))
             
             # Get scores based on model type
+            # ALL SCORES ARE TRANSFORMED SO HIGHER = MORE ANOMALOUS
             if method == 'isolation_forest':
                 logger.debug("Processing Isolation Forest scores for %s", model_name)
-                scores = model.score_samples(features)
-                logger.debug("Isolation Forest scores range: [%.4f, %.4f]", np.min(scores), np.max(scores))
+                raw_scores = model.score_samples(features) # Higher is more normal
+                scores = -raw_scores # Negate to make higher more anomalous
+                logger.debug("Isolation Forest standardized scores range: [%.4f, %.4f]", np.min(scores), np.max(scores))
             elif method == 'one_class_svm':
                 logger.debug("Processing One-Class SVM scores for %s", model_name)
                 # Apply preprocessing
@@ -1380,10 +1371,12 @@ class EnsembleAnomalyDetector:
                     features_processed = pca.transform(features_processed)
                 
                 features_scaled = scaler.transform(features_processed)
-                scores = model.decision_function(features_scaled)
-                logger.debug("One-Class SVM scores range: [%.4f, %.4f]", np.min(scores), np.max(scores))
+                raw_scores = model.decision_function(features_scaled) # Lower is more anomalous
+                scores = -raw_scores # Negate to make higher more anomalous
+                logger.debug("One-Class SVM standardized scores range: [%.4f, %.4f]", np.min(scores), np.max(scores))
             elif method == 'gnn_autoencoder':
                 logger.debug("Processing GNN Autoencoder scores for %s", model_name)
+                # GNN scores (reconstruction error) are already higher = more anomalous
                 # For GNN models, we need to create dummy graphs from features
                 # This is a fallback when graph data is not available
                 if hasattr(model, 'forward'):
@@ -1434,12 +1427,13 @@ class EnsembleAnomalyDetector:
                 logger.warning("All scores are constant for %s, adding small noise", model_name)
                 scores = scores + np.random.normal(0, 1e-6, size=scores.shape)
             
-            # Calculate predictions using default threshold
-            threshold = np.percentile(scores, 90)
-            predictions = (scores > threshold).astype(int)
+            # Calculate predictions using default threshold (higher score = more anomalous)
+            # This thresholding is mostly for debug logging here, actual thresholding happens in ensemble predict
+            threshold_debug = np.percentile(scores, 90)
+            predictions_debug = (scores > threshold_debug).astype(int)
             
-            logger.debug("Base model %s: %d anomalies detected out of %d samples", 
-                        model_name, np.sum(predictions), len(predictions))
+            logger.debug("Base model %s: %d anomalies detected out of %d samples (using debug threshold)",
+                        model_name, np.sum(predictions_debug), len(predictions_debug))
             
             return scores, predictions
             
