@@ -882,7 +882,7 @@ class GraphProcessor:
             for i, data in enumerate(torch_graphs):
                 try:
                     data = data.to(device)
-                    node_embeddings = trained_model(data)
+                    node_embeddings, _ = trained_model(data)
                     
                     # Aggregate to graph-level embedding
                     if hasattr(data, 'num_graphs') and data.num_graphs > 1:
@@ -961,10 +961,10 @@ class GraphProcessor:
                 optimizer.zero_grad()
                 
                 # Forward pass
-                node_embeddings = model(batch)
+                node_embeddings, reconstructed = model(batch)
                 
                 # Reconstruction loss (autoencoder-style)
-                loss = nn.MSELoss()(node_embeddings, batch.x)
+                loss = nn.MSELoss()(reconstructed, batch.x)
                 
                 # Backward pass
                 loss.backward()
@@ -1099,6 +1099,9 @@ class GraphSAGEModel(nn.Module):
         self.output_layer = SAGEConv(prev_dim, output_dim)
         
         self.dropout_layer = nn.Dropout(dropout)
+        
+        # Final projection layer to input_dim for reconstruction
+        self.reconstruction_layer = nn.Linear(output_dim, input_dim)
     
     def forward(self, data):
         """Forward pass through the GraphSAGE model."""
@@ -1112,6 +1115,9 @@ class GraphSAGEModel(nn.Module):
                 x = self.dropout_layer(x)
         
         # Output layer
-        x = self.output_layer(x, edge_index)
+        node_embeddings = self.output_layer(x, edge_index)
         
-        return x
+        # Project to input_dim for reconstruction
+        reconstructed = self.reconstruction_layer(node_embeddings)
+        
+        return node_embeddings, reconstructed

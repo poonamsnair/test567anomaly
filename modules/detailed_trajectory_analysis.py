@@ -127,41 +127,48 @@ class DetailedTrajectoryAnalysis:
                                          filename: str,
                                          trajectory_type: str) -> None:
         """
-        Create simple analysis for a single trajectory with graph and steps table.
-        
-        Args:
-            graph: NetworkX graph representing the trajectory
-            features: Feature series for this trajectory
-            test_row: Test data row for this trajectory
-            filename: Output filename
-            trajectory_type: Type of trajectory (Normal/Anomalous)
+        Create simple analysis for a single trajectory with graph, steps, errors, node type distribution, and stats.
         """
         try:
-            # Create figure with subplots
-            fig = plt.figure(figsize=(16, 8))
-            
-            # Create grid layout - 1 row, 2 columns
-            gs = fig.add_gridspec(1, 2, hspace=0.3, wspace=0.3)
-            
-            # 1. Trajectory Graph Visualization
+            # Create figure with subplots (2 rows x 3 columns)
+            fig = plt.figure(figsize=(22, 12))
+            gs = fig.add_gridspec(2, 3, hspace=0.4, wspace=0.4)
+
+            # 1. Trajectory Graph
             ax1 = fig.add_subplot(gs[0, 0])
             self._plot_trajectory_graph(graph, ax1, trajectory_type)
-            
-            # 2. Trajectory Steps Table
+
+            # 2. Steps Table (all steps)
             ax2 = fig.add_subplot(gs[0, 1])
-            self._plot_trajectory_steps_table(graph, ax2)
-            
+            self._plot_trajectory_steps_table(graph, ax2, all_steps=True)
+
+            # 3. Node Type Distribution
+            ax3 = fig.add_subplot(gs[0, 2])
+            self._plot_node_type_distribution(graph, ax3)
+
+            # 4. Errors Table/Panel
+            ax4 = fig.add_subplot(gs[1, 0])
+            self._plot_errors_table(graph, ax4)
+
+            # 5. Key Stats Table
+            ax5 = fig.add_subplot(gs[1, 1])
+            self._plot_key_statistics(features, test_row, ax5)
+
+            # 6. (Optional: leave blank or add more info)
+            ax6 = fig.add_subplot(gs[1, 2])
+            ax6.axis('off')
+
             # Add title
             fig.suptitle(f'{trajectory_type} Trajectory Analysis - {filename}', 
-                        fontsize=16, fontweight='bold', y=0.95)
-            
+                        fontsize=18, fontweight='bold', y=0.98)
+
             # Save the detailed analysis
             filepath = self.output_dir / f"{filename}_detailed_analysis.{self.format}"
             plt.savefig(filepath, dpi=self.dpi, bbox_inches=self.bbox_inches)
             plt.close()
-            
+
             logger.info(f"Saved detailed analysis for {filename}")
-            
+
         except Exception as e:
             logger.error(f"Error creating detailed analysis for {filename}: {e}")
     
@@ -319,89 +326,48 @@ class DetailedTrajectoryAnalysis:
             ax.text(0.5, 0.5, 'Error plotting graph', 
                    ha='center', va='center', transform=ax.transAxes)
     
-    def _plot_trajectory_steps_table(self, graph: nx.DiGraph, ax: plt.Axes) -> None:
-        """Plot trajectory steps in a table format."""
+    def _plot_trajectory_steps_table(self, graph: nx.DiGraph, ax: plt.Axes, all_steps: bool = False) -> None:
+        """Plot trajectory steps in a table format. If all_steps=True, show all steps."""
         try:
             if graph is not None and len(list(graph.nodes())) > 0:
-                # Create table data from graph nodes
                 table_data = []
                 headers = ['Step', 'Node Type', 'Agent Type', 'Description']
-                
-                # Get nodes in order
                 nodes_list = list(graph.nodes())
-                for i, node in enumerate(nodes_list[:10]):  # Show first 10 steps
+                max_steps = len(nodes_list) if all_steps else 10
+                for i, node in enumerate(nodes_list[:max_steps]):
                     node_data = graph.nodes[node]
                     node_type = node_data.get('node_type', 'unknown')
                     agent_type = node_data.get('agent_type', 'N/A')
-                    
-                    # Get meaningful description based on node type
-                    description = ''
-                    if node_type == 'user_enquiry':
-                        description = node_data.get('description', 'User query')
-                    elif node_type == 'llm_call':
-                        llm_purpose = node_data.get('llm_purpose', '')
-                        if llm_purpose:
-                            description = f"LLM: {llm_purpose}"
-                        else:
-                            description = node_data.get('description', 'LLM call')
-                    elif node_type == 'tool_call':
-                        tool_type = node_data.get('tool_type', '')
-                        if tool_type:
-                            description = f"Tool: {tool_type}"
-                        else:
-                            description = node_data.get('description', 'Tool call')
-                    elif node_type == 'action':
-                        description = node_data.get('description', 'Action taken')
-                    elif node_type == 'handoff':
-                        description = node_data.get('description', 'Agent handoff')
-                    elif node_type == 'planning':
-                        description = node_data.get('description', 'Planning step')
-                    elif node_type == 'reasoning':
-                        description = node_data.get('description', 'Reasoning step')
-                    elif node_type == 'validation':
-                        description = node_data.get('description', 'Validation step')
-                    elif node_type == 'memory_access':
-                        description = node_data.get('description', 'Memory access')
-                    elif node_type == 'outcome':
+                    description = node_data.get('description', 'Unknown step')
+                    if node_type == 'llm_call' and node_data.get('llm_purpose', ''):
+                        description = f"LLM: {node_data['llm_purpose']}"
+                    if node_type == 'tool_call' and node_data.get('tool_type', ''):
+                        description = f"Tool: {node_data['tool_type']}"
+                    if node_type == 'outcome':
                         outcome_type = node_data.get('outcome_type', 'unknown')
                         status = node_data.get('description', '')
                         description = f"{outcome_type.upper()}: {status}"
-                    else:
-                        description = node_data.get('description', 'Unknown step')
-                    
-                    # Truncate description for table
-                    if description:
-                        short_desc = description[:40] + "..." if len(description) > 40 else description
-                    else:
-                        short_desc = 'N/A'
-                    
+                    short_desc = description[:40] + "..." if len(description) > 40 else description
                     table_data.append([i+1, node_type, agent_type, short_desc])
-                
-                # Create table
                 table = ax.table(cellText=table_data, colLabels=headers,
                                cellLoc='center', loc='center')
                 table.auto_set_font_size(False)
                 table.set_fontsize(8)
                 table.scale(1, 2)
-                
-                # Style the table
                 for i in range(len(table_data) + 1):
                     for j in range(len(headers)):
                         cell = table[(i, j)]
-                        if i == 0:  # Header
+                        if i == 0:
                             cell.set_facecolor('lightgray')
                             cell.set_text_props(weight='bold')
                         else:
                             cell.set_facecolor('white')
-                
-                ax.set_title('Trajectory Steps (First 10)')
+                ax.set_title(f'Trajectory Steps (Total: {len(nodes_list)})')
                 ax.axis('off')
-                
             else:
                 ax.text(0.5, 0.5, 'No graph data available', 
                        ha='center', va='center', transform=ax.transAxes)
                 ax.set_title('Trajectory Steps')
-                
         except Exception as e:
             logger.error(f"Error plotting trajectory steps table: {e}")
             ax.text(0.5, 0.5, 'Error plotting steps', 
@@ -500,4 +466,73 @@ class DetailedTrajectoryAnalysis:
         except Exception as e:
             logger.error(f"Error plotting model predictions: {e}")
             ax.text(0.5, 0.5, 'Error plotting predictions', 
+                   ha='center', va='center', transform=ax.transAxes)
+
+    def _plot_errors_table(self, graph: nx.DiGraph, ax: plt.Axes) -> None:
+        """Plot a table of errors (failed nodes or error status)."""
+        try:
+            if graph is not None and len(list(graph.nodes())) > 0:
+                error_nodes = []
+                headers = ['Step', 'Node Type', 'Agent Type', 'Error/Status']
+                nodes_list = list(graph.nodes())
+                for i, node in enumerate(nodes_list):
+                    node_data = graph.nodes[node]
+                    is_failed = node_data.get('is_failed', False)
+                    status = node_data.get('status', '')
+                    if is_failed or (status and status.lower() in ['error', 'failed', 'failure']):
+                        node_type = node_data.get('node_type', 'unknown')
+                        agent_type = node_data.get('agent_type', 'N/A')
+                        desc = node_data.get('description', '')
+                        error_nodes.append([i+1, node_type, agent_type, desc or status or 'Error'])
+                if error_nodes:
+                    table = ax.table(cellText=error_nodes, colLabels=headers,
+                                   cellLoc='center', loc='center')
+                    table.auto_set_font_size(False)
+                    table.set_fontsize(8)
+                    table.scale(1, 2)
+                    for i in range(len(error_nodes) + 1):
+                        for j in range(len(headers)):
+                            cell = table[(i, j)]
+                            if i == 0:
+                                cell.set_facecolor('#ffcccc')
+                                cell.set_text_props(weight='bold')
+                            else:
+                                cell.set_facecolor('white')
+                    ax.set_title('Errors / Failed Steps')
+                    ax.axis('off')
+                else:
+                    ax.text(0.5, 0.5, 'No errors found', 
+                           ha='center', va='center', transform=ax.transAxes)
+                    ax.set_title('Errors / Failed Steps')
+            else:
+                ax.text(0.5, 0.5, 'No graph data available', 
+                       ha='center', va='center', transform=ax.transAxes)
+                ax.set_title('Errors / Failed Steps')
+        except Exception as e:
+            logger.error(f"Error plotting errors table: {e}")
+            ax.text(0.5, 0.5, 'Error plotting errors', 
+                   ha='center', va='center', transform=ax.transAxes)
+
+    def _plot_node_type_distribution(self, graph: nx.DiGraph, ax: plt.Axes) -> None:
+        """Plot a bar chart of node type distribution."""
+        try:
+            if graph is not None and len(list(graph.nodes())) > 0:
+                node_types = {}
+                for node in graph.nodes():
+                    node_type = graph.nodes[node].get('node_type', 'unknown')
+                    node_types[node_type] = node_types.get(node_type, 0) + 1
+                types = list(node_types.keys())
+                counts = list(node_types.values())
+                ax.bar(types, counts, color='skyblue', alpha=0.8)
+                ax.set_title('Node Type Distribution')
+                ax.set_ylabel('Count')
+                ax.set_xticklabels(types, rotation=45, ha='right')
+                ax.grid(True, alpha=0.3)
+            else:
+                ax.text(0.5, 0.5, 'No graph data available', 
+                       ha='center', va='center', transform=ax.transAxes)
+                ax.set_title('Node Type Distribution')
+        except Exception as e:
+            logger.error(f"Error plotting node type distribution: {e}")
+            ax.text(0.5, 0.5, 'Error plotting node types', 
                    ha='center', va='center', transform=ax.transAxes) 

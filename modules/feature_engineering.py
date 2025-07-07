@@ -30,6 +30,7 @@ class FeatureConfig:
     
     # Missing value thresholds
     MISSING_VALUE_THRESHOLD = 0.5  # If >50% missing, use median imputation
+    HIGH_MISSING_RATE_THRESHOLD = 0.8  # If >80% missing, use zero imputation
     
     # Default values for disconnected graphs
     DEFAULT_DIAMETER_MULTIPLIER = 1.0  # Use num_nodes - 1 for disconnected graphs
@@ -40,12 +41,29 @@ class FeatureConfig:
     # Edge attribute statistics
     LATENCY_PERCENTILES = [95, 99]
     
+    # Temporal analysis thresholds
+    EXECUTION_GAP_THRESHOLD = 10.0  # seconds - configurable gap detection
+    TEMPORAL_ANOMALY_Z_SCORE = 3.0  # Z-score threshold for temporal anomalies
+    
+    # Error clustering parameters
+    ERROR_CLUSTERING_DISTANCE_THRESHOLD = 2.0  # nodes - for error clustering analysis
+    
     # Feature categories for analysis
     FEATURE_CATEGORIES = {
         'structural': ['num_nodes', 'num_edges', 'density', 'diameter', 'centrality'],
         'temporal': ['duration', 'time', 'latency', 'delay', 'gap'],
         'semantic': ['agent', 'tool', 'error', 'recovery', 'handoff'],
         'dag': ['dag', 'topological', 'branch', 'level', 'parallel']
+    }
+    
+    # Consolidated feature groups to avoid redundancy
+    CONSOLIDATED_FEATURES = {
+        'basic_structural': ['num_nodes', 'num_edges', 'density', 'diameter', 'average_shortest_path_length'],
+        'centrality': ['betweenness_centrality', 'closeness_centrality', 'eigenvector_centrality'],
+        'connectivity': ['number_connected_components', 'node_connectivity', 'edge_connectivity'],
+        'topology': ['clustering_coefficient', 'transitivity', 'degree_assortativity'],
+        'temporal': ['total_duration', 'average_node_duration', 'duration_variance', 'inter_node_delays'],
+        'semantic': ['agent_type_counts', 'handoff_frequency', 'tool_type_distribution', 'error_frequency']
     }
 
 
@@ -97,7 +115,7 @@ class FeatureExtractor:
         return features_df
     
     def _clean_and_validate_features(self, features_df: pd.DataFrame) -> pd.DataFrame:
-        """Clean and validate feature DataFrame with simplified logic."""
+        """Clean and validate feature DataFrame with improved imputation strategy."""
         # Convert to numeric, preserving non-numeric columns
         numeric_columns = []
         for col in features_df.columns:
@@ -120,23 +138,31 @@ class FeatureExtractor:
                                           [FeatureConfig.INF_REPLACEMENT_POSITIVE, 
                                            FeatureConfig.INF_REPLACEMENT_NEGATIVE])
         
-        # Handle NaN values with median imputation
+        # Improved NaN imputation strategy with clear thresholds
         for col in numeric_columns:
             nan_count = numeric_data[col].isna().sum()
+            total_count = len(numeric_data)
+            missing_rate = nan_count / total_count
+            
             if nan_count > 0:
-                if nan_count > len(numeric_data) * FeatureConfig.MISSING_VALUE_THRESHOLD:
-                    # High missing rate - use median
+                if missing_rate > FeatureConfig.HIGH_MISSING_RATE_THRESHOLD:
+                    # Very high missing rate (>80%) - use zero imputation
+                    numeric_data[col] = numeric_data[col].fillna(0.0)
+                    logger.info(f"Column {col}: Used zero imputation (missing rate: {missing_rate:.2%})")
+                elif missing_rate > FeatureConfig.MISSING_VALUE_THRESHOLD:
+                    # High missing rate (50-80%) - use median imputation
                     median_val = numeric_data[col].median()
                     if pd.isna(median_val):
                         median_val = 0.0
                     numeric_data[col] = numeric_data[col].fillna(median_val)
-                    logger.info(f"Column {col}: Used median imputation ({median_val:.4f})")
+                    logger.info(f"Column {col}: Used median imputation (missing rate: {missing_rate:.2%})")
                 else:
-                    # Low missing rate - use median for remaining NaN
+                    # Low missing rate (<50%) - use median imputation
                     median_val = numeric_data[col].median()
                     if pd.isna(median_val):
                         median_val = 0.0
                     numeric_data[col] = numeric_data[col].fillna(median_val)
+                    logger.debug(f"Column {col}: Used median imputation (missing rate: {missing_rate:.2%})")
         
         # Update DataFrame and defragment
         features_df[numeric_columns] = numeric_data
@@ -160,16 +186,17 @@ class FeatureExtractor:
                 logger.warning(f"  {col}: could not compute statistics - {e}")
     
     def _extract_graph_features(self, graph: nx.DiGraph, graph_idx: int) -> Dict[str, Any]:
-        """Extract all features from a single graph."""
+        """Extract all features from a single graph with consolidated calculations."""
         features = {'graph_id': f"graph_{graph_idx}"}
         
         # Add graph metadata
         features.update(self._extract_metadata_features(graph))
         
-        # Extract different categories of features
-        if self.structural_features:
-            features.update(self._extract_structural_features(graph))
+        # Extract consolidated structural features (avoids redundancy)
+        structural_features = self._extract_consolidated_structural_features(graph)
+        features.update(structural_features)
         
+        # Extract other feature categories
         if self.dag_features:
             features.update(self._extract_dag_features(graph))
         
@@ -178,9 +205,6 @@ class FeatureExtractor:
         
         if self.semantic_features:
             features.update(self._extract_semantic_features(graph))
-        
-        # Always extract graph structure features (essential for GNNs)
-        features.update(self._extract_graph_structure_features(graph))
         
         return features
     
@@ -193,6 +217,41 @@ class FeatureExtractor:
             'total_duration': graph.graph.get('total_duration', 0.0),
             'anomaly_severity': graph.graph.get('anomaly_severity', None)
         }
+    
+    def _extract_consolidated_structural_features(self, graph: nx.DiGraph) -> Dict[str, Any]:
+        """
+        Extract consolidated structural features to avoid redundancy.
+        
+        This method combines all structural feature calculations into a single pass,
+        eliminating duplicate computations between general structural features
+        and GNN-specific structural features.
+        """
+        features = {}
+        
+        # Basic counts
+        num_nodes = len(graph.nodes)
+        num_edges = len(graph.edges)
+        
+        features['num_nodes'] = num_nodes
+        features['num_edges'] = num_edges
+        
+        if num_nodes == 0:
+            return self._get_empty_consolidated_features()
+        
+        # Extract all structural features in a single pass
+        features.update(self._extract_basic_structural_features(graph, num_nodes))
+        features.update(self._extract_centrality_features(graph))
+        features.update(self._extract_connectivity_features(graph))
+        features.update(self._extract_degree_features(graph))
+        features.update(self._extract_topology_features(graph))
+        features.update(self._extract_path_features(graph))
+        
+        # Extract adjacency matrix features
+        adj_matrix = nx.adjacency_matrix(graph).toarray()
+        features.update(self._extract_adjacency_features(adj_matrix))
+        features.update(self._extract_edge_attribute_features(graph))
+        
+        return features
     
     def _extract_structural_features(self, graph: nx.DiGraph) -> Dict[str, Any]:
         """Extract structural features from the graph."""
@@ -342,6 +401,61 @@ class FeatureExtractor:
     def _get_empty_features(self, feature_list: List[str]) -> Dict[str, float]:
         """Get empty feature values for a given feature list."""
         return {feat: 0.0 for feat in feature_list}
+    
+    def _get_empty_consolidated_features(self) -> Dict[str, float]:
+        """Get empty values for all consolidated structural features."""
+        empty_features = {}
+        
+        # Basic structural features
+        empty_features.update({
+            'num_nodes': 0.0, 'num_edges': 0.0, 'density': 0.0,
+            'diameter': 0.0, 'average_shortest_path_length': 0.0
+        })
+        
+        # Centrality features
+        for centrality_type in FeatureConfig.CENTRALITY_TYPES:
+            empty_features.update(self._get_zero_centrality_features(centrality_type))
+        
+        # Connectivity features
+        empty_features.update({
+            'number_connected_components': 0.0, 'node_connectivity': 0.0, 'edge_connectivity': 0.0,
+            'weakly_connected_components': 0.0, 'strongly_connected_components': 0.0,
+            'largest_weakly_connected_size': 0.0, 'largest_strongly_connected_size': 0.0,
+            'weakly_connected_ratio': 0.0, 'strongly_connected_ratio': 0.0
+        })
+        
+        # Degree features
+        empty_features.update({
+            'in_degree_mean': 0.0, 'in_degree_std': 0.0, 'in_degree_max': 0.0,
+            'in_degree_min': 0.0, 'in_degree_median': 0.0, 'out_degree_mean': 0.0,
+            'out_degree_std': 0.0, 'out_degree_max': 0.0, 'out_degree_min': 0.0,
+            'out_degree_median': 0.0, 'total_degree_mean': 0.0, 'total_degree_std': 0.0,
+            'total_degree_max': 0.0, 'total_degree_min': 0.0, 'degree_skewness': 0.0,
+            'degree_kurtosis': 0.0, 'degree_correlation': 0.0, 'leaf_nodes': 0.0,
+            'root_nodes': 0.0, 'isolated_nodes': 0.0
+        })
+        
+        # Topology features
+        empty_features.update({
+            'clustering_mean': 0.0, 'clustering_std': 0.0, 'clustering_max': 0.0,
+            'transitivity': 0.0, 'degree_assortativity': 0.0, 'radius': 0.0
+        })
+        
+        # Path features
+        empty_features.update({
+            'shortest_path_mean': 0.0, 'shortest_path_std': 0.0, 'shortest_path_max': 0.0,
+            'shortest_path_min': 0.0, 'shortest_path_median': 0.0, 'longest_path_length': 0.0
+        })
+        
+        # Adjacency features
+        empty_features.update({
+            'adjacency_density': 0.0, 'adjacency_sparsity': 1.0, 'adjacency_std': 0.0,
+            'adjacency_max': 0.0, 'adjacency_min': 0.0, 'self_loops': 0.0,
+            'bidirectional_edges': 0.0, 'row_means': 0.0, 'row_stds': 0.0,
+            'col_means': 0.0, 'col_stds': 0.0
+        })
+        
+        return empty_features
     
     def get_feature_importance_analysis(self, features_df: pd.DataFrame) -> Dict[str, Any]:
         """Analyze feature importance and distributions."""
@@ -728,11 +842,10 @@ class FeatureExtractor:
     def _count_execution_gaps(self, graph: nx.DiGraph) -> int:
         """Count execution gaps (large delays between nodes)."""
         gap_count = 0
-        gap_threshold = 10.0  # seconds
         
         for u, v, edge_data in graph.edges(data=True):
             latency = edge_data.get('latency', 0.0)
-            if latency > gap_threshold:
+            if latency > FeatureConfig.EXECUTION_GAP_THRESHOLD:
                 gap_count += 1
         
         return gap_count
@@ -770,9 +883,9 @@ class FeatureExtractor:
         durations = [node_data.get('duration', 0.0) for _, node_data in graph.nodes(data=True)]
         
         if len(durations) > 3:
-            # Use z-score to detect outliers
+            # Use z-score to detect outliers with configurable threshold
             z_scores = np.abs(stats.zscore(durations))
-            anomaly_count += np.sum(z_scores > 3)  # More than 3 standard deviations
+            anomaly_count += np.sum(z_scores > FeatureConfig.TEMPORAL_ANOMALY_Z_SCORE)
         
         return anomaly_count
     
@@ -799,12 +912,16 @@ class FeatureExtractor:
         
         if pairs > 0:
             avg_distance = total_distance / pairs
-            # Normalize by graph diameter
-            try:
-                diameter = nx.diameter(graph.to_undirected())
-                return 1.0 - (avg_distance / max(diameter, 1))
-            except:
-                return 0.0
+            # Use configurable threshold for error clustering analysis
+            if avg_distance <= FeatureConfig.ERROR_CLUSTERING_DISTANCE_THRESHOLD:
+                return 1.0  # Highly clustered errors
+            else:
+                # Normalize by graph diameter
+                try:
+                    diameter = nx.diameter(graph.to_undirected())
+                    return 1.0 - (avg_distance / max(diameter, 1))
+                except:
+                    return 0.0
         
         return 0.0
     
@@ -833,46 +950,15 @@ class FeatureExtractor:
     
     def _extract_graph_structure_features(self, graph: nx.DiGraph) -> Dict[str, Any]:
         """
-        Extract raw graph structure features essential for GNNs.
+        DEPRECATED: Use _extract_consolidated_structural_features instead.
         
-        This method extracts:
-        1. Adjacency matrix features (density, sparsity, connectivity patterns)
-        2. Edge attribute statistics (latency, reliability, data transfer patterns)
-        3. Graph-level structural properties (connectivity, centrality distributions)
-        4. Node degree distributions and patterns
-        5. Edge weight distributions and patterns
+        This method is kept for backward compatibility but the functionality
+        has been consolidated into _extract_consolidated_structural_features
+        to avoid redundant calculations.
         """
-        features = {}
-        
-        num_nodes = len(graph.nodes)
-        num_edges = len(graph.edges)
-        
-        if num_nodes == 0:
-            return self._get_empty_structure_features()
-        
-        # 1. Adjacency Matrix Features
-        adj_matrix = nx.adjacency_matrix(graph).toarray()
-        features.update(self._extract_adjacency_features(adj_matrix))
-        
-        # 2. Edge Attribute Statistics
-        features.update(self._extract_edge_attribute_features(graph))
-        
-        # 3. Node Degree Features
-        features.update(self._extract_degree_features(graph))
-        
-        # 4. Graph Connectivity Features
-        features.update(self._extract_connectivity_features(graph))
-        
-        # 5. Centrality Distribution Features
-        features.update(self._extract_centrality_distribution_features(graph))
-        
-        # 6. Path and Distance Features
-        features.update(self._extract_path_features(graph))
-        
-        # 7. Graph Topology Features
-        features.update(self._extract_topology_features(graph))
-        
-        return features
+        logger.warning("_extract_graph_structure_features is deprecated. "
+                      "Use _extract_consolidated_structural_features instead.")
+        return self._extract_consolidated_structural_features(graph)
     
     def _extract_adjacency_features(self, adj_matrix: np.ndarray) -> Dict[str, float]:
         """Extract features from adjacency matrix."""

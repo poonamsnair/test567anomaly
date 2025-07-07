@@ -31,6 +31,7 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 import json
+import pickle
 
 # Core pipeline modules
 from modules.anomaly_injection import AnomalyInjector
@@ -48,6 +49,9 @@ from visualisation.trajectory_visualization import TrajectoryVisualizer
 from visualisation.model_performance_visualization import ModelPerformanceVisualizer
 from visualisation.embedding_visualization import EmbeddingVisualizer
 from visualisation.anomaly_data_visualization import AnomalyDataVisualizer
+
+# Add import for DetailedTrajectoryAnalysis
+from modules.detailed_trajectory_analysis import DetailedTrajectoryAnalysis
 
 
 class AnomalyDetectionPipeline:
@@ -90,14 +94,39 @@ class AnomalyDetectionPipeline:
         self.logger.info("STARTING AI AGENT TRAJECTORY ANOMALY DETECTION PIPELINE")
         self.logger.info("=" * 80)
         pipeline_timer = Timer().start()
+        checkpoint_dir = Path(self.config.get('graph_processing', {}).get('checkpoint_dir', 'checkpoints'))
+        checkpoint_dir.mkdir(exist_ok=True)
         try:
+            # Checkpoint: synthetic data
             normal_trajectories, anomalous_trajectories = self._generate_synthetic_data()
             all_trajectories = normal_trajectories + anomalous_trajectories
             graphs = self._convert_to_graphs(all_trajectories)
-            embeddings = self._generate_embeddings(graphs)
+
+            # Checkpoint: embeddings
+            embeddings_ckpt = checkpoint_dir / 'embeddings.pkl'
+            if embeddings_ckpt.exists():
+                self.logger.info('Loading embeddings from checkpoint...')
+                with open(embeddings_ckpt, 'rb') as f:
+                    embeddings = pickle.load(f)
+            else:
+                embeddings = self._generate_embeddings(graphs)
+                with open(embeddings_ckpt, 'wb') as f:
+                    pickle.dump(embeddings, f)
+
             features_df = self._extract_features(graphs, all_trajectories)
             train_df, val_df, test_df = self._create_data_splits(features_df)
-            model_results = self._train_models(train_df, embeddings)
+
+            # Checkpoint: model training
+            models_ckpt = checkpoint_dir / 'model_results.pkl'
+            if models_ckpt.exists():
+                self.logger.info('Loading model results from checkpoint...')
+                with open(models_ckpt, 'rb') as f:
+                    model_results = pickle.load(f)
+            else:
+                model_results = self._train_models(train_df, embeddings)
+                with open(models_ckpt, 'wb') as f:
+                    pickle.dump(model_results, f)
+
             threshold_results = self._calibrate_thresholds(model_results, val_df, test_df)
             evaluation_results = self._evaluate_models(model_results, test_df, threshold_results)
             visualization_results = self._generate_visualizations(
@@ -254,8 +283,23 @@ class AnomalyDetectionPipeline:
         
         return embeddings_results
     
-    def _extract_features(self, graphs: List, trajectories: List) -> pd.DataFrame:
-        """Extract comprehensive features from graphs."""
+    def _extract_features(self, graphs: List, trajectories: List, model_type: str = "") -> pd.DataFrame:
+        """Extract comprehensive features from graphs, using model-specific feature sets if specified."""
+        # Determine which feature set to use
+        feature_config = self.config.get('feature_engineering', {})
+        if model_type == 'isolation_forest':
+            selected = feature_config.get('isolation_forest_features', {})
+        elif model_type == 'one_class_svm':
+            selected = feature_config.get('one_class_svm_features', {})
+        elif model_type == 'gnn_autoencoder':
+            selected = feature_config.get('gnn_features', {})
+        else:
+            selected = {}
+        # Copy selected features to flat keys if present
+        for key in ['structural_features', 'temporal_features', 'semantic_features', 'dag_features', 'node_features', 'edge_features', 'graph_features']:
+            if key in selected:
+                self.config['feature_engineering'][key] = selected[key]
+        # Now extract features as usual
         with Timer() as timer:
             features_df = self.feature_extractor.extract_features(graphs)
             
@@ -326,16 +370,13 @@ class AnomalyDetectionPipeline:
         self.train_feature_columns = feature_names
         self.logger.info("Training data shape: %s", X_train.shape)
         self.logger.info("Training on purely normal trajectories (unsupervised approach)")
-        
         # Load all graphs and filter for training set
         all_graphs = []
         train_graphs = []
         if (self.output_dir / "data" / "trajectory_graphs.pkl").exists():
             all_graphs = self.graph_processor.load_graphs(str(self.output_dir / "data" / "trajectory_graphs.pkl"))
-            
             # Filter graphs to only include those in the training set
             if 'graph_id' in train_df.columns:
-                # Map train_df graph_ids to graph indices
                 train_graph_ids = set(train_df['graph_id'].tolist())
                 train_graphs = []
                 for i, graph in enumerate(all_graphs):
@@ -345,18 +386,17 @@ class AnomalyDetectionPipeline:
                 self.logger.info("Filtered %d graphs for GNN training from %d total graphs", 
                                len(train_graphs), len(all_graphs))
             else:
-                # Fallback: assume train_df order matches graph order
                 train_graphs = all_graphs[:len(train_df)]
                 self.logger.info("Using first %d graphs for GNN training (fallback method)", len(train_graphs))
-        
         # Define model training functions and names
         model_trainers = [
             ("isolation_forest", self.models.train_isolation_forest),
             ("one_class_svm", self.models.train_one_class_svm),
             ("gnn_autoencoder", lambda X, _: self.models.train_gnn_autoencoder(train_graphs, True) if train_graphs else {"error": "No training graphs available"})
         ]
-        
         for name, trainer in model_trainers:
+            # Set the correct feature set for this model
+            self._extract_features(train_graphs, [], model_type=name)
             try:
                 with Timer() as timer:
                     if name == "gnn_autoencoder":
@@ -591,8 +631,13 @@ class AnomalyDetectionPipeline:
         test_df = pd.read_csv(self.output_dir / "data" / "test_split.csv")
         test_features, _ = self.models.prepare_training_data(test_df)
         test_features_for_confidence, _ = self.models.prepare_training_data(test_df, feature_columns=self.train_feature_columns)
+        embeddings_dict = self.results.get('embeddings', {})
+        labels = features_df['is_anomalous'].astype(int).values if 'is_anomalous' in features_df.columns else None
+        best_embeddings = self._select_best_embeddings(embeddings_dict)
         viz_tasks = [
-            ("embedding_visualization", lambda: self.embedding_visualizer.plot_tsne_embeddings(embeddings, features_df['is_anomalous'].astype(int).values) if (embeddings := self._select_best_embeddings(self.results.get('embeddings', {}))) is not None and 'is_anomalous' in features_df.columns else None),
+            ("embedding_visualization", lambda: self.embedding_visualizer.plot_tsne_embeddings(best_embeddings, labels) if best_embeddings is not None and labels is not None else None),
+            ("embedding_method_comparison", lambda: self.embedding_visualizer.plot_embedding_method_comparison(embeddings_dict, labels) if embeddings_dict and labels is not None else None),
+            ("embedding_quality_analysis", lambda: self.embedding_visualizer.plot_embedding_quality_analysis(embeddings_dict, labels) if embeddings_dict and labels is not None else None),
             ("trajectory_examples", lambda: self.trajectory_visualizer.plot_trajectory_examples(graphs, list(range(len(normal_trajectories))), [i + len(normal_trajectories) for i in range(len(anomalous_trajectories))])),
             ("performance_comparison", lambda: self.model_performance_visualizer.plot_model_performance_comparison(model_results)),
             ("roc_curves", lambda: self.visualizer.plot_roc_curves(model_results, test_df, test_features)),
@@ -617,28 +662,22 @@ class AnomalyDetectionPipeline:
                         self.logger.info(f"Generated {name.replace('_', ' ')}")
             except Exception as e:
                 self.logger.warning(f"{name.replace('_', ' ').title()} failed: %s", e)
-        # --- New: Generate individual trajectory charts ---
+        # --- Generate new detailed trajectory charts using DetailedTrajectoryAnalysis ---
         try:
             traj_dir = self.output_dir / "charts" / "trajectories"
             traj_dir.mkdir(parents=True, exist_ok=True)
-            # Only plot a few normal and a few anomalous trajectories
-            num_examples = 3
-            selected_normals = normal_trajectories[:num_examples]
-            selected_anomalies = anomalous_trajectories[:num_examples]
-            for i, traj in enumerate(selected_normals):
-                out_name = f"normal_trajectory_{i+1}"
-                self.trajectory_visualizer.plot_enhanced_trajectory(traj, output_path=out_name)
-            for i, traj in enumerate(selected_anomalies):
-                out_name = f"anomalous_trajectory_{i+1}"
-                self.trajectory_visualizer.plot_enhanced_trajectory(traj, output_path=out_name)
+            # Use the test set graphs for detailed analysis
+            # If graphs are not in NetworkX format, ensure they are
+            detailed_analyzer = DetailedTrajectoryAnalysis(traj_dir)
+            # Use test set for detailed analysis (as in old code, 3 normal + 3 anomalous)
+            detailed_analyzer.create_detailed_trajectory_analysis(graphs, features_df, model_results, test_df)
             visualization_results["individual_trajectories"] = {
                 "directory": str(traj_dir),
-                "normal_count": len(selected_normals),
-                "anomalous_count": len(selected_anomalies)
+                "type": "detailed_analysis"
             }
-            self.logger.info(f"Generated {len(selected_normals)} normal and {len(selected_anomalies)} anomalous trajectory charts in {traj_dir}")
+            self.logger.info(f"Generated detailed trajectory analysis charts in {traj_dir}")
         except Exception as e:
-            self.logger.warning(f"Failed to generate individual trajectory charts: {e}")
+            self.logger.warning(f"Failed to generate detailed trajectory analysis charts: {e}")
         return visualization_results
     
     def _save_results_and_report(self, model_results: Dict[str, Any], 

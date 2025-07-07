@@ -20,6 +20,7 @@ from sklearn.metrics import (
     accuracy_score, auc, f1_score, precision_recall_curve, precision_score,
     recall_score, roc_auc_score, roc_curve
 )
+from sklearn import metrics
 
 from modules.utils import ensure_directory
 
@@ -135,7 +136,8 @@ class ModelPerformanceVisualizer:
             
             # Create the plot
             plt.figure(figsize=(12, 8))
-            df.plot(kind='bar', ax=plt.gca(), alpha=0.7)
+            ax = plt.gca()
+            df.plot(kind='bar', ax=ax, alpha=0.7)
             plt.title('Model Performance Comparison', fontsize=14, fontweight='bold')
             plt.ylabel('Score', fontsize=12)
             plt.xlabel('Models', fontsize=12)
@@ -144,7 +146,16 @@ class ModelPerformanceVisualizer:
             plt.legend(fontsize=10)
             plt.grid(True, alpha=0.3)
             plt.tight_layout()
-            
+
+            # Annotate each bar with its value
+            for p in ax.patches:
+                height = p.get_height()
+                if not np.isnan(height):
+                    ax.annotate(f'{height:.2f}',
+                                (p.get_x() + p.get_width() / 2, height),
+                                ha='center', va='bottom', fontsize=10, fontweight='bold', color='black',
+                                xytext=(0, 3), textcoords='offset points')
+
             filepath = self.output_dir / f"model_performance_comparison.{self.format}"
             plt.savefig(str(filepath), dpi=self.dpi, bbox_inches=self.bbox_inches)
             plt.close()

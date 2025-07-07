@@ -2,7 +2,7 @@
 
 # Data Generation Configuration
 data_generation:
-  num_normal_trajectories: 35  # Increased for better training
+  num_normal_trajectories: 5000  # Increased for robust training
   trajectory_patterns:
     simple_linear: {min_nodes: 3, max_nodes: 8, weight: 0.4}
     branched_analysis: {min_nodes: 5, max_nodes: 12, weight: 0.35}
@@ -25,7 +25,7 @@ data_generation:
 
 # Anomaly Injection Configuration
 anomaly_injection:
-  total_anomalous_trajectories: 7  # Increased for better evaluation
+  total_anomalous_trajectories: 350  # Increased for robust evaluation
   anomaly_types:
     infinite_loops: {severity: critical, ratio: 0.25}
     suboptimal_paths: {severity: medium, ratio: 0.3}
@@ -52,7 +52,7 @@ hyperparameter_grids:
     max_combinations_ocsvm: 3
     isolation_forest:
       n_estimators: [100, 200]
-      contamination: [0.05, 0.1]
+      contamination: [0.05, 0.1]  # Expected anomaly ratio for unsupervised setting
       max_features: [0.5, 0.75]
       max_samples: [0.5, 0.75]
       bootstrap: [false]
@@ -60,7 +60,7 @@ hyperparameter_grids:
     one_class_svm:
       kernel: [rbf, linear]
       gamma: [scale, auto]
-      nu: [0.1, 0.15]
+      nu: [0.1, 0.15]  # Expected anomaly ratio
       degree: [2]
     gnn_autoencoder:
       hidden_dims: [[16, 32], [32, 64]]
@@ -68,7 +68,7 @@ hyperparameter_grids:
       dropout: [0.1, 0.2]
       batch_size: [8, 16]
       epochs: [30, 50]
-      gnn_type: [GCN]
+      gnn_type: [GCN]  # Consistent with models section
   
   medium_dataset:
     max_combinations: 5
@@ -76,7 +76,7 @@ hyperparameter_grids:
     max_combinations_ocsvm: 5
     isolation_forest:
       n_estimators: [200, 300]
-      contamination: [0.03, 0.05, 0.08]
+      contamination: [0.03, 0.05, 0.08]  # Expected anomaly ratio
       max_features: [0.5, 0.75, 1.0]
       max_samples: [0.5, 0.75, 1.0]
       bootstrap: [true, false]
@@ -84,7 +84,7 @@ hyperparameter_grids:
     one_class_svm:
       kernel: [rbf, linear, poly]
       gamma: [scale, auto, 0.1]
-      nu: [0.05, 0.1, 0.15]
+      nu: [0.05, 0.1, 0.15]  # Expected anomaly ratio
       degree: [2, 3]
     gnn_autoencoder:
       hidden_dims: [[32, 64], [64, 128]]
@@ -92,7 +92,7 @@ hyperparameter_grids:
       dropout: [0.1, 0.2, 0.3]
       batch_size: [16, 32]
       epochs: [50, 100]
-      gnn_type: [GCN, GAT]
+      gnn_type: [GCN, GAT]  # Consistent with models section
   
   large_dataset:
     max_combinations: 10
@@ -100,7 +100,7 @@ hyperparameter_grids:
     max_combinations_ocsvm: 10
     isolation_forest:
       n_estimators: [300, 500]
-      contamination: [0.03, 0.05, 0.08, 0.1]
+      contamination: [0.03, 0.05, 0.08, 0.1]  # Expected anomaly ratio
       max_features: [0.5, 0.75, 1.0]
       max_samples: [0.5, 0.75, 1.0]
       bootstrap: [true, false]
@@ -108,7 +108,7 @@ hyperparameter_grids:
     one_class_svm:
       kernel: [rbf, linear, poly]
       gamma: [scale, auto, 0.1, 0.01]
-      nu: [0.05, 0.1, 0.15, 0.2]
+      nu: [0.05, 0.1, 0.15, 0.2]  # Expected anomaly ratio
       degree: [2, 3]
     gnn_autoencoder:
       hidden_dims: [[64, 128], [128, 256]]
@@ -116,97 +116,97 @@ hyperparameter_grids:
       dropout: [0.1, 0.2, 0.3]
       batch_size: [32, 64]
       epochs: [100, 200]
-      gnn_type: [GCN, GAT, GraphConv]
+      gnn_type: [GCN, GAT, GraphConv]  # Consistent with models section
 
 # Graph Processing Configuration
 graph_processing:
-  # Node2Vec parameters (simplified)
+  checkpoint_dir: checkpoints  # Add checkpoint directory for embeddings
   node2vec:
-    dimensions: [32, 64]  # Reduced dimensions
-    walk_length: [10, 20]  # Shorter walks
-    num_walks: [50, 100]  # Fewer walks
-    p: [1.0]  # Single value
-    q: [1.0]  # Single value
-    window: [5]  # Single value
-    min_count: [1]  # Single value
-    workers: 2  # Fewer workers
-  
-  # DeepWalk parameters (simplified)
+    dimensions: [8]  # Lowered for speed
+    walk_length: [5]  # Shorter walks
+    num_walks: [5]  # Fewer walks
+    p: [1.0]
+    q: [1.0]
+    window: [5]
+    min_count: [1]
+    workers: 2
   deepwalk:
-    dimensions: [32, 64]  # Reduced dimensions
-    walk_length: [15, 30]  # Shorter walks
-    num_walks: [30, 60]  # Fewer walks
-    window: [5]  # Single value
-    min_count: [0]  # Single value
-    sg: 1  # Skip-gram
-  
-  # GraphSAGE parameters (primary method)
+    dimensions: [8]
+    walk_length: [5]
+    num_walks: [5]
+    window: [5]
+    min_count: [0]
+    sg: 1
   graphsage:
-    hidden_dims: [[32, 64], [64, 128]]  # Multiple architectures
-    output_dim: [32, 64]  # Output dimensions
-    learning_rate: [0.001, 0.01]  # Learning rates
-    epochs: [50, 100]  # Training epochs
-    batch_size: [16, 32]  # Batch sizes
-    dropout: [0.1, 0.3]  # Dropout rates
-    aggregator: ['mean', 'max']  # Aggregation methods
-  
-  # Graph-level aggregation methods
+    hidden_dims: [[8, 8]]
+    output_dim: [8]
+    learning_rate: [0.001]
+    epochs: [5]
+    batch_size: [8]
+    dropout: [0.1]
+    aggregator: ['mean']
   aggregation_methods:
     - mean
-    - max
-  
-  # Centrality measures for node importance
   centrality_measures:
     - betweenness
     - closeness
 
 # Feature Engineering Configuration
 feature_engineering:
-  # Structural features (improved set)
-  structural_features:
-    - num_nodes
-    - num_edges
-    - density
-    - diameter
-    - betweenness_centrality
-    - closeness_centrality
-    - clustering_coefficient
-    - average_degree
-    - degree_variance
-  
-  # DAG-specific features (improved set)
-  dag_features:
-    - topological_sort_validation
-    - longest_path_in_dag
-    - dag_depth
-    - branching_factor
-    - leaf_node_ratio
-    - root_to_leaf_paths
-  
-  # Temporal features (improved set)
-  temporal_features:
-    - total_duration
-    - average_node_duration
-    - duration_variance
-    - inter_node_delays
-    - max_concurrent_operations
-    - idle_time_ratio
-  
-  # Semantic features (improved set)
-  semantic_features:
-    - agent_type_counts
-    - handoff_frequency
-    - tool_type_distribution
-    - error_frequency
-    - agent_specialization_index
-    - tool_usage_efficiency
+  # Model-specific feature sets
+  isolation_forest_features:
+    structural_features:
+      - num_nodes
+      - num_edges
+      - density
+      - diameter
+      - betweenness_centrality
+    temporal_features:
+      - total_duration
+      - average_node_duration
+    semantic_features:
+      - error_frequency
+      - handoff_frequency
+    dag_features:
+      - dag_depth
+
+  one_class_svm_features:
+    structural_features:
+      - num_nodes
+      - num_edges
+      - density
+      - diameter
+      - betweenness_centrality
+    temporal_features:
+      - total_duration
+      - average_node_duration
+    semantic_features:
+      - error_frequency
+      - handoff_frequency
+    dag_features:
+      - dag_depth
+
+  gnn_features:
+    node_features:
+      - agent_type
+      - node_type
+      - success
+      - duration
+      - error_count
+    edge_features:
+      - latency
+      - edge_type
+    graph_features:
+      - num_nodes
+      - num_edges
+      - error_frequency
 
 # Model Configuration
 models:
   # Isolation Forest (improved)
   isolation_forest:
     n_estimators: [200, 300]  # Increased for better stability
-    contamination: [0.03, 0.05, 0.08, 0.1]  # More conservative options
+    contamination: [0.03, 0.05, 0.08, 0.1]  # Expected anomaly ratio for unsupervised setting
     max_features: [0.5, 0.75, 1.0]  # More feature sampling options
     max_samples: [0.5, 0.75, 1.0]  # More sample sampling options
     bootstrap: [true, false]  # Try both bootstrap options
@@ -216,18 +216,17 @@ models:
   one_class_svm:
     kernel: [rbf, linear, poly]  # Added poly kernel
     gamma: [scale, auto, 0.1, 0.01]  # More gamma options
-    nu: [0.05, 0.1, 0.15, 0.2]  # More nu options
+    nu: [0.05, 0.1, 0.15, 0.2]  # Expected anomaly ratio
     degree: [2, 3]  # For poly kernel
   
-  # GNN Diffusion Autoencoder (simplified)
+  # GNN Autoencoder (simplified for fast testing)
   gnn_autoencoder:
-    hidden_dims: [[32, 64]]  # Single option
+    hidden_dims: [[32, 64]]  # Single option for fast testing
     learning_rate: [0.001]  # Single value
     dropout: [0.1]  # Single value
-    diffusion_steps: [3]  # Single value
     batch_size: [16]  # Single value
-    epochs: [50]  # Reduced epochs
-    gnn_types: [GCN]  # Single type
+    epochs: [50]  # Reduced epochs for fast testing
+    gnn_type: [GCN]  # Single type for consistency
 
 # Evaluation Configuration
 evaluation:

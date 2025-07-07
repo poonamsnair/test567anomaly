@@ -1,6 +1,6 @@
 # AI Agent Trajectory Anomaly Detection - Results Report
 
-**Generated:** 2025-07-07 10:56:35
+**Generated:** 2025-07-07 23:15:29
 
 ## Executive Summary
 
@@ -13,27 +13,31 @@
 
 | Model | F1 Score | Precision | Recall | AUC-ROC |
 |-------|----------|-----------|--------|---------|
-| isolation_forest | 0.571 | 0.400 | 1.000 | 0.214 |
-| one_class_svm | 0.571 | 0.400 | 1.000 | 0.500 |
-| gnn_autoencoder | 0.250 | 0.250 | 0.250 | 0.464 |
-| ensemble_model | 0.462 | 0.333 | 0.750 | 0.250 |
+| isolation_forest | 0.567 | 0.678 | 0.488 | 0.751 |
+| one_class_svm | 0.560 | 0.488 | 0.656 | 0.697 |
+| gnn_autoencoder | 0.556 | 0.385 | 1.000 | 0.583 |
+| ensemble_model | 0.556 | 0.385 | 1.000 | 0.607 |
 
 ## Dataset Statistics
 
-- **Training Set:** 21 samples (100% normal)
-- **Validation Set:** 10 samples (30.0% anomalous)
-- **Test Set:** 11 samples (36.4% anomalous)
+- **Training Set:** 600 samples (100% normal)
+- **Validation Set:** 325 samples (38.5% anomalous)
+- **Test Set:** 325 samples (38.5% anomalous)
 
 ## Feature Engineering
 
-- **Total Features Extracted:** 226
-- **Feature Extraction Time:** 0.67 seconds
+- **Total Features Extracted:** 214
+- **Feature Extraction Time:** 6.95 seconds
 
 ## Generated Visualizations
 
 - **Embedding Visualization:** `results/charts/embedding_tsne_visualization.png`
+- **Embedding Method Comparison:** `results/charts/embedding_method_comparison.png`
+- **Embedding Quality Analysis:** `results/charts/embedding_quality_analysis.png`
 - **Trajectory Examples:** `results/charts/trajectory_examples.png`
 - **Performance Comparison:** `results/charts/model_performance_comparison.png`
+- **Roc Curves:** `results/charts/roc_curves.png`
+- **Pr Curves:** `results/charts/precision_recall_curves.png`
 - **Feature Importance:** `results/charts/feature_importance.png`
 - **Anomaly Distribution:** `results/charts/anomaly_distribution.png`
 - **Ensemble Weights:** `results/charts/ensemble_weights.png`
@@ -47,12 +51,13 @@
 
 ## Recommendations
 
-- Use isolation_forest model for deployment (best F1: 0.571)
-- isolation_forest: Low precision (0.400) - many false positives
-- one_class_svm: Low precision (0.400) - many false positives
-- gnn_autoencoder: Low precision (0.250) - many false positives
-- gnn_autoencoder: Low recall (0.250) - missing anomalies
-- ensemble_model: Low precision (0.333) - many false positives
+- Use isolation_forest model for deployment (best F1: 0.567)
+- isolation_forest: Low precision (0.678) - many false positives
+- isolation_forest: Low recall (0.488) - missing anomalies
+- one_class_svm: Low precision (0.488) - many false positives
+- one_class_svm: Low recall (0.656) - missing anomalies
+- gnn_autoencoder: Low precision (0.385) - many false positives
+- ensemble_model: Low precision (0.385) - many false positives
 
 ## Configuration Used
 
@@ -92,14 +97,14 @@ anomaly_injection:
       - 0.2
       - 0.4
       user_impact: noticeable
-  total_anomalous_trajectories: 7
+  total_anomalous_trajectories: 250
 data_generation:
   agent_types:
   - Planner
   - Executor
   - Validator
   - Coordinator
-  num_normal_trajectories: 35
+  num_normal_trajectories: 1000
   tool_types:
   - web_search
   - read_document
@@ -119,6 +124,9 @@ data_generation:
       max_nodes: 8
       min_nodes: 3
       weight: 0.4
+dataset_size_thresholds:
+  medium_large_boundary: 300
+  small_medium_boundary: 100
 evaluation:
   data_split:
     test_ratio: 0.2
@@ -174,79 +182,247 @@ feature_engineering:
 graph_processing:
   aggregation_methods:
   - mean
-  - max
   centrality_measures:
   - betweenness
   - closeness
+  checkpoint_dir: checkpoints
   deepwalk:
     dimensions:
-    - 32
-    - 64
+    - 8
     min_count:
     - 0
     num_walks:
-    - 30
-    - 60
+    - 5
     sg: 1
     walk_length:
-    - 15
-    - 30
+    - 5
     window:
     - 5
   graphsage:
     aggregator:
     - mean
-    - max
     batch_size:
-    - 16
-    - 32
+    - 8
     dropout:
     - 0.1
-    - 0.3
     epochs:
-    - 50
-    - 100
+    - 5
     hidden_dims:
-    - - 32
-      - 64
-    - - 64
-      - 128
+    - - 8
+      - 8
     learning_rate:
     - 0.001
-    - 0.01
     output_dim:
-    - 32
-    - 64
+    - 8
   node2vec:
     dimensions:
-    - 32
-    - 64
+    - 8
     min_count:
     - 1
     num_walks:
-    - 50
-    - 100
+    - 5
     p:
     - 1.0
     q:
     - 1.0
     walk_length:
-    - 10
-    - 20
+    - 5
     window:
     - 5
     workers: 2
+hyperparameter_grids:
+  large_dataset:
+    gnn_autoencoder:
+      batch_size:
+      - 32
+      - 64
+      dropout:
+      - 0.1
+      - 0.2
+      - 0.3
+      epochs:
+      - 100
+      - 200
+      gnn_type:
+      - GCN
+      - GAT
+      - GraphConv
+      hidden_dims:
+      - - 64
+        - 128
+      - - 128
+        - 256
+      learning_rate:
+      - 0.001
+      - 0.01
+    isolation_forest:
+      bootstrap:
+      - true
+      - false
+      contamination:
+      - 0.03
+      - 0.05
+      - 0.08
+      - 0.1
+      max_features:
+      - 0.5
+      - 0.75
+      - 1.0
+      max_samples:
+      - 0.5
+      - 0.75
+      - 1.0
+      n_estimators:
+      - 300
+      - 500
+      random_state:
+      - 42
+    max_combinations: 10
+    max_combinations_gnn: 5
+    max_combinations_ocsvm: 10
+    one_class_svm:
+      degree:
+      - 2
+      - 3
+      gamma:
+      - scale
+      - auto
+      - 0.1
+      - 0.01
+      kernel:
+      - rbf
+      - linear
+      - poly
+      nu:
+      - 0.05
+      - 0.1
+      - 0.15
+      - 0.2
+  medium_dataset:
+    gnn_autoencoder:
+      batch_size:
+      - 16
+      - 32
+      dropout:
+      - 0.1
+      - 0.2
+      - 0.3
+      epochs:
+      - 50
+      - 100
+      gnn_type:
+      - GCN
+      - GAT
+      hidden_dims:
+      - - 32
+        - 64
+      - - 64
+        - 128
+      learning_rate:
+      - 0.001
+      - 0.01
+    isolation_forest:
+      bootstrap:
+      - true
+      - false
+      contamination:
+      - 0.03
+      - 0.05
+      - 0.08
+      max_features:
+      - 0.5
+      - 0.75
+      - 1.0
+      max_samples:
+      - 0.5
+      - 0.75
+      - 1.0
+      n_estimators:
+      - 200
+      - 300
+      random_state:
+      - 42
+    max_combinations: 5
+    max_combinations_gnn: 3
+    max_combinations_ocsvm: 5
+    one_class_svm:
+      degree:
+      - 2
+      - 3
+      gamma:
+      - scale
+      - auto
+      - 0.1
+      kernel:
+      - rbf
+      - linear
+      - poly
+      nu:
+      - 0.05
+      - 0.1
+      - 0.15
+  small_dataset:
+    gnn_autoencoder:
+      batch_size:
+      - 8
+      - 16
+      dropout:
+      - 0.1
+      - 0.2
+      epochs:
+      - 30
+      - 50
+      gnn_type:
+      - GCN
+      hidden_dims:
+      - - 16
+        - 32
+      - - 32
+        - 64
+      learning_rate:
+      - 0.001
+      - 0.01
+    isolation_forest:
+      bootstrap:
+      - false
+      contamination:
+      - 0.05
+      - 0.1
+      max_features:
+      - 0.5
+      - 0.75
+      max_samples:
+      - 0.5
+      - 0.75
+      n_estimators:
+      - 100
+      - 200
+      random_state:
+      - 42
+    max_combinations: 3
+    max_combinations_gnn: 2
+    max_combinations_ocsvm: 3
+    one_class_svm:
+      degree:
+      - 2
+      gamma:
+      - scale
+      - auto
+      kernel:
+      - rbf
+      - linear
+      nu:
+      - 0.1
+      - 0.15
 models:
   gnn_autoencoder:
     batch_size:
     - 16
-    diffusion_steps:
-    - 3
     dropout:
     - 0.1
     epochs:
     - 50
-    gnn_types:
+    gnn_type:
     - GCN
     hidden_dims:
     - - 32
@@ -273,7 +449,8 @@ models:
     n_estimators:
     - 200
     - 300
-    random_state: 42
+    random_state:
+    - 42
   one_class_svm:
     degree:
     - 2
