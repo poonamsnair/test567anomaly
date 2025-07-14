@@ -24,6 +24,8 @@ import seaborn as sns
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.metrics import roc_curve, precision_recall_curve
 from sklearn.mixture import GaussianMixture  # <-- Add this import
+import re
+from collections import Counter
 
 # Suppress specific warnings
 warnings.filterwarnings('ignore', category=RuntimeWarning, module='sklearn.covariance._robust_covariance')
@@ -133,13 +135,16 @@ def extract_trace_features(trace, embedder=None):
     else:
         content_embedding_mean = [0.0] * 384
         content_embedding_std = 0.0
-    # Simple keyword detection without TF-IDF
+    # Improved keyword detection: word-based, case-insensitive, punctuation-stripped
     anomaly_keywords = ['error', 'timeout', 'failed', 'exception', 'invalid', 'missing', 'undefined']
     keyword_features = {}
     if step_texts:
         combined_text = ' '.join(step_texts).lower()
+        combined_text = re.sub(r'[^\w\s]', ' ', combined_text)
+        words = combined_text.split()
+        word_counts = Counter(words)
         for keyword in anomaly_keywords:
-            keyword_features[f'contains_{keyword}'] = keyword in combined_text
+            keyword_features[f'contains_{keyword}'] = keyword in word_counts
     else:
         for keyword in anomaly_keywords:
             keyword_features[f'contains_{keyword}'] = False

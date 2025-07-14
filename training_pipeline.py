@@ -37,6 +37,8 @@ import shap
 import umap
 import plotly.graph_objects as go
 from sklearn.mixture import GaussianMixture
+import re
+from matplotlib.patches import Ellipse
 
 warnings.filterwarnings('ignore', category=RuntimeWarning)
 
@@ -251,13 +253,16 @@ def extract_trace_features(trace, embedder=None):
     else:
         content_embedding_mean = [0.0] * 384
         content_embedding_std = 0.0
-    # Simple keyword detection without TF-IDF
+    # Improved keyword detection: word-based, case-insensitive, punctuation-stripped
     anomaly_keywords = ['error', 'timeout', 'failed', 'exception', 'invalid', 'missing', 'undefined']
     keyword_features = {}
     if step_texts:
         combined_text = ' '.join(step_texts).lower()
+        combined_text = re.sub(r'[^\w\s]', ' ', combined_text)
+        words = combined_text.split()
+        word_counts = Counter(words)
         for keyword in anomaly_keywords:
-            keyword_features[f'contains_{keyword}'] = keyword in combined_text
+            keyword_features[f'contains_{keyword}'] = keyword in word_counts
     else:
         for keyword in anomaly_keywords:
             keyword_features[f'contains_{keyword}'] = False
@@ -1159,6 +1164,64 @@ def generate_visualizations(dgi_losses, ae_losses, X_train, X_test, results, all
         ax2.legend(fontsize=10)
         plt.tight_layout()
         plt.savefig(os.path.join(VISUALS_DIR, 'anomaly_types_analysis.png'), dpi=300)
+        plt.close()
+
+    # GMM Contour/Ellipse Plot over Latent Space
+    print(f"   📊 Creating GMM contour/ellipse plot...")
+    def plot_gmm_ellipses(gmm, ax, colors=None):
+        for i, (mean, covar) in enumerate(zip(gmm.means_, gmm.covariances_)):
+            if covar.shape == (2, 2):
+                v, w = np.linalg.eigh(covar)
+                v = 2.0 * np.sqrt(2.0) * np.sqrt(v)
+                u = w[0] / np.linalg.norm(w[0])
+                angle = np.arctan2(u[1], u[0])
+                angle = np.degrees(angle)
+                ell = Ellipse(mean, v[0], v[1], 180.0 + angle, color=colors[i % len(colors)] if colors else None, alpha=0.25, lw=2, edgecolor=colors[i % len(colors)] if colors else 'black', facecolor='none')
+                ax.add_patch(ell)
+    # Project GMM means and covariances to 2D
+    # Get the same transformation as used for latent_2d
+    # Use the reducer (UMAP or t-SNE) fitted above
+    # Project all test latent vectors
+    # Fit GMM on full latent_vecs if not already
+    # Use gmm from pipeline (should be fitted on train latents, but for visualization, use test latents)
+    # Project GMM means and covariances to 2D
+    if hasattr(gmm, 'means_') and gmm.means_.shape[1] == latent_vecs.shape[1]:
+        gmm_means_2d = reducer.transform(gmm.means_)
+        gmm_covars_2d = []
+        for cov in gmm.covariances_:
+            if cov.shape[0] > 2:
+                # Project covariance to 2D using the same reducer components (if available)
+                if hasattr(reducer, 'embedding_') and hasattr(reducer, 'components_'):
+                    W = reducer.components_[:2, :]
+                    cov2d = W @ cov @ W.T
+                elif hasattr(reducer, 'components_'):
+                    W = reducer.components_[:2, :]
+                    cov2d = W @ cov @ W.T
+                else:
+                    cov2d = np.eye(2)
+            else:
+                cov2d = cov
+            gmm_covars_2d.append(cov2d)
+        fig, ax = plt.subplots(figsize=(12, 8))
+        for i, (color, marker, label) in enumerate(zip(colors, markers, labels)):
+            mask = (y_true == i)
+            ax.scatter(latent_2d[mask, 0], latent_2d[mask, 1], c=color, marker=marker, s=60, alpha=0.8, label=label, edgecolors='gray')
+        for i, (mean, covar) in enumerate(zip(gmm_means_2d, gmm_covars_2d)):
+            if covar.shape == (2, 2):
+                v, w = np.linalg.eigh(covar)
+                v = 2.0 * np.sqrt(2.0) * np.sqrt(v)
+                u = w[0] / np.linalg.norm(w[0])
+                angle = np.arctan2(u[1], u[0])
+                angle = np.degrees(angle)
+                ell = Ellipse(mean, v[0], v[1], 180.0 + angle, color=colors[i % len(colors)], alpha=0.25, lw=2, edgecolor=colors[i % len(colors)], facecolor='none')
+                ax.add_patch(ell)
+        ax.set_xlabel(f'{method} Component 1', fontsize=12)
+        ax.set_ylabel(f'{method} Component 2', fontsize=12)
+        ax.set_title(f'GMM Components in Latent Space ({method})', fontsize=14)
+        ax.legend(fontsize=12)
+        ax.grid(alpha=0.3)
+        plt.tight_layout()
+        plt.savefig(os.path.join(VISUALS_DIR, 'gmm_latent_contours.png'), dpi=300)
         plt.close()
 
 def main():
