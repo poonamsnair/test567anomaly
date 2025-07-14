@@ -1,0 +1,110 @@
+{
+  "trace_id": "trace_failure_to_recover_from_error_0014",
+  "question": "How much can I save monthly on a 15-year home loan if I refinance my current 30-year loan?",
+  "true_answer": "Estimate savings would require knowing current interest rates, remaining principal, and new interest rates.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent failed to correctly compute savings due to incorrect application of rates and abandoned task."
+    ],
+    "duration": "13 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 11,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Failure to Recover from Error"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "How much can I save monthly on a 15-year home loan if I refinance my current 30-year loan?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve current loan refinancing rates. 2) Calculate monthly savings. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving current refinancing rates for 15-year and 30-year loans."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Average refinance rates are 5.5% for 15-year and 6% for 30-year fixed loans."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate savings based on these rates. 2) Return the estimated savings."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "calculator",
+      "content": "Calculating savings using current rates. Assume principal $200,000."
+    },
+    {
+      "step_number": 7,
+      "type": "error",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Error: Incorrect calculation due to misapplication of interest rates."
+    },
+    {
+      "step_number": 8,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Attempt to recalculate using adjusted inputs. 2) Return the answer."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "calculator",
+      "content": "Recalculating savings with adjusted rates and principal."
+    },
+    {
+      "step_number": 10,
+      "type": "error",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Error: Calculation failed again; cannot proceed with incorrect parameters."
+    },
+    {
+      "step_number": 11,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "I am unable to determine the exact savings without correct parameters. Please provide more details."
+    }
+  ]
+}

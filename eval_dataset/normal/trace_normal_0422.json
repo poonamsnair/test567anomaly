@@ -1,0 +1,118 @@
+{
+  "trace_id": "trace_normal_0422",
+  "question": "What is my estimated monthly mortgage payment for a $250,000 loan at a 3.5% interest rate over 30 years?",
+  "true_answer": "Estimated monthly mortgage payment is approximately $1,122.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "6 minutes",
+    "tools_called": [
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 13,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": []
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is my estimated monthly mortgage payment for a $250,000 loan at a 3.5% interest rate over 30 years?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use home_loan_agent to calculate monthly payment. 2) Request supervisor review. 3) Return final answer."
+    },
+    {
+      "step_number": 3,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Does this include taxes and insurance?"
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Clarify: Taxes and insurance are usually additional."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating monthly mortgage payment for $250,000 loan, 3.5% interest, 30 years."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Monthly payment calculated as approximately $1,122."
+    },
+    {
+      "step_number": 7,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "What if I make extra payments?"
+    },
+    {
+      "step_number": 8,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Extra payments can reduce total interest paid and loan term."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Re-calculating with hypothetical extra payments scenario."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "With extra payments, loan term could be reduced significantly."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review complete, all calculations verified."
+    },
+    {
+      "step_number": 12,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Clarified: Taxes and insurance not included in base calculation."
+    },
+    {
+      "step_number": 13,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Estimated monthly mortgage payment is approximately $1,122. Taxes and insurance are additional. Extra payments can reduce loan term."
+    }
+  ]
+}

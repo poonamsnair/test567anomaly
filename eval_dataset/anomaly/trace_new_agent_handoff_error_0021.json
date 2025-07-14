@@ -1,0 +1,146 @@
+{
+  "trace_id": "trace_agent_handoff_error_0021",
+  "question": "Am I eligible for a home loan based on my financial profile?",
+  "true_answer": "Eligibility depends on factors including income, debts, and credit score.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent Handoff Error: Incorrectly sent to home_loan_agent for credit check, causing delays."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "decompose_task",
+      "assign_agent",
+      "retrieve_knowledge",
+      "create_loan_plan",
+      "update_loan_plan",
+      "final_answer"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ],
+    "memory_state": {
+      "user_profile": {
+        "income": 75000,
+        "credit_score": 680,
+        "debts": 15000
+      },
+      "loan_plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Check credit eligibility",
+            "completed": false
+          },
+          {
+            "id": 2,
+            "description": "Assess income and debt",
+            "completed": false
+          }
+        ],
+        "current_objective": "Determine home loan eligibility"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan based on my financial profile?"
+    },
+    {
+      "step_number": 2,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "decompose_task",
+      "content": "Decomposing task: 1) Check credit eligibility. 2) Assess income and debts."
+    },
+    {
+      "step_number": 3,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Assign credit check to credit_agent."
+    },
+    {
+      "step_number": 4,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Incorrectly assigns credit check to home_loan_agent instead."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Attempt to retrieve eligibility based on credit, but no appropriate data is fetched."
+    },
+    {
+      "step_number": 6,
+      "type": "error",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Error: Unable to determine credit eligibility, wrong agent for task."
+    },
+    {
+      "step_number": 7,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Reassign task to credit_agent after realizing error."
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieve credit information successfully."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Credit score sufficient for basic eligibility."
+    },
+    {
+      "step_number": 10,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "create_loan_plan",
+      "content": "Create loan plan based on retrieved data."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review shows initial misassignment caused task delay, memory state inconsistent."
+    },
+    {
+      "step_number": 12,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Task incomplete due to propagation of earlier error, eligibility not fully assessed."
+    }
+  ]
+}

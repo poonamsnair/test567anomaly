@@ -1,0 +1,122 @@
+{
+  "trace_id": "trace_normal_0398",
+  "question": "How much can I afford to borrow for a home loan with an income of $75,000 and monthly debts of $500?",
+  "true_answer": "Based on your income and debts, you can afford a home loan of approximately $295,000.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "6 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 14,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": []
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "How much can I afford to borrow for a home loan with an income of $75,000 and monthly debts of $500?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Hand off to home_loan_agent for affordability calculation. 2) Use calculator for DTI and loan amount. 3) Supervisor review. 4) Return answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on calculating home loan affordability."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Typical affordability calculations use DTI and income factors."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating debt-to-income ratio."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Calculated DTI is 8%, well within acceptable limits."
+    },
+    {
+      "step_number": 7,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating maximum loan amount based on income and DTI."
+    },
+    {
+      "step_number": 8,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Estimated affordable loan amount is $295,000."
+    },
+    {
+      "step_number": 9,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Is this calculation considering interest rates?"
+    },
+    {
+      "step_number": 10,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on how interest rates affect affordability."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Interest rates influence monthly payments, affecting loan size. Current rates assumed at 3.5%."
+    },
+    {
+      "step_number": 12,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review complete, calculations verified."
+    },
+    {
+      "step_number": 13,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Based on your income and debts, you can afford a home loan of approximately $295,000, assuming a 3.5% interest rate."
+    }
+  ]
+}

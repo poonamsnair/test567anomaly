@@ -1,0 +1,108 @@
+{
+  "trace_id": "trace_task_not_completed_0006",
+  "question": "Am I eligible for a home loan if my credit score is 620 and my income is $50,000?",
+  "true_answer": "Eligibility depends on factors like credit history, debt-to-income ratio, and lender criteria.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent failed to provide a final answer after multiple attempts."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator"
+    ],
+    "num_steps": 11,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent"
+    ],
+    "anomaly_types": [
+      "Normal"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan if my credit score is 620 and my income is $50,000?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve knowledge on eligibility criteria. 2) Calculate based on provided details. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving eligibility criteria for home loans."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Eligibility varies widely by lender; a score of 620 is typically the minimum."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use calculator to estimate eligibility based on income and credit score."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating eligibility using income $50,000 and credit score 620."
+    },
+    {
+      "step_number": 7,
+      "type": "error",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Error: Calculation tool requires detailed debt-to-income ratio input."
+    },
+    {
+      "step_number": 8,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Attempt to retrieve more detailed criteria. 2) Return answer."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving additional criteria for loan eligibility."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Needs more inputs: debt info, existing loans, etc."
+    },
+    {
+      "step_number": 11,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Failed to determine eligibility due to incomplete information."
+    }
+  ]
+}

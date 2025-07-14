@@ -1,0 +1,143 @@
+{
+  "trace_id": "trace_anomaly_decomposition_error_0003",
+  "question": "Determine the economic impact of green energy initiatives in Europe.",
+  "true_answer": "Green energy initiatives in Europe have led to increased jobs in the renewable sector, decreased reliance on fossil fuels, and a strong push towards sustainable economic growth.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Decomposition Error: Incorrect task breakdown leading to incomplete assessment.",
+      "Memory Inconsistency: Memory state did not accurately reflect the current task progress."
+    ],
+    "duration": "20 minutes",
+    "tools_called": [
+      "create_plan",
+      "decompose",
+      "search",
+      "update_plan"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "planner",
+      "search_agent",
+      "analyzer"
+    ],
+    "anomaly_types": [
+      "Decomposition Error"
+    ],
+    "memory_state": {
+      "plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Identify key green energy initiatives",
+            "completed": true
+          },
+          {
+            "id": 2,
+            "description": "Analyze economic impacts",
+            "completed": false
+          },
+          {
+            "id": 3,
+            "description": "Outdated economic data check",
+            "completed": true
+          }
+        ],
+        "current_objective": "Partially complete due to decomposition errors"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Determine the economic impact of green energy initiatives in Europe."
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "create_plan",
+      "content": "Creating plan: 1) Identify initiatives. 2) Analyze economic impacts."
+    },
+    {
+      "step_number": 3,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "decompose",
+      "content": "Decomposing task into sub-tasks: Incorrectly includes outdated economic data analysis."
+    },
+    {
+      "step_number": 4,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "search_agent",
+      "tool": "search",
+      "content": "Searching for key green energy initiatives in Europe."
+    },
+    {
+      "step_number": 5,
+      "type": "observation",
+      "role": "agent",
+      "agent": "search_agent",
+      "content": "Found major initiatives like solar and wind energy projects."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "analyzer",
+      "tool": "search",
+      "content": "Analyzing economic impacts of identified initiatives."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "analyzer",
+      "content": "Partial analysis done; missing comprehensive economic impact assessment."
+    },
+    {
+      "step_number": 8,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "update_plan",
+      "content": "Attempting to update plan with correct economic data analysis."
+    },
+    {
+      "step_number": 9,
+      "type": "error",
+      "role": "agent",
+      "agent": "planner",
+      "content": "Update failed, memory state not properly reflecting changes."
+    },
+    {
+      "step_number": 10,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "search_agent",
+      "tool": "search",
+      "content": "Re-attempting search for updated economic data, but task decomposition flawed."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "analyzer",
+      "content": "Economic analysis incomplete due to poor task breakdown."
+    },
+    {
+      "step_number": 12,
+      "type": "error",
+      "role": "agent",
+      "agent": "planner",
+      "content": "Failed to complete task; errors in decomposition and memory inconsistency."
+    }
+  ]
+}

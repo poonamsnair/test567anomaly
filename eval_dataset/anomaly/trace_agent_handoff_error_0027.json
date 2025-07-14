@@ -1,0 +1,165 @@
+{
+  "trace_id": "trace_agent_handoff_error_0027",
+  "question": "Am I eligible for a home loan with an income of $50,000?",
+  "true_answer": "Eligibility depends on various factors including credit score, existing debts, and down payment.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Incorrect agent handoff led to processing delays and errors."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "create_loan_plan",
+      "interpret_query",
+      "assign_agent",
+      "retrieve_knowledge",
+      "mark_step_completed",
+      "final_answer"
+    ],
+    "num_steps": 14,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Normal"
+    ],
+    "memory_state": {
+      "user_profile": {
+        "income": 50000,
+        "credit_score": null,
+        "debts": null
+      },
+      "loan_plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Check credit eligibility",
+            "completed": false
+          },
+          {
+            "id": 2,
+            "description": "Assess income suitability",
+            "completed": false
+          },
+          {
+            "id": 3,
+            "description": "Evaluate total eligibility",
+            "completed": false
+          }
+        ],
+        "current_objective": "Determine home loan eligibility"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan with an income of $50,000?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "create_loan_plan",
+      "content": "Creating plan: 1) Check credit eligibility. 2) Assess income suitability. 3) Evaluate total eligibility."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "interpret_query",
+      "content": "Interpreting user query for eligibility check."
+    },
+    {
+      "step_number": 4,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Assigning task to home_loan_agent for income assessment."
+    },
+    {
+      "step_number": 5,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Evaluating income of $50,000 against loan criteria."
+    },
+    {
+      "step_number": 6,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "assign_agent",
+      "content": "Incorrectly assigning credit check to home_loan_agent."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Error: Unable to process credit check, handing back task."
+    },
+    {
+      "step_number": 8,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Re-assigning credit eligibility check to credit_agent."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving credit score information."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Credit score not provided; unable to proceed."
+    },
+    {
+      "step_number": 11,
+      "type": "feedback",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Reviewing task flow: Identified handoff error."
+    },
+    {
+      "step_number": 12,
+      "type": "error",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Error: Delay and incorrect processing due to handoff to wrong agent."
+    },
+    {
+      "step_number": 13,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Unable to determine eligibility without credit score and debt information."
+    },
+    {
+      "step_number": 14,
+      "type": "memory_update",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Memory inconsistency resolved: Updated need for credit score in user profile."
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "trace_id": "trace_normal_0529",
+  "question": "Can I increase my current home loan based on a recent salary increase to $80,000?",
+  "true_answer": "Yes, with increased income and a strong credit profile, you are eligible to increase your loan.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "7 minutes",
+    "tools_called": [
+      "create_loan_plan",
+      "decompose_task",
+      "assign_agent",
+      "retrieve_knowledge",
+      "calculator",
+      "feedback",
+      "update_loan_plan",
+      "final_answer"
+    ],
+    "num_steps": 16,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [],
+    "memory_state": {
+      "user_profile": {
+        "income": 80000,
+        "credit_score": 700
+      },
+      "loan_plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Verify income increase",
+            "completed": true
+          },
+          {
+            "id": 2,
+            "description": "Perform creditworthiness check",
+            "completed": true
+          },
+          {
+            "id": 3,
+            "description": "Calculate new loan amount eligibility",
+            "completed": true
+          }
+        ],
+        "current_objective": "Assess eligibility for loan increase"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can I increase my current home loan based on a recent salary increase to $80,000?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "create_loan_plan",
+      "content": "Creating loan increase plan: 1) Verify income increase. 2) Check creditworthiness. 3) Calculate new loan eligibility."
+    },
+    {
+      "step_number": 3,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "decompose_task",
+      "content": "Decomposing task into income verification, creditworthiness check, loan amount calculation."
+    },
+    {
+      "step_number": 4,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Assigning income verification to home_loan_agent."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving required documents for income verification."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Income verified as $80,000 per annum."
+    },
+    {
+      "step_number": 7,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Assigning credit check to credit_agent."
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Checking current credit score details."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Credit score verified at 700, which is strong."
+    },
+    {
+      "step_number": 10,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating new eligible loan amount based on updated income."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "New loan eligibility calculated. Increased loan possible with current profile."
+    },
+    {
+      "step_number": 12,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "What are the potential risks or terms I should consider?"
+    },
+    {
+      "step_number": 13,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on loan increase terms and potential risks."
+    },
+    {
+      "step_number": 14,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Terms include potential interest rate adjustments and repayment capacity assessment."
+    },
+    {
+      "step_number": 15,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review complete, all criteria met for loan increase. Updating memory with new eligibility stats."
+    },
+    {
+      "step_number": 16,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Yes, with increased income and a strong credit profile, you are eligible to increase your loan."
+    }
+  ]
+}

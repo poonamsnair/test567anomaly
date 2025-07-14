@@ -1,0 +1,91 @@
+{
+  "trace_id": "trace_normal_0268",
+  "question": "What would be the monthly payment on a $250,000 mortgage with an interest rate of 3.5% over 30 years?",
+  "true_answer": "The monthly payment on a $250,000 mortgage with a 3.5% interest rate over 30 years is approximately $1,123.61.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "4 minutes",
+    "tools_called": [
+      "calculator",
+      "retrieve_knowledge",
+      "final_answer"
+    ],
+    "num_steps": 10,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": []
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What would be the monthly payment on a $250,000 mortgage with an interest rate of 3.5% over 30 years?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate monthly payment using mortgage formula. 2) Confirm calculation with home_loan_agent. 3) Supervisor review. 4) Provide final answer to user."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating monthly payment using mortgage formula: P = $250,000, r = 3.5%, n = 30 years."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Monthly payment calculated as approximately $1,123.61."
+    },
+    {
+      "step_number": 5,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Does this include taxes and insurance?"
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge about what's included in mortgage payments."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Standard calculation typically excludes taxes and insurance, which are additional costs."
+    },
+    {
+      "step_number": 8,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review complete, calculations verified."
+    },
+    {
+      "step_number": 9,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "The monthly payment is approximately $1,123.61, excluding taxes and insurance."
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "trace_id": "trace_agent_handoff_error_0004",
+  "question": "What is the maximum loan amount I can get if my credit score is 750 and I earn $70,000 annually?",
+  "true_answer": "Depends on various factors, including credit score and income; typically, with a score of 750, a higher loan amount is possible.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent Handoff Error: Incorrectly handed off to home_loan_agent instead of credit_agent, leading to mishandling."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is the maximum loan amount I can get if my credit score is 750 and I earn $70,000 annually?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve credit-specific info. 2) Calculate potential loan amount. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on loan amounts, erroneously focusing on home loans instead of credit implications."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Found general info on loan types but not relevant to income or credit score details."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Attempt calculation with wrong data. 2) Return assumed loan amount."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "calculator",
+      "content": "Calculating potential loan amount based on limited and incorrect data."
+    },
+    {
+      "step_number": 7,
+      "type": "error",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Error: Incorrect parameters for calculation, unable to determine accurate amount."
+    },
+    {
+      "step_number": 8,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retry retrieval with correct agent. 2) Attempt correct calculation."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving credit score implications for borrowing."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "High credit score allows for favorable terms, potentially supporting a larger loan."
+    },
+    {
+      "step_number": 11,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Attempt final calculation. 2) Return final answer."
+    },
+    {
+      "step_number": 12,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Unable to determine exact amount due to initial error, but a higher loan amount is possible with your credit score."
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "trace_id": "trace_hallucination_0006",
+  "question": "What is the maximum home loan I can get with a salary of $50,000 per year?",
+  "true_answer": "The maximum loan amount depends on various factors, including credit score, debt-to-income ratio, and lender policies.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent hallucinated about user eligibility without proper validation tools."
+    ],
+    "duration": "14 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 11,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent"
+    ],
+    "anomaly_types": [
+      "Inadequate Validation of Tool Results"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is the maximum home loan I can get with a salary of $50,000 per year?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve general knowledge on loan limits. 2) Calculate specific maximum based on salary. 3) Provide the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving general info on how salary influences loan limits."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Observed that lenders typically allow up to a 30-35% debt-to-income ratio."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use an assumed debt-to-income ratio to estimate the maximum loan. 2) Skip detailed validation."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating maximum loan based on $50,000 salary using a 35% debt-to-income assumption."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Calculated a theoretical maximum loan of $175,000 without considering interest rates or credit score."
+    },
+    {
+      "step_number": 8,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Present calculated amount as the final answer without further checks."
+    },
+    {
+      "step_number": 9,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Based on your salary, you can get a maximum home loan of $175,000."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Noticed that detailed credit score and expense checks were skipped."
+    },
+    {
+      "step_number": 11,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Error: Hallucinated a loan amount without considering full validation factors."
+    }
+  ]
+}

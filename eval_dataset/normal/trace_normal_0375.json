@@ -1,0 +1,128 @@
+{
+  "trace_id": "trace_normal_0375",
+  "question": "Can I afford a $250,000 home with a $50,000 down payment and an annual income of $80,000?",
+  "true_answer": "Yes, with an annual income of $80,000 and a $50,000 down payment, you can afford a $250,000 home, assuming a DTI of 33% and mortgage terms.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "6 minutes",
+    "tools_called": [
+      "calculator",
+      "retrieve_knowledge",
+      "final_answer"
+    ],
+    "num_steps": 14,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": []
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can I afford a $250,000 home with a $50,000 down payment and an annual income of $80,000?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate the loan amount needed. 2) Check affordability using DTI. 3) Retrieve mortgage terms. 4) Supervisor review. 5) Provide final answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating loan amount: $250,000 - $50,000 down payment = $200,000 loan required."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Loan amount required is $200,000."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating debt-to-income ratio based on $80,000 annual income."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Estimated DTI is 33%, which is within acceptable range."
+    },
+    {
+      "step_number": 7,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "What are the typical mortgage terms?"
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving typical mortgage terms."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Mortgage terms: 30-year fixed rate, 3-4% interest."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Verifying credit score influence on interest rates."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Assuming credit score qualifies for standard rates."
+    },
+    {
+      "step_number": 12,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review complete, all calculations verified."
+    },
+    {
+      "step_number": 13,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Yes, with an annual income of $80,000 and a $50,000 down payment, you can afford a $250,000 home, assuming a DTI of 33% and mortgage terms."
+    },
+    {
+      "step_number": 14,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Process complete, successful execution."
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "metadata": {
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "code_agent"
+    ],
+    "duration": "5 minutes",
+    "errors": [
+      "Used code tool for news lookup instead of browser tool"
+    ],
+    "num_steps": 7,
+    "task_completed": false,
+    "tools_called": [
+      "code",
+      "error",
+      "final_answer"
+    ],
+    "anomaly_types": [
+      "Tool Calling Error"
+    ]
+  },
+  "question": "Find the latest news about climate change",
+  "steps": [
+    {
+      "agent": "user",
+      "content": "Find the latest news about climate change",
+      "role": "user",
+      "step_number": 1,
+      "type": "task"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Get the latest news about climate change. 2) Return the information.",
+      "role": "agent",
+      "step_number": 2,
+      "type": "plan"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Attempting to programmatically access news data",
+      "role": "agent",
+      "step_number": 3,
+      "tool": "code",
+      "type": "tool_call"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Error: Cannot retrieve news data using code tool",
+      "role": "agent",
+      "step_number": 4,
+      "type": "error"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Explain the error. 2) Return the answer.",
+      "role": "agent",
+      "step_number": 5,
+      "type": "plan"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Unable to retrieve the latest news about climate change with the current tools.",
+      "role": "agent",
+      "step_number": 6,
+      "tool": "final_answer",
+      "type": "answer"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Task failed due to incorrect tool usage.",
+      "role": "agent",
+      "step_number": 7,
+      "type": "observation"
+    }
+  ],
+  "trace_id": "trace_obvious_anomaly_006",
+  "true_answer": "The latest news about climate change should be sourced from a reliable news outlet."
+}

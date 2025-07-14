@@ -1,0 +1,110 @@
+{
+  "trace_id": "trace_failure_to_recover_from_error_0017",
+  "question": "Can you calculate the monthly mortgage payment for a $300,000 loan at 4% interest over 20 years, and what if my credit score affects it?",
+  "true_answer": "The monthly payment is approximately $1,817.94 assuming a credit score adjustment might slightly increase or decrease this amount.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Failure to adjust calculation based on credit score, leading to incorrect assumptions."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "calculator",
+      "retrieve_knowledge",
+      "final_answer"
+    ],
+    "num_steps": 11,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent"
+    ],
+    "anomaly_types": [
+      "Planning Failure"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can you calculate the monthly mortgage payment for a $300,000 loan at 4% interest over 20 years, and what if my credit score affects it?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate the basic monthly payment. 2) Check how credit score might affect the rate. 3) Return a detailed answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating monthly payment for $300,000 loan at 4% over 20 years."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "The basic monthly payment is calculated as $1,817.94."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve knowledge on how credit score affects interest rates. 2) Adjust calculation if necessary."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving how credit score affects mortgage rates."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "High credit scores might reduce rates by 0.5%, low scores might increase by 1%."
+    },
+    {
+      "step_number": 8,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Recalculate with improved rate. 2) Return final answer. But mistakenly skips recalculation."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Recalculating monthly payment, but with no adjustments due to oversight."
+    },
+    {
+      "step_number": 10,
+      "type": "error",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Error: Failed to adjust calculation based on credit score variations."
+    },
+    {
+      "step_number": 11,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "The monthly payment is $1,817.94, but this doesn't consider potential credit score impacts."
+    }
+  ]
+}

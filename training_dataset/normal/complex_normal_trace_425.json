@@ -1,0 +1,151 @@
+{
+  "metadata": {
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "search_agent",
+      "code_agent",
+      "media_agent"
+    ],
+    "duration": "8 minutes",
+    "errors": [],
+    "num_steps": 14,
+    "task_completed": true,
+    "tools_called": [
+      "search",
+      "code",
+      "image_generation",
+      "final_answer"
+    ]
+  },
+  "question": "What are the top 5 emerging markets to invest in 2023 and generate a graph comparing their GDP growth rates?",
+  "steps": [
+    {
+      "agent": "user",
+      "content": "What are the top 5 emerging markets to invest in 2023 and generate a graph comparing their GDP growth rates?",
+      "role": "user",
+      "step_number": 1,
+      "type": "task"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Search for the top 5 emerging markets to invest in 2023. 2) Search for their GDP growth rates. 3) Generate a graph comparing these growth rates. 4) Return the answer.",
+      "role": "agent",
+      "step_number": 2,
+      "type": "plan"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Searching for the top 5 emerging markets to invest in 2023.",
+      "role": "agent",
+      "step_number": 3,
+      "tool": "search",
+      "type": "tool_call"
+    },
+    {
+      "agent": "search_agent",
+      "content": "The top 5 emerging markets to invest in 2023 are India, Vietnam, Indonesia, Brazil, and Nigeria.",
+      "role": "agent",
+      "step_number": 4,
+      "type": "observation"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Searching for GDP growth rates of India, Vietnam, Indonesia, Brazil, and Nigeria.",
+      "role": "agent",
+      "step_number": 5,
+      "tool": "search",
+      "type": "tool_call"
+    },
+    {
+      "agent": "search_agent",
+      "content": "GDP growth rates: India 6.5%, Vietnam 6.8%, Indonesia 5.1%, Brazil 2.3%, Nigeria 3.2%.",
+      "role": "agent",
+      "step_number": 6,
+      "type": "observation"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Writing code to generate a graph comparing GDP growth rates of India, Vietnam, Indonesia, Brazil, and Nigeria.",
+      "role": "agent",
+      "step_number": 7,
+      "tool": "code",
+      "type": "tool_call"
+    },
+    {
+      "agent": "code_agent",
+      "content": "import matplotlib.pyplot as plt\n\ncountries = ['India', 'Vietnam', 'Indonesia', 'Brazil', 'Nigeria']\ngrowth_rates = [6.5, 6.8, 5.1, 2.3, 3.2]\n\nplt.figure(figsize=(10, 6))\nplt.bar(countries, growth_rates, color=['blue', 'green', 'red', 'purple', 'orange'])\nplt.title('GDP Growth Rates of Emerging Markets 2023')\nplt.xlabel('Countries')\nplt.ylabel('GDP Growth Rate (%)')\nplt.savefig('gdp_growth_rates.png')",
+      "role": "agent",
+      "step_number": 8,
+      "type": "code"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Code executed successfully. Graph saved as 'gdp_growth_rates.png'.",
+      "role": "agent",
+      "step_number": 9,
+      "type": "observation"
+    },
+    {
+      "agent": "media_agent",
+      "content": "Generating an image of the graph comparing GDP growth rates.",
+      "role": "agent",
+      "step_number": 10,
+      "tool": "image_generation",
+      "type": "tool_call"
+    },
+    {
+      "agent": "media_agent",
+      "content": "Graph image generated successfully.",
+      "role": "agent",
+      "step_number": 11,
+      "type": "observation"
+    },
+    {
+      "agent": "user",
+      "content": "Can you also provide a brief analysis of why these markets are promising?",
+      "role": "user",
+      "step_number": 12,
+      "type": "question"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Search for analysis on why these emerging markets are promising. 2) Return the answer.",
+      "role": "agent",
+      "step_number": 13,
+      "type": "plan"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Searching for analysis on why India, Vietnam, Indonesia, Brazil, and Nigeria are promising markets.",
+      "role": "agent",
+      "step_number": 14,
+      "tool": "search",
+      "type": "tool_call"
+    },
+    {
+      "agent": "search_agent",
+      "content": "India: Strong tech sector and demographic dividend. Vietnam: Manufacturing hub with trade agreements. Indonesia: Large domestic market and digital economy growth. Brazil: Rich in natural resources and agricultural exports. Nigeria: Growing population and tech innovation.",
+      "role": "agent",
+      "step_number": 15,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "The top 5 emerging markets to invest in 2023 are India, Vietnam, Indonesia, Brazil, and Nigeria. A graph comparing their GDP growth rates has been generated. Analysis: India has a strong tech sector and demographic dividend. Vietnam is a manufacturing hub with trade agreements. Indonesia has a large domestic market and digital economy growth. Brazil is rich in natural resources and agricultural exports. Nigeria has a growing population and tech innovation.",
+      "role": "agent",
+      "step_number": 16,
+      "tool": "final_answer",
+      "type": "answer"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Task completed successfully.",
+      "role": "agent",
+      "step_number": 17,
+      "type": "observation"
+    }
+  ],
+  "trace_id": "trace_example_complex_003",
+  "true_answer": "The top 5 emerging markets to invest in 2023 are India, Vietnam, Indonesia, Brazil, and Nigeria. A graph comparing their GDP growth rates has been generated."
+}

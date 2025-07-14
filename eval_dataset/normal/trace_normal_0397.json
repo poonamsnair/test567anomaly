@@ -1,0 +1,127 @@
+{
+  "metadata": {
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "duration": "6 minutes",
+    "errors": [],
+    "num_steps": 14,
+    "task_completed": true,
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ]
+  },
+  "question": "How much can I borrow for a home loan with an annual income of $75,000?",
+  "steps": [
+    {
+      "agent": "user",
+      "content": "How much can I borrow for a home loan with an annual income of $75,000?",
+      "role": "user",
+      "step_number": 1,
+      "type": "task"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Handoff to home_loan_agent for borrowing capacity rules. 2) Use calculator for estimate. 3) Supervisor confirmation. 4) Return answer.",
+      "role": "agent",
+      "step_number": 2,
+      "type": "plan"
+    },
+    {
+      "agent": "home_loan_agent",
+      "content": "Retrieving knowledge on borrowing capacity based on income.",
+      "role": "agent",
+      "step_number": 3,
+      "tool": "retrieve_knowledge",
+      "type": "tool_call"
+    },
+    {
+      "agent": "home_loan_agent",
+      "content": "Borrowing capacity often calculated as a multiple of annual income, typically 4 to 5 times.",
+      "role": "agent",
+      "step_number": 4,
+      "type": "observation"
+    },
+    {
+      "agent": "credit_agent",
+      "content": "Checking recent credit activities for constraints.",
+      "role": "agent",
+      "step_number": 5,
+      "type": "observation"
+    },
+    {
+      "agent": "credit_agent",
+      "content": "No recent negative credit activities affecting borrowing capacity.",
+      "role": "agent",
+      "step_number": 6,
+      "type": "observation"
+    },
+    {
+      "agent": "home_loan_agent",
+      "content": "Calculating borrowing estimate.",
+      "role": "agent",
+      "step_number": 7,
+      "tool": "calculator",
+      "type": "tool_call"
+    },
+    {
+      "agent": "home_loan_agent",
+      "content": "Estimated borrowing capacity is between $300,000 and $375,000.",
+      "role": "agent",
+      "step_number": 8,
+      "type": "observation"
+    },
+    {
+      "agent": "user",
+      "content": "Does this include potential debts?",
+      "role": "user",
+      "step_number": 9,
+      "type": "question"
+    },
+    {
+      "agent": "home_loan_agent",
+      "content": "Retrieving knowledge on debt impact.",
+      "role": "agent",
+      "step_number": 10,
+      "tool": "retrieve_knowledge",
+      "type": "tool_call"
+    },
+    {
+      "agent": "home_loan_agent",
+      "content": "Existing debts may reduce borrowing capacity; estimated values assume no major debts.",
+      "role": "agent",
+      "step_number": 11,
+      "type": "observation"
+    },
+    {
+      "agent": "supervisor_agent",
+      "content": "Review complete, no further constraints identified.",
+      "role": "agent",
+      "step_number": 12,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Based on your income, you can borrow between $300,000 and $375,000, assuming no major debts.",
+      "role": "agent",
+      "step_number": 13,
+      "tool": "final_answer",
+      "type": "answer"
+    },
+    {
+      "agent": "user",
+      "content": "Thank you for the information!",
+      "role": "user",
+      "step_number": 14,
+      "type": "observation"
+    }
+  ],
+  "trace_id": "trace_normal_0397",
+  "true_answer": "You can borrow between $300,000 and $375,000, assuming no major debts."
+}

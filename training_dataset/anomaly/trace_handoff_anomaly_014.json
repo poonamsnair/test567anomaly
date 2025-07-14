@@ -1,0 +1,102 @@
+{
+  "metadata": {
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "browser_agent",
+      "code_agent"
+    ],
+    "duration": "9 minutes",
+    "errors": [
+      "Principal agent incorrectly handed off to browser_agent instead of code_agent"
+    ],
+    "num_steps": 10,
+    "task_completed": false,
+    "tools_called": [
+      "browser",
+      "code",
+      "final_answer"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ]
+  },
+  "question": "Create a Python script that prints 'Hello, World!'",
+  "steps": [
+    {
+      "agent": "user",
+      "content": "Create a Python script that prints 'Hello, World!'",
+      "role": "user",
+      "step_number": 1,
+      "type": "task"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Create a Python script to print 'Hello, World!'. 2) Return the script.",
+      "role": "agent",
+      "step_number": 2,
+      "type": "plan"
+    },
+    {
+      "agent": "browser_agent",
+      "content": "Attempting to browse for Python script creation tool",
+      "role": "agent",
+      "step_number": 3,
+      "tool": "browser",
+      "type": "tool_call"
+    },
+    {
+      "agent": "browser_agent",
+      "content": "Cannot create Python scripts with browser tool. This requires code tool.",
+      "role": "agent",
+      "step_number": 4,
+      "type": "observation"
+    },
+    {
+      "agent": "browser_agent",
+      "content": "Plan: 1) Hand back to principal agent. 2) Request code agent instead.",
+      "role": "agent",
+      "step_number": 5,
+      "type": "plan"
+    },
+    {
+      "agent": "browser_agent",
+      "content": "Handing back to principal agent - wrong agent for this task.",
+      "role": "agent",
+      "step_number": 6,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use code agent for script creation. 2) Return the script.",
+      "role": "agent",
+      "step_number": 7,
+      "type": "plan"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Creating Python script: print('Hello, World!')",
+      "role": "agent",
+      "step_number": 8,
+      "tool": "code",
+      "type": "tool_call"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Successfully created the Python script: \nprint('Hello, World!')",
+      "role": "agent",
+      "step_number": 9,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "The Python script is created: \nprint('Hello, World!')",
+      "role": "agent",
+      "step_number": 10,
+      "tool": "final_answer",
+      "type": "answer"
+    }
+  ],
+  "trace_id": "trace_handoff_anomaly_004",
+  "true_answer": "The Python script is created: \nprint('Hello, World!')"
+}

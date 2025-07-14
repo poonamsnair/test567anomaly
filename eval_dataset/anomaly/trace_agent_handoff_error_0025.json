@@ -1,0 +1,126 @@
+{
+  "trace_id": "trace_agent_handoff_error_0025",
+  "question": "Am I eligible for a home loan with my current credit score and income?",
+  "true_answer": "Eligibility depends on credit score, income, and other factors; typically, a credit score above 650 and stable income can qualify.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent Handoff Error: Credit check handed off to home_loan_agent instead of credit_agent, leading to incorrect eligibility assessment."
+    ],
+    "duration": "9 minutes",
+    "tools_called": [
+      "create_loan_plan",
+      "retrieve_knowledge",
+      "final_answer"
+    ],
+    "num_steps": 10,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ],
+    "memory_state": {
+      "user_profile": {
+        "income": 75000,
+        "credit_score": 680
+      },
+      "loan_plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Check credit eligibility",
+            "completed": false
+          },
+          {
+            "id": 2,
+            "description": "Calculate loan eligibility based on income",
+            "completed": false
+          }
+        ],
+        "current_objective": "Determine home loan eligibility"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan with my current credit score and income?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "create_loan_plan",
+      "content": "Creating plan: 1) Perform credit check. 2) Assess income for eligibility. 3) Provide final assessment."
+    },
+    {
+      "step_number": 3,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Assigning home_loan_agent to perform credit check."
+    },
+    {
+      "step_number": 4,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving credit eligibility based on credit score and income."
+    },
+    {
+      "step_number": 5,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Credit check information is missing key financial obligations data."
+    },
+    {
+      "step_number": 6,
+      "type": "error",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Error: Incorrect agent assignment for credit check."
+    },
+    {
+      "step_number": 7,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "update_loan_plan",
+      "content": "Updating plan: Attempt direct income eligibility assessment."
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Assessing income eligibility without complete credit validation."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Preliminary income check suggests potential eligibility but lacks credit validation."
+    },
+    {
+      "step_number": 10,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Based on incomplete checks, eligibility is unclear. Credit score and income seem adequate, but further validation needed."
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "trace_id": "trace_agent_handoff_error_0002",
+  "question": "What are the requirements for a mortgage pre-approval?",
+  "true_answer": "Requirements include a credit check, proof of income, employment verification, and other financial assessments.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent Handoff Error: Misrouted to home_loan_agent instead of credit_agent, leading to incorrect handling of credit check information."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "final_answer"
+    ],
+    "num_steps": 10,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What are the requirements for a mortgage pre-approval?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve pre-approval requirements. 2) Conduct credit check. 3) Return comprehensive answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving information on mortgage pre-approval requirements."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Requirements include income proof and employment verification."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Conduct credit check. 2) Return combined answer."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving information on credit check requirements."
+    },
+    {
+      "step_number": 7,
+      "type": "error",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Error: Incorrect agent for credit check details; should have been credit_agent."
+    },
+    {
+      "step_number": 8,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Hand off to supervisor_agent to correct error. 2) Return adjusted answer."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Attempting to correct by retrieving credit check info."
+    },
+    {
+      "step_number": 10,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "The requirements include proof of income and employment verification. Credit check details are currently unavailable due to process error."
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "trace_id": "trace_agent_handoff_error_0022",
+  "question": "Am I eligible for a home loan to purchase a $500,000 house?",
+  "true_answer": "Eligibility depends on income, credit score, debts, and other factors.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent Handoff Error: Incorrect agent assigned for credit check, leading to mishandling."
+    ],
+    "duration": "13 minutes",
+    "tools_called": [
+      "create_loan_plan",
+      "retrieve_knowledge",
+      "assign_agent",
+      "update_loan_plan",
+      "mark_step_completed",
+      "final_answer"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ],
+    "memory_state": {
+      "user_profile": {
+        "income": 85000,
+        "credit_score": 680,
+        "debts": 20000
+      },
+      "loan_plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Assess income and debts",
+            "completed": true
+          },
+          {
+            "id": 2,
+            "description": "Conduct credit check",
+            "completed": false
+          },
+          {
+            "id": 3,
+            "description": "Evaluate eligibility",
+            "completed": false
+          }
+        ],
+        "current_objective": "Verify credit check details"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan to purchase a $500,000 house?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "create_loan_plan",
+      "content": "Creating plan: 1) Assess income and debts. 2) Conduct credit check. 3) Evaluate eligibility."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving user income and debt details."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Income: $85,000, Debts: $20,000."
+    },
+    {
+      "step_number": 5,
+      "type": "mark_step_completed",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "mark_step_completed",
+      "content": "Step 1 completed: Income and debts assessed."
+    },
+    {
+      "step_number": 6,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Assigning home_loan_agent to conduct credit check."
+    },
+    {
+      "step_number": 7,
+      "type": "error",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Error: Incorrect agent for credit check."
+    },
+    {
+      "step_number": 8,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "update_loan_plan",
+      "content": "Updating plan: Correct agent assignment needed for credit check."
+    },
+    {
+      "step_number": 9,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Reassigning credit_agent to conduct credit check."
+    },
+    {
+      "step_number": 10,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving credit score details."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Credit score: 680."
+    },
+    {
+      "step_number": 12,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Memory inconsistency: Eligibility not evaluated, previous errors unresolved."
+    }
+  ]
+}

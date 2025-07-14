@@ -1,0 +1,111 @@
+{
+  "trace_id": "trace_error_propagation_0009",
+  "question": "What is the maximum mortgage I can get with a $75,000 salary and no existing debts?",
+  "true_answer": "Based on a $75,000 salary and no existing debts, the maximum mortgage would typically be approximately $250,000, considering standard lending criteria.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Error propagation in calculations, leading to incorrect mortgage estimation."
+    ],
+    "duration": "13 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 11,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Normal"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is the maximum mortgage I can get with a $75,000 salary and no existing debts?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve standard mortgage calculation guidelines. 2) Calculate based on provided salary. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving standard guidelines for mortgage calculations."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Guideline: Maximum mortgage typically up to 3.5 times annual salary."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate using retrieved guideline. 2) Validate calculation. 3) Deliver result."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating maximum mortgage for $75,000 salary."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Initial calculation result: $300,000"
+    },
+    {
+      "step_number": 8,
+      "type": "error",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Error: Overestimation due to incorrect multiplier usage (4x instead of 3.5x)."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "calculator",
+      "content": "Recalculating with correct guideline."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "New calculation result: $262,500"
+    },
+    {
+      "step_number": 11,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Based on your salary, the maximum mortgage might be around $300,000."
+    }
+  ]
+}

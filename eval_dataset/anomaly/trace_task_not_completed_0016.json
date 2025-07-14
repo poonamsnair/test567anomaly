@@ -1,0 +1,116 @@
+{
+  "trace_id": "trace_task_not_completed_0016",
+  "question": "What is the maximum home loan I can get with a salary of $70,000 and no other debts?",
+  "true_answer": "It depends on various factors, but typically around $280,000 to $350,000 with a 28% DTI ratio.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Task not completed due to early termination without final answer."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Task Not Completed"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is the maximum home loan I can get with a salary of $70,000 and no other debts?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Determine borrowing capacity based on salary. 2) Use DTI ratio for estimate. 3) Retrieve any special conditions."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving standard DTI ratios and borrowing limits based on salary."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Found general rules: 28% DTI for housing payments, 36% overall."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use calculator to estimate loan with 28% DTI. 2) Verify assumptions."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating max loan amount using $70,000 salary and 28% DTI."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Calculated preliminary amount: $280,000."
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Checking for other potential influencing factors or exceptions."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "No additional guidelines or exceptions found."
+    },
+    {
+      "step_number": 10,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Confirm with user. 2) Provide estimated range."
+    },
+    {
+      "step_number": 11,
+      "type": "question",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Does this information cover what you need, or are there specific conditions you're considering?"
+    },
+    {
+      "step_number": 12,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Task ended prematurely without delivering a final quantified answer range."
+    }
+  ]
+}

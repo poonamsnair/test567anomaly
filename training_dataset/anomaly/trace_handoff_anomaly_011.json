@@ -1,0 +1,102 @@
+{
+  "metadata": {
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "browser_agent",
+      "code_agent"
+    ],
+    "duration": "7 minutes",
+    "errors": [
+      "Principal agent incorrectly handed off to browser_agent instead of code_agent"
+    ],
+    "num_steps": 11,
+    "task_completed": false,
+    "tools_called": [
+      "browser",
+      "code",
+      "final_answer"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ]
+  },
+  "question": "Write a function to calculate the factorial of a number in Python.",
+  "steps": [
+    {
+      "agent": "user",
+      "content": "Write a function to calculate the factorial of a number in Python.",
+      "role": "user",
+      "step_number": 1,
+      "type": "task"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Write a Python function to calculate factorial. 2) Return the function code.",
+      "role": "agent",
+      "step_number": 2,
+      "type": "plan"
+    },
+    {
+      "agent": "browser_agent",
+      "content": "Attempting to search for Python code to calculate factorial",
+      "role": "agent",
+      "step_number": 3,
+      "tool": "browser",
+      "type": "tool_call"
+    },
+    {
+      "agent": "browser_agent",
+      "content": "Cannot write code using the browser tool. This requires code writing capabilities.",
+      "role": "agent",
+      "step_number": 4,
+      "type": "observation"
+    },
+    {
+      "agent": "browser_agent",
+      "content": "Plan: 1) Hand back to principal agent. 2) Request code agent instead.",
+      "role": "agent",
+      "step_number": 5,
+      "type": "plan"
+    },
+    {
+      "agent": "browser_agent",
+      "content": "Handing back to principal agent - wrong tool for task. Need code agent for writing functions.",
+      "role": "agent",
+      "step_number": 6,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use code agent to write Python function. 2) Return the function code.",
+      "role": "agent",
+      "step_number": 7,
+      "type": "plan"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Writing Python function for factorial calculation",
+      "role": "agent",
+      "step_number": 8,
+      "tool": "code",
+      "type": "tool_call"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Successfully wrote the Python function:\n```python\ndef factorial(n):\n    if n == 0:\n        return 1\n    else:\n        return n * factorial(n-1)\n```",
+      "role": "agent",
+      "step_number": 9,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "The function to calculate the factorial of a number in Python is:\n```python\ndef factorial(n):\n    if n == 0:\n        return 1\n    else:\n        return n * factorial(n-1)\n```",
+      "role": "agent",
+      "step_number": 10,
+      "tool": "final_answer",
+      "type": "answer"
+    }
+  ],
+  "trace_id": "trace_handoff_anomaly_004",
+  "true_answer": "The function to calculate the factorial of a number in Python is:\n```python\ndef factorial(n):\n    if n == 0:\n        return 1\n    else:\n        return n * factorial(n-1)\n```"
+}

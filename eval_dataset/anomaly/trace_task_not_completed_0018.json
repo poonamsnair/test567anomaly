@@ -1,0 +1,117 @@
+{
+  "trace_id": "trace_task_not_completed_0018",
+  "question": "Am I eligible for a home loan if my income is $50,000 annually?",
+  "true_answer": "Eligibility depends on multiple factors such as credit score, debt-to-income ratio, and down payment.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent failed to gather all necessary information and provide a conclusive answer."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Task Not Completed"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan if my income is $50,000 annually?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve general eligibility criteria. 2) Calculate potential eligibility based on income. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving information on home loan eligibility criteria."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Income, credit score, and debt-to-income ratio are key factors."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate based on income. 2) Assume average credit score."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating eligibility based on $50,000 income."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "With $50,000 income, estimated eligibility is plausible with fair credit."
+    },
+    {
+      "step_number": 8,
+      "type": "question",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Do you have your credit score or any existing debts?"
+    },
+    {
+      "step_number": 9,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "I don't know my credit score, but I have some student loans."
+    },
+    {
+      "step_number": 10,
+      "type": "plan",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Plan: 1) Attempt to calculate without exact credit score. 2) Provide tentative answer."
+    },
+    {
+      "step_number": 11,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "calculator",
+      "content": "Estimating with assumed average credit and existing debts."
+    },
+    {
+      "step_number": 12,
+      "type": "error",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Error: Insufficient data to provide a definitive answer on eligibility."
+    }
+  ]
+}

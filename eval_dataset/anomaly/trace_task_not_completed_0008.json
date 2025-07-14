@@ -1,0 +1,102 @@
+{
+  "trace_id": "trace_task_not_completed_0008",
+  "question": "Am I eligible for a home loan if my credit score is 650?",
+  "true_answer": "With a credit score of 650, eligibility depends on additional factors, but generally, you may still qualify with higher interest rates or a larger down payment.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent did not provide a complete answer regarding eligibility.",
+      "Failed to conclude on loan eligibility."
+    ],
+    "duration": "9 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator"
+    ],
+    "num_steps": 10,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "credit_agent",
+      "home_loan_agent"
+    ],
+    "anomaly_types": [
+      "Task Not Completed"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan if my credit score is 650?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve knowledge on credit score requirements. 2) Calculate eligibility. 3) Provide a final answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving information on loan eligibility for credit score 650."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Credit score 650 is below average. Eligibility often requires compensating factors."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating possible loan terms and interest rates."
+    },
+    {
+      "step_number": 6,
+      "type": "error",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Calculation incomplete due to missing financial details like income or down payment."
+    },
+    {
+      "step_number": 7,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Attempt another knowledge retrieval. 2) Provide an answer."
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Checking for more details on loan eligibility criteria."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Additional data indicates potential eligibility with a co-signer or higher down payment."
+    },
+    {
+      "step_number": 10,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Failed to synthesize information into a conclusive answer."
+    }
+  ]
+}

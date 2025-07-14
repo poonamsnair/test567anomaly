@@ -1,0 +1,144 @@
+{
+  "trace_id": "trace_agent_handoff_error_0020",
+  "question": "Am I eligible for a home loan if my credit score is 650?",
+  "true_answer": "Eligibility can depend on additional factors, but generally, you may face higher interest rates with a credit score of 650.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent Handoff Error occurred when the credit check was sent to home_loan_agent instead of credit_agent, leading to incorrect processing."
+    ],
+    "duration": "14 minutes",
+    "tools_called": [
+      "create_loan_plan",
+      "retrieve_knowledge",
+      "interpret_query",
+      "final_answer"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ],
+    "memory_state": {
+      "user_profile": {
+        "income": 60000,
+        "credit_score": 650
+      },
+      "loan_plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Check eligibility",
+            "completed": false
+          },
+          {
+            "id": 2,
+            "description": "Verify credit information",
+            "completed": false
+          }
+        ],
+        "current_objective": "Determine home loan eligibility"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan if my credit score is 650?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "create_loan_plan",
+      "content": "Creating plan: 1) Check eligibility criteria. 2) Verify credit score details. 3) Provide answer."
+    },
+    {
+      "step_number": 3,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "decompose_task",
+      "content": "Breaking down tasks: Assign eligibility check and credit verification."
+    },
+    {
+      "step_number": 4,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Assigning home loan eligibility check to home_loan_agent."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving home loan eligibility criteria."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Eligibility typically requires a minimum credit score of 620, but rates vary."
+    },
+    {
+      "step_number": 7,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Erroneously assigning credit score verification to home_loan_agent."
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "interpret_query",
+      "content": "Attempting credit score verification steps."
+    },
+    {
+      "step_number": 9,
+      "type": "error",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Error: Misassignment detected, unable to correctly verify credit score."
+    },
+    {
+      "step_number": 10,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "update_loan_plan",
+      "content": "Updating plan: Correct assignment error, attempt proper verification."
+    },
+    {
+      "step_number": 11,
+      "type": "feedback",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Reviewing process: Noticed agent handoff error, adjusting memory for future accuracy."
+    },
+    {
+      "step_number": 12,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Based on an incomplete check, you may be eligible. However, interest rates could be higher due to the credit score misverification."
+    }
+  ]
+}

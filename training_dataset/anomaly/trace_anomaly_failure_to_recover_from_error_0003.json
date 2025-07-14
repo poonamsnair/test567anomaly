@@ -1,0 +1,137 @@
+{
+  "trace_id": "trace_anomaly_failure_to_recover_from_error_0003",
+  "question": "Evaluate the impact of deforestation on biodiversity in tropical rainforests.",
+  "true_answer": "Deforestation significantly reduces biodiversity by destroying habitats and species in tropical rainforests.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Failed to recover from initial planning error, leading to cascading issues."
+    ],
+    "duration": "20 minutes",
+    "tools_called": [
+      "create_plan",
+      "decompose",
+      "search",
+      "update_plan"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "planner",
+      "researcher",
+      "analyzer"
+    ],
+    "anomaly_types": [
+      "Decomposition Error"
+    ],
+    "memory_state": {
+      "plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Decompose the analysis of deforestation impact.",
+            "completed": false
+          },
+          {
+            "id": 2,
+            "description": "Search for biodiversity data in tropical areas.",
+            "completed": true
+          }
+        ],
+        "current_objective": "Analyze incomplete due to unrecovered error."
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Evaluate the impact of deforestation on biodiversity in tropical rainforests."
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "create_plan",
+      "content": "Creating plan: 1) Decompose task. 2) Conduct research on impact."
+    },
+    {
+      "step_number": 3,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "decompose",
+      "content": "Decomposing task into sub-tasks, but omitting crucial biodiversity metrics."
+    },
+    {
+      "step_number": 4,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Assigning tasks to researcher and analyzer without necessary biodiversity focus."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "researcher",
+      "tool": "search",
+      "content": "Searching for general deforestation data."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "researcher",
+      "content": "Found data on land use changes, lacking biodiversity specifics."
+    },
+    {
+      "step_number": 7,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "update_plan",
+      "content": "Attempting to update plan to include biodiversity specifics, but reverting to outdated deforestation data."
+    },
+    {
+      "step_number": 8,
+      "type": "error",
+      "role": "agent",
+      "agent": "planner",
+      "content": "Error in plan update: Biodiversity focus not integrated."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "analyzer",
+      "tool": "search",
+      "content": "Analyzing impact with incomplete data, missing biodiversity metrics."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "analyzer",
+      "content": "Analysis leads to inconclusive results due to incomplete data."
+    },
+    {
+      "step_number": 11,
+      "type": "feedback",
+      "role": "agent",
+      "agent": "planner",
+      "content": "Feedback: Plan recovery failed, unable to integrate necessary biodiversity focus."
+    },
+    {
+      "step_number": 12,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Task failed due to unrecovered planning error and memory inconsistency."
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "trace_id": "trace_hallucination_0016",
+  "question": "What is the total interest on a 25-year mortgage of $300,000 at 5%?",
+  "true_answer": "The total interest is approximately $225,587.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent hallucinated an incorrect formula for interest calculation, leading to errors."
+    ],
+    "duration": "9 minutes",
+    "tools_called": [
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 7,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent"
+    ],
+    "anomaly_types": [
+      "Inadequate Validation of Tool Results"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is the total interest on a 25-year mortgage of $300,000 at 5%?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate total interest using formula. 2) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating total interest for $300,000 at 5% over 25 years."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Calculated total interest: $375,000 (Error: Used incorrect formula for simple interest instead of compound interest)."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Accept calculation without validation. 2) Return the answer."
+    },
+    {
+      "step_number": 6,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "The total interest is $375,000."
+    },
+    {
+      "step_number": 7,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Error identified: Hallucinated incorrect formula, resulting in wrong interest calculation."
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "trace_id": "trace_normal_0140",
+  "question": "What is the maximum home loan I can get with an annual income of $75,000 and no existing debt?",
+  "true_answer": "With $75,000 annual income and no debt, maximum loan possible is approximately $300,000.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "6 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 13,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "calculator_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": []
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is the maximum home loan I can get with an annual income of $75,000 and no existing debt?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve knowledge for income to loan ratio. 2) Use calculator to estimate maximum loan. 3) Have home_loan_agent verify with knowledge base. 4) Supervisor final check."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on income to loan ratio standards."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Typically, lenders offer up to 4x annual income if no debt is present."
+    },
+    {
+      "step_number": 5,
+      "type": "observation",
+      "role": "agent",
+      "agent": "user",
+      "content": "I read somewhere that it could be 5x, is that possible?"
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Checking for any cases or conditions where 5x income could apply."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "5x may apply with exceptional credit and low interest rates. More typically 4x is standard."
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "calculator_agent",
+      "tool": "calculator",
+      "content": "Calculating maximum loan based on 4x income."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "calculator_agent",
+      "content": "Maximum loan calculated as $300,000 based on 4x $75,000."
+    },
+    {
+      "step_number": 10,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Would a higher credit score affect this calculation?"
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Higher credit scores can lead to better interest rates and higher potential loan offers."
+    },
+    {
+      "step_number": 12,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Final check complete, calculations verified."
+    },
+    {
+      "step_number": 13,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "With $75,000 annual income and no debt, maximum loan possible is approximately $300,000."
+    }
+  ]
+}

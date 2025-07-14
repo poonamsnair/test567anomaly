@@ -1,0 +1,88 @@
+{
+  "metadata": {
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "search_agent",
+      "code_agent"
+    ],
+    "duration": "9 minutes",
+    "errors": [
+      "Agent was confused, cycled through tools, and gave up."
+    ],
+    "num_steps": 8,
+    "task_completed": false,
+    "tools_called": [
+      "search",
+      "code",
+      "final_answer"
+    ],
+    "anomaly_types": [
+      "Normal"
+    ]
+  },
+  "question": "What is the temperature of a whisper at midnight in a forest?",
+  "steps": [
+    {
+      "agent": "user",
+      "content": "What is the temperature of a whisper at midnight in a forest?",
+      "role": "user",
+      "step_number": 1,
+      "type": "task"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Search for temperature of a whisper. 2) Attempt a calculation. 3) Return the answer.",
+      "role": "agent",
+      "step_number": 2,
+      "type": "plan"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Searching for temperature of a whisper at midnight in a forest.",
+      "role": "agent",
+      "step_number": 3,
+      "tool": "search",
+      "type": "tool_call"
+    },
+    {
+      "agent": "search_agent",
+      "content": "No relevant results found.",
+      "role": "agent",
+      "step_number": 4,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Try to calculate the temperature somehow. 2) Return the answer.",
+      "role": "agent",
+      "step_number": 5,
+      "type": "plan"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Attempting to calculate the temperature of a whisper.",
+      "role": "agent",
+      "step_number": 6,
+      "tool": "code",
+      "type": "tool_call"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Error: Cannot calculate temperature of a whisper.",
+      "role": "agent",
+      "step_number": 7,
+      "type": "error"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "I'm sorry, I cannot determine the temperature of a whisper.",
+      "role": "agent",
+      "step_number": 8,
+      "tool": "final_answer",
+      "type": "answer"
+    }
+  ],
+  "trace_id": "trace_confused_anomaly_004",
+  "true_answer": "This is a nonsensical question; there is no factual answer."
+}

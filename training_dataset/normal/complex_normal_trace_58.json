@@ -1,0 +1,112 @@
+{
+  "metadata": {
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "search_agent",
+      "media_agent"
+    ],
+    "duration": "8 minutes",
+    "errors": [],
+    "num_steps": 13,
+    "task_completed": true,
+    "tools_called": [
+      "search",
+      "image_generation",
+      "final_answer"
+    ]
+  },
+  "question": "Can you find a hotel in Tokyo with a view of Mount Fuji and generate an image of the view from the hotel room?",
+  "steps": [
+    {
+      "agent": "user",
+      "content": "Can you find a hotel in Tokyo with a view of Mount Fuji and generate an image of the view from the hotel room?",
+      "role": "user",
+      "step_number": 1,
+      "type": "task"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Search for hotels in Tokyo with a view of Mount Fuji. 2) Generate an image of the view from the hotel room. 3) Return the answer.",
+      "role": "agent",
+      "step_number": 2,
+      "type": "plan"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Searching for hotels in Tokyo with a view of Mount Fuji.",
+      "role": "agent",
+      "step_number": 3,
+      "tool": "search",
+      "type": "tool_call"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Hotel found: The Park Hyatt Tokyo offers rooms with a view of Mount Fuji.",
+      "role": "agent",
+      "step_number": 4,
+      "type": "observation"
+    },
+    {
+      "agent": "media_agent",
+      "content": "Generating an image of the view from a hotel room at The Park Hyatt Tokyo.",
+      "role": "agent",
+      "step_number": 5,
+      "tool": "image_generation",
+      "type": "tool_call"
+    },
+    {
+      "agent": "media_agent",
+      "content": "Image of the view from the hotel room generated.",
+      "role": "agent",
+      "step_number": 6,
+      "type": "observation"
+    },
+    {
+      "agent": "user",
+      "content": "What amenities does the hotel offer?",
+      "role": "user",
+      "step_number": 7,
+      "type": "question"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Search for amenities offered by The Park Hyatt Tokyo. 2) Return the answer.",
+      "role": "agent",
+      "step_number": 8,
+      "type": "plan"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Searching for amenities offered by The Park Hyatt Tokyo.",
+      "role": "agent",
+      "step_number": 9,
+      "tool": "search",
+      "type": "tool_call"
+    },
+    {
+      "agent": "search_agent",
+      "content": "The Park Hyatt Tokyo offers amenities such as a spa, fitness center, indoor pool, and multiple dining options.",
+      "role": "agent",
+      "step_number": 10,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Hotel found: The Park Hyatt Tokyo offers rooms with a view of Mount Fuji. Image of the view from the hotel room generated. The hotel offers amenities such as a spa, fitness center, indoor pool, and multiple dining options.",
+      "role": "agent",
+      "step_number": 11,
+      "tool": "final_answer",
+      "type": "answer"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Task completed successfully.",
+      "role": "agent",
+      "step_number": 12,
+      "type": "observation"
+    }
+  ],
+  "trace_id": "trace_example_complex_003",
+  "true_answer": "Hotel found: The Park Hyatt Tokyo offers rooms with a view of Mount Fuji. Image of the view from the hotel room generated."
+}

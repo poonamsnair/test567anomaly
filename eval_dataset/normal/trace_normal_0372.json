@@ -1,0 +1,121 @@
+{
+  "trace_id": "trace_normal_0372",
+  "question": "What is the maximum home loan amount I can qualify for with an annual income of $85,000 and no existing debts?",
+  "true_answer": "With an income of $85,000 and no existing debts, you may qualify for a home loan of approximately $425,000 assuming a DTI of 30%.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "6 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 13,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": []
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is the maximum home loan amount I can qualify for with an annual income of $85,000 and no existing debts?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Hand off to home_loan_agent to determine loan qualification criteria. 2) Use calculator for estimation. 3) Supervisor review. 4) Provide final answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on maximum home loan calculation based on income."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Maximum home loan is often calculated with a DTI ratio of 30% and requires no existing debts."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating maximum loan amount based on income of $85,000."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Based on a 30% DTI, monthly income available is $2,125."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Estimated maximum loan amount is $425,000."
+    },
+    {
+      "step_number": 8,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Is this calculation considering any interest rates?"
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on interest rate influence."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "This estimate does not include interest rates; actual loan amount may vary."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review completed, calculations verified."
+    },
+    {
+      "step_number": 12,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "With an income of $85,000 and no existing debts, you may qualify for a home loan of approximately $425,000 assuming a DTI of 30%."
+    },
+    {
+      "step_number": 13,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Note: This does not factor in interest rates, which can affect the actual loan amount."
+    }
+  ]
+}

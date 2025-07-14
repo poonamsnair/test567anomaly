@@ -1,0 +1,146 @@
+{
+  "trace_id": "trace_agent_handoff_error_0021",
+  "question": "Am I eligible for a home loan with my current income and credit score?",
+  "true_answer": "Eligibility depends on detailed assessment of income, credit score, and existing obligations.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent Handoff Error: Credit check misrouted to home_loan_agent instead of credit_agent, causing a delay and incorrect processing."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "create_loan_plan",
+      "decompose_task",
+      "assign_agent",
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Normal"
+    ],
+    "memory_state": {
+      "user_profile": {
+        "income": 60000,
+        "credit_score": 680
+      },
+      "loan_plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Assess income",
+            "completed": true
+          },
+          {
+            "id": 2,
+            "description": "Check credit score",
+            "completed": false
+          }
+        ],
+        "current_objective": "Determine loan eligibility"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan with my current income and credit score?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "create_loan_plan",
+      "content": "Creating plan: 1) Assess income. 2) Check credit score. 3) Determine eligibility."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving eligibility criteria for home loans based on income."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Income assessment completed: $60,000 is within acceptable range."
+    },
+    {
+      "step_number": 5,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "update_loan_plan",
+      "content": "Marking income assessment step as completed."
+    },
+    {
+      "step_number": 6,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "decompose_task",
+      "content": "Decomposing task to evaluate credit score."
+    },
+    {
+      "step_number": 7,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Assigning credit check to home_loan_agent instead of credit_agent by mistake."
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Attempting to access credit score data (incorrectly)."
+    },
+    {
+      "step_number": 9,
+      "type": "error",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Error: Insufficient permissions to access credit score data."
+    },
+    {
+      "step_number": 10,
+      "type": "feedback",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Notified of agent handoff error, reassessing task."
+    },
+    {
+      "step_number": 11,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "assign_agent",
+      "content": "Reassigning credit check to credit_agent."
+    },
+    {
+      "step_number": 12,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Unable to determine eligibility due to processing error."
+    }
+  ]
+}

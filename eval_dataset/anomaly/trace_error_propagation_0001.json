@@ -1,0 +1,118 @@
+{
+  "trace_id": "trace_error_propagation_0001",
+  "question": "Can I afford a $500,000 home if my monthly income is $5,000 and I have existing debts?",
+  "true_answer": "A thorough assessment of debts, income, and interest rates is needed to determine affordability.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Error propagated through incorrect debt calculation, leading to a flawed affordability result."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Error Propagation"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can I afford a $500,000 home if my monthly income is $5,000 and I have existing debts?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve average home loan info. 2) Pass to credit_agent for affordability calculation."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on home loan eligibility criteria."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Eligibility often depends on income, debts, and interest rates."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating affordability using monthly income of $5,000 and considering existing debts."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Calculated debt-to-income ratio but error in calculating total debt amount."
+    },
+    {
+      "step_number": 7,
+      "type": "error",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Error: Incorrect debt amount used in calculations."
+    },
+    {
+      "step_number": 8,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Attempt recalculation. 2) If fails, consult supervisor_agent."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "calculator",
+      "content": "Reattempting calculation with revised debt information."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Calculation still incorrect; original error propagated."
+    },
+    {
+      "step_number": 11,
+      "type": "error",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Error: Failed to correct error in debt calculation."
+    },
+    {
+      "step_number": 12,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "I'm unable to accurately determine your affordability due to calculation errors."
+    }
+  ]
+}

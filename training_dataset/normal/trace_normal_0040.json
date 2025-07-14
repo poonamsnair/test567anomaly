@@ -1,0 +1,97 @@
+{
+  "trace_id": "trace_normal_0040",
+  "question": "Can you find me a recipe for apple pie and generate an image of how it should look?",
+  "true_answer": "Recipe for apple pie and generated image of an apple pie.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "7 minutes",
+    "tools_called": [
+      "search",
+      "image_generation",
+      "final_answer"
+    ],
+    "num_steps": 11,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "search_agent",
+      "media_agent"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can you find me a recipe for apple pie and generate an image of how it should look?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Search for a recipe for apple pie. 2) Generate an image of an apple pie. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "search_agent",
+      "tool": "search",
+      "content": "Searching for a recipe for apple pie."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "search_agent",
+      "content": "Found a recipe for apple pie: Ingredients include apples, sugar, flour, butter, and cinnamon. Instructions involve preparing the crust, cooking the filling, and baking."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "media_agent",
+      "tool": "image_generation",
+      "content": "Generating an image of an apple pie."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "media_agent",
+      "content": "Image of an apple pie generated."
+    },
+    {
+      "step_number": 7,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Is this a traditional apple pie recipe or does it have a twist?"
+    },
+    {
+      "step_number": 8,
+      "type": "observation",
+      "role": "agent",
+      "agent": "search_agent",
+      "content": "The recipe is a traditional apple pie recipe with a classic buttery crust and spiced apple filling."
+    },
+    {
+      "step_number": 9,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Here is a traditional apple pie recipe: Ingredients include apples, sugar, flour, butter, and cinnamon. Instructions involve preparing the crust, cooking the filling, and baking. Image of an apple pie generated."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Task completed successfully."
+    }
+  ]
+}

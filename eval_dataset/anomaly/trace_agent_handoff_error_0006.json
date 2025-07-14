@@ -1,0 +1,109 @@
+{
+  "trace_id": "trace_agent_handoff_error_0006",
+  "question": "What is my home loan eligibility if my credit score is 720?",
+  "true_answer": "Eligibility would depend on multiple factors including income, debts, and credit score. Typically, a score of 720 qualifies for favorable terms.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent handed off to wrong agent, leading to incorrect handling of credit check."
+    ],
+    "duration": "14 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator"
+    ],
+    "num_steps": 11,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent"
+    ],
+    "anomaly_types": [
+      "Normal"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is my home loan eligibility if my credit score is 720?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Hand off to credit_agent for score evaluation. 2) Use data to determine eligibility. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving information on loan eligibility based on credit score 720."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Credit score 720 generally qualifies for good loan terms, but no specific eligibility info retrieved."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Seek further details from home_loan_agent. 2) Calculate eligibility based on incomplete info."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving details on home loan eligibility criteria."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Eligibility involves income, debt-to-income ratio, and credit score."
+    },
+    {
+      "step_number": 8,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Attempt to calculate eligibility using partial data. 2) Return rough estimation."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating eligibility based on credit score 720 only."
+    },
+    {
+      "step_number": 10,
+      "type": "error",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Error: Calculation is incomplete, lacking income and debt data."
+    },
+    {
+      "step_number": 11,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Eligibility cannot be conclusively determined without full financial data."
+    }
+  ]
+}

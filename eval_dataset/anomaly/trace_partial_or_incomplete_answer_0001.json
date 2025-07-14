@@ -1,0 +1,102 @@
+{
+  "trace_id": "trace_partial_or_incomplete_answer_0001",
+  "question": "Am I eligible for a home loan with a credit score of 680?",
+  "true_answer": "Eligibility depends on credit score, income, debt-to-income ratio, and other factors.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "The agent provided partial information regarding credit score but did not consider other eligibility factors."
+    ],
+    "duration": "9 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 10,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent"
+    ],
+    "anomaly_types": [
+      "Partial or Incomplete Answer"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan with a credit score of 680?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve credit score eligibility criteria. 2) Determine eligibility. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving information on loan eligibility for credit score 680."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Credit score of 680 is generally considered fair. Some lenders may approve loans with a higher interest rate."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use retrieved information to determine eligibility. 2) Return the answer."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating eligibility based only on credit score."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Eligibility uncertain without considering income and debt."
+    },
+    {
+      "step_number": 8,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Provide partial answer based on credit score. 2) Finalize task."
+    },
+    {
+      "step_number": 9,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "With a credit score of 680, you may be eligible but likely with higher interest rates."
+    },
+    {
+      "step_number": 10,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Failed to consider income and other factors, leading to incomplete answer."
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "trace_id": "trace_normal_0330",
+  "question": "What is the maximum home loan amount I can qualify for with an annual income of $80,000 and a monthly debt of $500?",
+  "true_answer": "With a monthly income of $6666.67 and monthly debt of $500, you can qualify for a maximum loan amount of approximately $320,000.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "7 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 14,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": []
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is the maximum home loan amount I can qualify for with an annual income of $80,000 and a monthly debt of $500?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate monthly income from annual income. 2) Hand off to home_loan_agent for DTI and loan amount calculation. 3) Check monthly debt with credit_agent. 4) Supervisor review before concluding."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "calculator",
+      "tool": "calculator",
+      "content": "Calculating monthly income from $80,000 annual income."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "calculator",
+      "content": "Monthly income calculated as $6666.67."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on loan qualification with provided income and debts."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Maximum DTI ratio for qualification is typically 43%."
+    },
+    {
+      "step_number": 7,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating maximum loan amount based on $6666.67 monthly income and $500 monthly debt."
+    },
+    {
+      "step_number": 8,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Using a DTI of 43%, maximum monthly mortgage payment allowed is $2433.67."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating loan amount that equates to $2433.67 monthly payment."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Estimated maximum loan amount is approximately $320,000."
+    },
+    {
+      "step_number": 11,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Does this include taxes and insurance?"
+    },
+    {
+      "step_number": 12,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "No, the $2433.67 does not include taxes and insurance. Consider these in your budget."
+    },
+    {
+      "step_number": 13,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review complete, all calculations verified."
+    },
+    {
+      "step_number": 14,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "With a monthly income of $6666.67 and monthly debt of $500, you can qualify for a maximum loan amount of approximately $320,000. This does not include taxes and insurance."
+    }
+  ]
+}

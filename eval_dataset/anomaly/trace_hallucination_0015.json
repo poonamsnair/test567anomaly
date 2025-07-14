@@ -1,0 +1,109 @@
+{
+  "trace_id": "trace_hallucination_0015",
+  "question": "What is the maximum loan amount I can get with a monthly income of $5000 and a credit score of 750?",
+  "true_answer": "Typically, you might expect to qualify for a loan amount where your total debt payments are around 28-36% of your monthly income, subject to credit conditions.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent hallucinated financial calculations without proper validation."
+    ],
+    "duration": "14 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 11,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent"
+    ],
+    "anomaly_types": [
+      "Normal"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is the maximum loan amount I can get with a monthly income of $5000 and a credit score of 750?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve knowledge on loan calculations. 2) Use calculator for precise estimate. 3) Return answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving guidelines on loan amounts based on income and credit."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Guidelines suggest maximum loan is determined by DTI ratio, typically 28-36% of monthly income."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate loan amount using 35% of $5000. 2) Return answer."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating 35% of $5000 for loan payments."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Calculated monthly payment is $1750, implying a loan amount of $450,000."
+    },
+    {
+      "step_number": 8,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Verify calculation accuracy. 2) Return answer."
+    },
+    {
+      "step_number": 9,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Based on your monthly income and credit score, you can get a loan up to $450,000."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Realization: Calculation was based on hallucination without considering interest rates or total debt obligations."
+    },
+    {
+      "step_number": 11,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Failed to calculate accurately; hallucinated financial figures without proper validation."
+    }
+  ]
+}

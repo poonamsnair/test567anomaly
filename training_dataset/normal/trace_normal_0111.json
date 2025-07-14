@@ -1,0 +1,112 @@
+{
+  "trace_id": "trace_normal_0111",
+  "question": "Can you find the current weather in Paris and generate an image of the Eiffel Tower in the rain?",
+  "true_answer": "The current weather in Paris is rainy. Image of the Eiffel Tower in the rain generated.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "5 minutes",
+    "tools_called": [
+      "search",
+      "image_generation",
+      "final_answer"
+    ],
+    "num_steps": 9,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "search_agent",
+      "media_agent"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can you find the current weather in Paris and generate an image of the Eiffel Tower in the rain?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Search for the current weather in Paris. 2) Generate an image of the Eiffel Tower in the rain. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "search_agent",
+      "tool": "search",
+      "content": "Searching for the current weather in Paris."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "search_agent",
+      "content": "The current weather in Paris is rainy."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "media_agent",
+      "tool": "image_generation",
+      "content": "Generating an image of the Eiffel Tower in the rain."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "media_agent",
+      "content": "Image of the Eiffel Tower in the rain generated."
+    },
+    {
+      "step_number": 7,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Can you also tell me if it's expected to rain all day?"
+    },
+    {
+      "step_number": 8,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Search for the weather forecast in Paris for the day. 2) Return the answer."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "search_agent",
+      "tool": "search",
+      "content": "Searching for the weather forecast in Paris for the day."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "search_agent",
+      "content": "Rain is expected throughout the day in Paris."
+    },
+    {
+      "step_number": 11,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "The current weather in Paris is rainy. Image of the Eiffel Tower in the rain generated. Rain is expected throughout the day in Paris."
+    },
+    {
+      "step_number": 12,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Task completed successfully."
+    }
+  ]
+}

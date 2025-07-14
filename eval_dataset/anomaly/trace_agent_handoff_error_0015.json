@@ -1,0 +1,110 @@
+{
+  "trace_id": "trace_agent_handoff_error_0015",
+  "question": "Can I get a home loan with a credit score of 620?",
+  "true_answer": "With a credit score of 620, you might face higher interest rates, typically needing to meet specific lender criteria.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent Handoff Error: Credit check was incorrectly handed off to home_loan_agent instead of credit_agent, leading to incorrect processing."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 11,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can I get a home loan with a credit score of 620?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Hand off to credit_agent to assess credit eligibility. 2) Compute potential terms. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving info on loan eligibility for credit score 620."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Eligibility varies; generally requires specific lender criteria."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate potential loan terms without detailed credit check. 2) Return the answer."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating potential loan terms for credit score 620."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Potential interest rate higher due to credit risk; however, exact terms vary."
+    },
+    {
+      "step_number": 8,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Error: Incorrect handoff led to lack of detailed credit analysis."
+    },
+    {
+      "step_number": 9,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Attempt to retrieve credit-specific information again. 2) Attempt to resolve the issue."
+    },
+    {
+      "step_number": 10,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving detailed credit analysis for credit score 620."
+    },
+    {
+      "step_number": 11,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "I'm sorry, I couldn't complete the task. A detailed credit check is required for accurate eligibility assessment."
+    }
+  ]
+}

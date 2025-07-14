@@ -1,0 +1,118 @@
+{
+  "trace_id": "trace_task_not_completed_0002",
+  "question": "Can you tell me if I'm eligible for a home loan with an annual income of $50,000?",
+  "true_answer": "Eligibility depends on multiple factors including debt, credit score, and the property value.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent failed to complete task by not assessing all necessary factors."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Task Not Completed"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can you tell me if I'm eligible for a home loan with an annual income of $50,000?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve knowledge about income requirements. 2) Calculate potential eligibility. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving information on income requirements for home loans."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Minimum income requirement might vary based on debt and credit score."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: Consult with credit_agent to check for minimal credit score requirements."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving information on credit score requirements for home loans."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Typically, a score of 620 or higher is needed for conventional loans."
+    },
+    {
+      "step_number": 8,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: Use income information to calculate basic eligibility. Ignore debt to income ratio for simplicity."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "calculator",
+      "tool": "calculator",
+      "content": "Calculating eligibility based solely on $50,000 income."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "calculator",
+      "content": "Calculation complete. Basic eligibility might be possible based on income alone."
+    },
+    {
+      "step_number": 11,
+      "type": "error",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Failure to assess other factors like debt and full credit evaluation."
+    },
+    {
+      "step_number": 12,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Based on income alone, you might qualify, but I did not assess other required factors like debt."
+    }
+  ]
+}

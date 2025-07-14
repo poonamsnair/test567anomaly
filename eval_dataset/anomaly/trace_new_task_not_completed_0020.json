@@ -1,0 +1,148 @@
+{
+  "trace_id": "trace_task_not_completed_0020",
+  "question": "Am I eligible for a home loan with a salary of $50,000 and a credit score of 650?",
+  "true_answer": "Eligibility depends on other factors like debts and expenses, but with a credit score of 650, you might qualify with certain conditions.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Task was not completed as the final eligibility was not provided.",
+      "Memory state not updated correctly with loan plan completion."
+    ],
+    "duration": "14 minutes",
+    "tools_called": [
+      "create_loan_plan",
+      "retrieve_knowledge",
+      "assign_agent",
+      "final_answer"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Planning Failure"
+    ],
+    "memory_state": {
+      "user_profile": {
+        "income": 50000,
+        "credit_score": 650
+      },
+      "loan_plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Check salary and credit score",
+            "completed": false
+          },
+          {
+            "id": 2,
+            "description": "Retrieve loan eligibility criteria",
+            "completed": true
+          },
+          {
+            "id": 3,
+            "description": "Assign agents for detailed analysis",
+            "completed": false
+          }
+        ],
+        "current_objective": "Determine loan eligibility"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan with a salary of $50,000 and a credit score of 650?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "create_loan_plan",
+      "content": "Creating plan: 1) Verify salary and credit score. 2) Retrieve eligibility criteria. 3) Assign agents for further analysis."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving loan eligibility criteria based on current economic conditions and credit policies."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Eligibility criteria retrieved: Income above $40,000 and credit score above 600 generally required."
+    },
+    {
+      "step_number": 5,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "update_loan_plan",
+      "content": "Updating plan: Assign agents to verify other eligibility factors."
+    },
+    {
+      "step_number": 6,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Assigning credit_agent to assess credit history, and home_loan_agent to evaluate income details."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Credit history shows a few late payments, affecting eligibility."
+    },
+    {
+      "step_number": 8,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Income verification: Stable, but high expense ratio not checked."
+    },
+    {
+      "step_number": 9,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "update_loan_plan",
+      "content": "Plan was not updated to address expense ratio, which is crucial for eligibility."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review: Missing expense check, eligibility not fully determined."
+    },
+    {
+      "step_number": 11,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Task not completed: Final eligibility decision was not reached."
+    },
+    {
+      "step_number": 12,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Eligibility could not be fully determined due to missing expense analysis."
+    }
+  ]
+}

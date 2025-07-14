@@ -1,0 +1,120 @@
+{
+  "trace_id": "trace_normal_0354",
+  "question": "Can I afford a home loan with a property value of $300,000, a down payment of $60,000, and an annual income of $75,000?",
+  "true_answer": "Yes, with a property value of $300,000, a down payment of $60,000, and an income of $75,000, you can afford the loan. Your DTI is acceptable.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "6 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 13,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can I afford a home loan with a property value of $300,000, a down payment of $60,000, and an annual income of $75,000?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Hand off to home_loan_agent for affordability criteria. 2) Involve credit_agent for credit check. 3) Use calculator for monthly mortgage calculation. 4) Supervisor review. 5) Return answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on home loan affordability criteria."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Affordability requires a debt-to-income (DTI) ratio under 43% and sufficient down payment."
+    },
+    {
+      "step_number": 5,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Verifying credit score and history as part of affordability assessment."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating monthly mortgage payments with a loan amount of $240,000 and checking DTI."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Monthly payment calculated as $1,200, resulting in a DTI of 32%."
+    },
+    {
+      "step_number": 8,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Does the loan type affect this calculation?"
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving information on different loan types and their impact."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Fixed vs. adjustable rates mainly affect interest obligations; primary calculation unaffected."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Reviewing complete interaction and calculations. All checks passed."
+    },
+    {
+      "step_number": 12,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Confirmed affordability based on provided financials."
+    },
+    {
+      "step_number": 13,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Yes, with a property value of $300,000, a down payment of $60,000, and an income of $75,000, you can afford the loan. Your DTI is acceptable."
+    }
+  ]
+}

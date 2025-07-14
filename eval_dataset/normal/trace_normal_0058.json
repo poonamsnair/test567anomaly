@@ -1,0 +1,128 @@
+{
+  "trace_id": "trace_normal_0058",
+  "question": "How much can I borrow for a home loan with an income of $80,000 and monthly debts of $500?",
+  "true_answer": "You can potentially borrow around $320,000 based on a DTI of 28%.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "6 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 14,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": []
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "How much can I borrow for a home loan with an income of $80,000 and monthly debts of $500?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Check with home_loan_agent for DTI calculation. 2) Use calculator for loan amount. 3) Verify credit standing. 4) Supervisor review. 5) Provide final answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on standard DTI limits and borrowing calculations."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "DTI should typically not exceed 36%. Ideal DTI for borrowing is 28%."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating maximum loan amount based on income of $80,000 and DTI of 28%."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Loan amount calculated at approximately $320,000."
+    },
+    {
+      "step_number": 7,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Can you double-check if this includes property taxes and insurance?"
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving details on property taxes and insurance impact on loan eligibility."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Property taxes and insurance are typically included in the DTI calculation, impacting borrowing power slightly."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Credit score check: Score is acceptable for borrowing."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review complete. All calculated and checked parameters are within normal ranges."
+    },
+    {
+      "step_number": 12,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "What if my income increases next year?"
+    },
+    {
+      "step_number": 13,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "If income increases, borrowing power can be recalculated to potentially allow for a higher loan amount."
+    },
+    {
+      "step_number": 14,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "You can potentially borrow around $320,000 based on a DTI of 28%. Future income increases can adjust this."
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "trace_id": "trace_normal_0171",
+  "question": "Can I afford a mortgage with a $50,000 annual income and a $25,000 down payment?",
+  "true_answer": "With $50,000 income and $25,000 down payment, a mortgage up to $200,000 could be affordable, given a 4% interest rate and 30-year term.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "6 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 13,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": []
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can I afford a mortgage with a $50,000 annual income and a $25,000 down payment?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Hand off to home_loan_agent for affordability criteria. 2) Calculate potential mortgage amount. 3) Verify with credit_agent. 4) Supervisor review. 5) Return answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on mortgage affordability criteria."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Affordability typically involves income, debt, and down payment analysis."
+    },
+    {
+      "step_number": 5,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Checking baseline conditions with credit score assumed healthy."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating potential mortgage amount with given income and down payment."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "With $50,000 income and $25,000 down payment, can consider mortgage up to $200,000."
+    },
+    {
+      "step_number": 8,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "What interest rate and term are considered in this calculation?"
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving typical interest rates and loan terms."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Assumed interest rate is 4% with a 30-year mortgage term."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review complete, calculation and assumptions valid."
+    },
+    {
+      "step_number": 12,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "With $50,000 income and $25,000 down payment, a mortgage up to $200,000 could be affordable, given a 4% interest rate and 30-year term."
+    },
+    {
+      "step_number": 13,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Thank you, that helps a lot!"
+    }
+  ]
+}

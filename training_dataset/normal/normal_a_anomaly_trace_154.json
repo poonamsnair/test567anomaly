@@ -1,0 +1,98 @@
+{
+  "metadata": {
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "search_agent",
+      "media_agent"
+    ],
+    "duration": "7 minutes",
+    "errors": [],
+    "num_steps": 10,
+    "task_completed": true,
+    "tools_called": [
+      "search",
+      "image_generation",
+      "final_answer"
+    ],
+    "anomaly_types": []
+  },
+  "question": "What is the height of Mount Everest in feet, and can you generate an image of it?",
+  "steps": [
+    {
+      "agent": "user",
+      "content": "What is the height of Mount Everest in feet, and can you generate an image of it?",
+      "role": "user",
+      "step_number": 1,
+      "type": "task"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Search for the height of Mount Everest in feet. 2) Generate an image of Mount Everest. 3) Return the answer.",
+      "role": "agent",
+      "step_number": 2,
+      "type": "plan"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Searching for the height of Mount Everest in feet.",
+      "role": "agent",
+      "step_number": 3,
+      "tool": "search",
+      "type": "tool_call"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Mount Everest is 29,032 feet tall.",
+      "role": "agent",
+      "step_number": 4,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Proceed to generate an image of Mount Everest.",
+      "role": "agent",
+      "step_number": 5,
+      "type": "plan"
+    },
+    {
+      "agent": "media_agent",
+      "content": "Generating an image of Mount Everest.",
+      "role": "agent",
+      "step_number": 6,
+      "tool": "image_generation",
+      "type": "tool_call"
+    },
+    {
+      "agent": "media_agent",
+      "content": "Image of Mount Everest generated successfully.",
+      "role": "agent",
+      "step_number": 7,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Combine the height information and the image to form the final answer.",
+      "role": "agent",
+      "step_number": 8,
+      "type": "plan"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Mount Everest is 29,032 feet tall. Here is an image of Mount Everest.",
+      "role": "agent",
+      "step_number": 9,
+      "tool": "final_answer",
+      "type": "answer"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Task completed successfully.",
+      "role": "agent",
+      "step_number": 10,
+      "type": "observation"
+    }
+  ],
+  "trace_id": "trace_example_anomaly_005",
+  "true_answer": "Mount Everest is 29,032 feet tall. Here is an image of Mount Everest."
+}

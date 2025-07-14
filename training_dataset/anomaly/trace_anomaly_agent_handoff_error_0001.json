@@ -1,0 +1,47 @@
+{
+  "trace_id": "trace_anomaly_agent_handoff_error_0001",
+  "question": "Can you transfer me to an agent who specializes in billing issues?",
+  "true_answer": "Please hold on as I transfer you to our billing specialist.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "The handoff to the billing specialist failed due to a system routing error."
+    ],
+    "duration": "5 minutes",
+    "tools_called": [
+      "routing_system"
+    ],
+    "num_steps": 3,
+    "agents_called": [
+      "user",
+      "principal_agent"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can you transfer me to an agent who specializes in billing issues?"
+    },
+    {
+      "step_number": 2,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "routing_system",
+      "content": "Certainly, I will transfer you now."
+    },
+    {
+      "step_number": 3,
+      "type": "error",
+      "role": "system",
+      "agent": "routing_system",
+      "content": "Handoff failed: Unable to connect to the billing specialist."
+    }
+  ]
+}

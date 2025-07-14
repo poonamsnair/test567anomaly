@@ -1,0 +1,139 @@
+{
+  "trace_id": "trace_anomaly_decomposition_error_0002",
+  "question": "How does global warming affect biodiversity in tropical rainforests?",
+  "true_answer": "Global warming affects biodiversity in tropical rainforests by altering habitats, increasing temperatures, and changing precipitation patterns, leading to species migration or extinction.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Incorrect task decomposition leading to unrelated sub-tasks.",
+      "Failed memory update causing inconsistent task tracking."
+    ],
+    "duration": "18 minutes",
+    "tools_called": [
+      "create_plan",
+      "decompose",
+      "search",
+      "feedback"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "planner",
+      "deep_researcher_agent",
+      "analyzer"
+    ],
+    "anomaly_types": [
+      "Normal"
+    ],
+    "memory_state": {
+      "plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Understand global warming effects",
+            "completed": false
+          },
+          {
+            "id": 2,
+            "description": "Analyze biodiversity with incorrect focus",
+            "completed": false
+          },
+          "id: 3, "
+        ],
+        "current_objective": "Analyze biodiversity incorrectly due to faulty decomposition"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "How does global warming affect biodiversity in tropical rainforests?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "create_plan",
+      "content": "Creating plan: 1) Decompose the question into researchable components. 2) Analyze findings."
+    },
+    {
+      "step_number": 3,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "decompose",
+      "content": "Incorrectly decomposing into sub-tasks: Focuses on unrelated climate impacts and non-biodiversity topics."
+    },
+    {
+      "step_number": 4,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Assigning deep research tasks to deep_researcher_agent with incorrect decomposition."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "deep_researcher_agent",
+      "tool": "search",
+      "content": "Searching for climate effects but unrelated to biodiversity."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "deep_researcher_agent",
+      "content": "Found data on temperature increases but no direct link to biodiversity."
+    },
+    {
+      "step_number": 7,
+      "type": "error",
+      "role": "agent",
+      "agent": "planner",
+      "content": "Detected decomposition error: Sub-tasks are not aligned with the main task."
+    },
+    {
+      "step_number": 8,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "feedback",
+      "content": "Attempting to update plan but memory state fails to reflect correct task focus."
+    },
+    {
+      "step_number": 9,
+      "type": "error",
+      "role": "agent",
+      "agent": "planner",
+      "content": "Memory inconsistency: Task plan is not updated correctly after feedback."
+    },
+    {
+      "step_number": 10,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "analyzer",
+      "tool": "feedback",
+      "content": "Providing feedback on findings but based on incorrect sub-tasks."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "analyzer",
+      "content": "Feedback loop ineffective due to initial decomposition errors."
+    },
+    {
+      "step_number": 12,
+      "type": "error",
+      "role": "agent",
+      "agent": "planner",
+      "content": "Concluding task failed due to decomposition and memory updating issues."
+    }
+  ]
+}

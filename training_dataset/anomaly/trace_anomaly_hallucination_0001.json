@@ -1,0 +1,102 @@
+{
+  "trace_id": "trace_anomaly_hallucination_0001",
+  "question": "What are the latest breakthroughs in quantum computing?",
+  "true_answer": "Recent breakthroughs in quantum computing include advancements in quantum error correction and the development of more stable qubits.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Hallucination of unsupported information."
+    ],
+    "duration": "12 minutes",
+    "tools_called": [
+      "search",
+      "code_generation",
+      "final_answer"
+    ],
+    "num_steps": 10,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "search_agent",
+      "code_agent"
+    ],
+    "anomaly_types": [
+      "Hallucination"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What are the latest breakthroughs in quantum computing?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Search for recent breakthroughs in quantum computing. 2) Analyze the findings for key advancements. 3) Provide the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "search_agent",
+      "tool": "search",
+      "content": "Searching for recent breakthroughs in quantum computing."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "search_agent",
+      "content": "Found several articles discussing quantum error correction and stable qubit development."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "code_agent",
+      "tool": "code_generation",
+      "content": "Attempting to generate code simulating a quantum algorithm improvement."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "code_agent",
+      "content": "Generated code for a simple quantum teleportation algorithm."
+    },
+    {
+      "step_number": 7,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: Use generated code and search findings to construct a final answer."
+    },
+    {
+      "step_number": 8,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Recent breakthroughs include teleportation of quantum states over unprecedented distances and creation of quantum internet."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Observation indicates some information may not be supported by initial search results."
+    },
+    {
+      "step_number": 10,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Hallucination of unsupported information; mention of quantum internet not found in search."
+    }
+  ]
+}

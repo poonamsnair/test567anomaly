@@ -1,0 +1,129 @@
+{
+  "trace_id": "trace_normal_0016",
+  "question": "Can I afford a $300,000 home with an annual income of $75,000 and savings of $50,000?",
+  "true_answer": "Yes, with savings for down payment and DTI of 32%, you can afford it.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "6 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 14,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": []
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can I afford a $300,000 home with an annual income of $75,000 and savings of $50,000?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Hand off to home_loan_agent for affordability criteria. 2) Use calculator for affordability analysis. 3) Involve credit_agent for additional checks if needed. 4) Supervisor review. 5) Return answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on home affordability criteria."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Affordability depends on down payment, debt-to-income ratio, and monthly mortgage payment calculations."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating monthly mortgage payment for $300,000 home with a $50,000 down payment and a 30-year loan."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Monthly payment estimated at approximately $1,250."
+    },
+    {
+      "step_number": 7,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating debt-to-income ratio considering a $75,000 annual income."
+    },
+    {
+      "step_number": 8,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "DTI calculated as 32%, which is below the typical threshold of 43%."
+    },
+    {
+      "step_number": 9,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "What interest rate is this based on?"
+    },
+    {
+      "step_number": 10,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving current average interest rate for 30-year fixed mortgages."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "The average interest rate is currently 4.5%."
+    },
+    {
+      "step_number": 12,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review complete, all calculations and checks are correct."
+    },
+    {
+      "step_number": 13,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Yes, with your savings for the down payment and a DTI of 32%, you can afford it. The calculation is based on a 4.5% interest rate."
+    },
+    {
+      "step_number": 14,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Final answer delivered with all conditions met."
+    }
+  ]
+}

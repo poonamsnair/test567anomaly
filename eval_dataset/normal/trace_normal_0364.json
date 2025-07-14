@@ -1,0 +1,120 @@
+{
+  "trace_id": "trace_normal_0364",
+  "question": "Can I qualify for a mortgage with a credit score of 700 and a debt-to-income ratio of 35%?",
+  "true_answer": "Yes, with a credit score of 700 and DTI of 35%, you are likely eligible. Ensure a down payment of 5-20% based on the loan type.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "6 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 14,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can I qualify for a mortgage with a credit score of 700 and a debt-to-income ratio of 35%?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Confirm credit score with credit_agent. 2) Check DTI with home_loan_agent. 3) Retrieve additional mortgage requirement details. 4) Supervisor review. 5) Provide final answer."
+    },
+    {
+      "step_number": 3,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Credit score 700 is confirmed as good for most mortgage types."
+    },
+    {
+      "step_number": 4,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on debt-to-income ratio requirements."
+    },
+    {
+      "step_number": 5,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "A DTI of 35% is within acceptable limits for most lenders."
+    },
+    {
+      "step_number": 6,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Do I need a specific down payment amount?"
+    },
+    {
+      "step_number": 7,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving information on down payment requirements."
+    },
+    {
+      "step_number": 8,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Down payment requirements vary from 5% to 20% depending on the mortgage type."
+    },
+    {
+      "step_number": 9,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "What interest rate can I expect?"
+    },
+    {
+      "step_number": 10,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving current interest rate information."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Interest rates currently range from 3% to 4% for good credit scores."
+    },
+    {
+      "step_number": 12,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review completed. All criteria are satisfactorily met."
+    },
+    {
+      "step_number": 13,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Yes, with a credit score of 700 and DTI of 35%, you are likely eligible. Ensure a down payment of 5-20% based on the loan type. Expect interest rates between 3% and 4%."
+    }
+  ]
+}

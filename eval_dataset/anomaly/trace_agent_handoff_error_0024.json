@@ -1,0 +1,145 @@
+{
+  "trace_id": "trace_agent_handoff_error_0024",
+  "question": "Am I eligible for a home renovation loan with my current credit score?",
+  "true_answer": "Eligibility depends on credit score, income, and outstanding debts.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent Handoff Error: Credit check was sent to home_loan_agent instead of credit_agent, causing delays."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "create_loan_plan",
+      "interpret_query",
+      "decompose_task",
+      "assign_agent",
+      "retrieve_knowledge",
+      "final_answer"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ],
+    "memory_state": {
+      "user_profile": {
+        "credit_score": 680,
+        "income": 70000
+      },
+      "loan_plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Check credit eligibility",
+            "completed": false
+          },
+          {
+            "id": 2,
+            "description": "Calculate income to debt ratio",
+            "completed": false
+          }
+        ],
+        "current_objective": "Determine eligibility for home renovation loan"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home renovation loan with my current credit score?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "create_loan_plan",
+      "content": "Creating plan: 1) Check credit score. 2) Calculate income to debt ratio. 3) Return eligibility status."
+    },
+    {
+      "step_number": 3,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "decompose_task",
+      "content": "Decomposing task: Assigning credit check to credit_agent."
+    },
+    {
+      "step_number": 4,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Assigning credit check to home_loan_agent mistakenly."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving credit score knowledge mistakenly."
+    },
+    {
+      "step_number": 6,
+      "type": "error",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Error: Misrouted task - unable to perform credit check."
+    },
+    {
+      "step_number": 7,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Reassigning credit check to credit_agent."
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving credit score eligibility."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Credit score of 680 is generally eligible, pending income check."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Income to debt ratio calculation needed."
+    },
+    {
+      "step_number": 11,
+      "type": "error",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Task incomplete: Further steps needed for full eligibility assessment."
+    },
+    {
+      "step_number": 12,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Further review needed; please check income to debt ratio for complete eligibility."
+    }
+  ]
+}

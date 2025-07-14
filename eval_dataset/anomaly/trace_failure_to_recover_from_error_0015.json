@@ -1,0 +1,110 @@
+{
+  "trace_id": "trace_failure_to_recover_from_error_0015",
+  "question": "What is the monthly payment on a $200,000 home loan at 3.5% interest over 30 years?",
+  "true_answer": "The monthly payment should be approximately $898.09.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent made a calculation mistake and failed to recover, resulting in incorrect answer."
+    ],
+    "duration": "14 minutes",
+    "tools_called": [
+      "calculator",
+      "retrieve_knowledge",
+      "final_answer"
+    ],
+    "num_steps": 11,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent"
+    ],
+    "anomaly_types": [
+      "Normal"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is the monthly payment on a $200,000 home loan at 3.5% interest over 30 years?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use calculator to determine monthly payment. 2) Verify with knowledge retrieval. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating monthly payment for $200,000 loan, 3.5% interest, over 30 years."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Calculated monthly payment: $909.24."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving typical monthly payments for similar loan details."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Typical monthly payments for such loans are around $898.09."
+    },
+    {
+      "step_number": 7,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Re-calculate to verify numbers. 2) Confirm and finalize answer."
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Re-calculating monthly payment to verify."
+    },
+    {
+      "step_number": 9,
+      "type": "error",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Error in calculation: Incorrect formula used, result is still $909.24."
+    },
+    {
+      "step_number": 10,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Accept current calculation. 2) Deliver answer."
+    },
+    {
+      "step_number": 11,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "The monthly payment is approximately $909.24."
+    }
+  ]
+}

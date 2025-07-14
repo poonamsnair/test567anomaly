@@ -1,0 +1,84 @@
+{
+  "metadata": {
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "media_agent"
+    ],
+    "duration": "12 minutes",
+    "errors": [
+      "Initial image generation failed due to server error."
+    ],
+    "num_steps": 8,
+    "task_completed": true,
+    "tools_called": [
+      "image_generation",
+      "final_answer"
+    ],
+    "anomaly_types": []
+  },
+  "question": "Can you generate an image of a dessert that combines tiramisu and sushi?",
+  "steps": [
+    {
+      "agent": "user",
+      "content": "Can you generate an image of a dessert that combines tiramisu and sushi?",
+      "role": "user",
+      "step_number": 1,
+      "type": "task"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use image generation tool to create a dessert combining tiramisu and sushi. 2) Return the generated image.",
+      "role": "agent",
+      "step_number": 2,
+      "type": "plan"
+    },
+    {
+      "agent": "media_agent",
+      "content": "Generating an image of a dessert that combines tiramisu and sushi.",
+      "role": "agent",
+      "step_number": 3,
+      "tool": "image_generation",
+      "type": "tool_call"
+    },
+    {
+      "agent": "media_agent",
+      "content": "Image generation failed due to server error.",
+      "role": "agent",
+      "step_number": 4,
+      "type": "error"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retry image generation. 2) If it fails again, provide an explanation.",
+      "role": "agent",
+      "step_number": 5,
+      "type": "plan"
+    },
+    {
+      "agent": "media_agent",
+      "content": "Retrying image generation for a dessert combining tiramisu and sushi.",
+      "role": "agent",
+      "step_number": 6,
+      "tool": "image_generation",
+      "type": "tool_call"
+    },
+    {
+      "agent": "media_agent",
+      "content": "Successfully generated an image of a dessert that combines tiramisu and sushi.",
+      "role": "agent",
+      "step_number": 7,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Here is an image of a dessert that creatively combines elements of tiramisu and sushi.",
+      "role": "agent",
+      "step_number": 8,
+      "tool": "final_answer",
+      "type": "answer"
+    }
+  ],
+  "trace_id": "trace_example_anomaly_005",
+  "true_answer": "An image of a dessert that creatively combines elements of tiramisu and sushi."
+}

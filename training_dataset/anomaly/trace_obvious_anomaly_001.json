@@ -1,0 +1,80 @@
+{
+  "metadata": {
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "code_agent"
+    ],
+    "duration": "5 minutes",
+    "errors": [
+      "Attempted to calculate distance using code tool instead of search tool",
+      "Mathematical error: missing geographical data"
+    ],
+    "num_steps": 7,
+    "task_completed": false,
+    "tools_called": [
+      "code",
+      "error",
+      "final_answer"
+    ],
+    "anomaly_types": [
+      "Normal"
+    ]
+  },
+  "question": "Find the distance between New York and Los Angeles.",
+  "steps": [
+    {
+      "agent": "user",
+      "content": "Find the distance between New York and Los Angeles.",
+      "role": "user",
+      "step_number": 1,
+      "type": "task"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate the distance using available tools. 2) Return the result.",
+      "role": "agent",
+      "step_number": 2,
+      "type": "plan"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Attempting to calculate distance between New York and Los Angeles",
+      "role": "agent",
+      "step_number": 3,
+      "tool": "code",
+      "type": "tool_call"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Error: Cannot calculate distance without geographical data",
+      "role": "agent",
+      "step_number": 4,
+      "type": "error"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Explain the error. 2) Return the result.",
+      "role": "agent",
+      "step_number": 5,
+      "type": "plan"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Unable to calculate distance without proper data.",
+      "role": "agent",
+      "step_number": 6,
+      "tool": "final_answer",
+      "type": "answer"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Task failed due to incorrect tool usage and missing data.",
+      "role": "agent",
+      "step_number": 7,
+      "type": "observation"
+    }
+  ],
+  "trace_id": "trace_obvious_anomaly_006",
+  "true_answer": "The distance between New York and Los Angeles is approximately 2,450 miles."
+}

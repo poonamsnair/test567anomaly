@@ -1,0 +1,83 @@
+{
+  "trace_id": "trace_normal_0060",
+  "question": "Can you tell me what the weather is like in Paris today and generate an image of a sunny day in Paris?",
+  "true_answer": "The weather in Paris today is sunny with a mild temperature. Image of a sunny day in Paris generated.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "5 minutes",
+    "tools_called": [
+      "search",
+      "image_generation",
+      "final_answer"
+    ],
+    "num_steps": 9,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "search_agent",
+      "media_agent"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can you tell me what the weather is like in Paris today and generate an image of a sunny day in Paris?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Search for the current weather in Paris. 2) Generate an image of a sunny day in Paris. 3) Return the weather information and the image."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "search_agent",
+      "tool": "search",
+      "content": "Searching for current weather in Paris."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "search_agent",
+      "content": "The weather in Paris today is sunny with a mild temperature."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "media_agent",
+      "tool": "image_generation",
+      "content": "Generating an image of a sunny day in Paris."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "media_agent",
+      "content": "Image of a sunny day in Paris generated."
+    },
+    {
+      "step_number": 7,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "The weather in Paris today is sunny with a mild temperature. Image of a sunny day in Paris generated."
+    },
+    {
+      "step_number": 8,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Task completed successfully."
+    }
+  ]
+}

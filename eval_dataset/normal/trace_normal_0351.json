@@ -1,0 +1,129 @@
+{
+  "trace_id": "trace_normal_0351",
+  "question": "How much can I borrow for a mortgage if my annual income is $80,000 and I have no other debts?",
+  "true_answer": "Based on your income and no debts, you can borrow approximately $320,000, assuming a 4x income multiple.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "7 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 14,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": []
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "How much can I borrow for a mortgage if my annual income is $80,000 and I have no other debts?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Hand off to home_loan_agent for borrowing capacity. 2) Use calculator for income multiple. 3) Supervisor review. 4) Return answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on standard borrowing limits relative to income."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Borrowing limits typically use 3-4 times the annual income as a rule of thumb."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating maximum mortgage borrowing based on $80,000 income."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Calculated borrowing capacity as $320,000 using a 4x income multiple."
+    },
+    {
+      "step_number": 7,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Is $320,000 the maximum I can borrow?"
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Checking if any additional factors might affect the borrowing capacity."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Factors such as credit score and interest rates may adjust final amount."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Assuming good credit score, $320,000 is a reasonable estimate."
+    },
+    {
+      "step_number": 11,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "What if I want to consider a different loan term?"
+    },
+    {
+      "step_number": 12,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving options for different loan terms."
+    },
+    {
+      "step_number": 13,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Loan terms can vary from 15 to 30 years, affecting monthly payments more than borrowing limits."
+    },
+    {
+      "step_number": 14,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Based on your income and no debts, you can borrow approximately $320,000, assuming a 4x income multiple. Loan term adjustments will affect payment, not borrowing amount."
+    }
+  ]
+}

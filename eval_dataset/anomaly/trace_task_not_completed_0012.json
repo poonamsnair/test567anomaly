@@ -1,0 +1,117 @@
+{
+  "trace_id": "trace_task_not_completed_0012",
+  "question": "Am I eligible for a home loan with an annual income of $50,000 and no outstanding debts?",
+  "true_answer": "With an annual income of $50,000 and no outstanding debts, you may be eligible for a loan. Eligibility also depends on other factors like credit score, employment history, and the lender's criteria.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent failed to provide a conclusive answer on loan eligibility."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Task Not Completed"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan with an annual income of $50,000 and no outstanding debts?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve knowledge on eligibility criteria. 2) Calculate potential loan amount. 3) Provide eligibility answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving information on home loan eligibility criteria."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Eligibility depends on income, credit score, and other factors."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate possible loan amount. 2) Retrieve credit score requirements."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating potential loan amount for an income of $50,000."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Potential loan amount might be up to $200,000, depending on other factors."
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving credit score requirements for loan eligibility."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Credit score above 650 typically needed, but varies by lender."
+    },
+    {
+      "step_number": 10,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Combine eligibility criteria. 2) Provide final answer."
+    },
+    {
+      "step_number": 11,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Error: Unable to conclude eligibility without a specific credit score."
+    },
+    {
+      "step_number": 12,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "I'm unable to determine your eligibility for a home loan at this time. Please check specific lender requirements."
+    }
+  ]
+}

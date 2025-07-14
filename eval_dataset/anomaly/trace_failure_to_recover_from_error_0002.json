@@ -1,0 +1,117 @@
+{
+  "trace_id": "trace_failure_to_recover_from_error_0002",
+  "question": "Can you calculate the monthly payment for a $500,000 home loan with a 4% interest rate over 30 years?",
+  "true_answer": "The monthly payment should be approximately $2,387.08.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent failed to recover from calculation error, leading to an incorrect result and task abandonment."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Failure to Recover from Error"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can you calculate the monthly payment for a $500,000 home loan with a 4% interest rate over 30 years?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use the calculator to determine the monthly payment. 2) Verify the calculation. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating monthly payment for $500,000 loan, 4% interest, 30 years."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Initial calculation is $2,387.08, but verifying for accuracy."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Double-checking monthly payment calculation."
+    },
+    {
+      "step_number": 6,
+      "type": "error",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Error: Miscalculation identified, re-calculating."
+    },
+    {
+      "step_number": 7,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "calculator",
+      "content": "Reattempting calculation with corrected methodology."
+    },
+    {
+      "step_number": 8,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "New result is $3,000.00 due to a wrong formula application."
+    },
+    {
+      "step_number": 9,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Rely on final calculation despite mismatch. 2) Return the answer."
+    },
+    {
+      "step_number": 10,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "The estimated monthly payment is $3,000.00."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Noticed discrepancy between calculations but unable to verify correct method."
+    },
+    {
+      "step_number": 12,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Failed to recover from error, resulting in task abandonment."
+    }
+  ]
+}

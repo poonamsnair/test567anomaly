@@ -1,0 +1,149 @@
+{
+  "trace_id": "trace_task_not_completed_0025",
+  "question": "Am I eligible for a home loan with a down payment of $30,000?",
+  "true_answer": "Eligibility depends on income, credit score, and property value.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent failed to complete all eligibility checks, resulting in incomplete task."
+    ],
+    "duration": "14 minutes",
+    "tools_called": [
+      "create_loan_plan",
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Failure to Recover from Error"
+    ],
+    "memory_state": {
+      "user_profile": {
+        "income": 75000,
+        "credit_score": 680,
+        "down_payment": 30000
+      },
+      "loan_plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Check income eligibility",
+            "completed": true
+          },
+          {
+            "id": 2,
+            "description": "Check credit score",
+            "completed": false
+          },
+          {
+            "id": 3,
+            "description": "Calculate loan amount available",
+            "completed": false
+          }
+        ],
+        "current_objective": "Determine home loan eligibility"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan with a down payment of $30,000?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "create_loan_plan",
+      "content": "Creating plan: 1) Check income eligibility. 2) Check credit score. 3) Calculate available loan amount. 4) Return answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Checking income eligibility for down payment of $30,000."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Income of $75,000 meets initial eligibility criteria."
+    },
+    {
+      "step_number": 5,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "update_loan_plan",
+      "content": "Updating plan: Proceed to credit score check."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Checking credit score, currently at 680."
+    },
+    {
+      "step_number": 7,
+      "type": "error",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Error encountered: Credit score check not fully processed."
+    },
+    {
+      "step_number": 8,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "update_loan_plan",
+      "content": "Plan update: Attempt to calculate loan amount anyway."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Attempting to calculate loan amount based on partial data."
+    },
+    {
+      "step_number": 10,
+      "type": "error",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Error: Insufficient data for loan calculation."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review: Incomplete execution due to skipped steps and errors."
+    },
+    {
+      "step_number": 12,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "I'm unable to determine your home loan eligibility at this time."
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "trace_id": "trace_task_not_completed_0010",
+  "question": "Am I eligible for a home loan with a $50,000 annual income and $10,000 in savings?",
+  "true_answer": "Eligibility depends on several factors including debt, credit score, and local housing market.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent failed to complete the task by not considering all eligibility criteria."
+    ],
+    "duration": "9 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 11,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent"
+    ],
+    "anomaly_types": [
+      "Normal"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan with a $50,000 annual income and $10,000 in savings?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve eligibility criteria. 2) Consider savings and income. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on home loan eligibility criteria."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Eligibility often requires considering debt-to-income ratio, credit score, and local market."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate eligibility based only on income and savings. 2) Return a tentative answer."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating possible loan amount with given income and savings."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "For income of $50,000 and savings of $10,000, potential loan amount might be constrained."
+    },
+    {
+      "step_number": 8,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Skip debt and credit check. 2) Provide an estimate based on partial info."
+    },
+    {
+      "step_number": 9,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Based on income and savings, eligibility might be limited, but other factors not considered."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Task failed due to incomplete analysis of all eligibility factors."
+    },
+    {
+      "step_number": 11,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Failed to complete full eligibility analysis; task incomplete."
+    }
+  ]
+}

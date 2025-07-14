@@ -1,0 +1,112 @@
+{
+  "trace_id": "trace_failure_to_recover_from_error_0004",
+  "question": "How much can I afford for a down payment if I earn $75,000 a year?",
+  "true_answer": "Typically, around 20% of the property price depending on savings and expenses.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent failed to correctly calculate down payment affordability due to error propagation in calculation."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "calculator",
+      "retrieve_knowledge",
+      "final_answer"
+    ],
+    "num_steps": 11,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Normal"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "How much can I afford for a down payment if I earn $75,000 a year?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate savings potential. 2) Determine down payment based on income. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating potential savings from $75,000 income."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Assume savings rate is 15% of income."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Total savings: $11,250 annually."
+    },
+    {
+      "step_number": 6,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve knowledge on typical down payment requirements."
+    },
+    {
+      "step_number": 7,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving typical down payment percentage."
+    },
+    {
+      "step_number": 8,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Typical down payments are around 20% of home price."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating maximum affordable home price based on $11,250 savings."
+    },
+    {
+      "step_number": 10,
+      "type": "error",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Error: Incorrectly assumed savings to be total down payment without accounting for actual property price."
+    },
+    {
+      "step_number": 11,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Based on the calculation, you can afford a $11,250 down payment, but this may not be accurate without full expenses factored in."
+    }
+  ]
+}

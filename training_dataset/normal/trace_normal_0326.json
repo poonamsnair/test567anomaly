@@ -1,0 +1,203 @@
+{
+  "trace_id": "trace_normal_0326",
+  "question": "Can you help me plan a weekend trip to New York City?",
+  "true_answer": "Weekend trip itinerary for New York City including flights, hotel, and activity suggestions provided.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "18 minutes",
+    "tools_called": [
+      "create_plan",
+      "decompose",
+      "assign",
+      "search",
+      "feedback",
+      "update_plan",
+      "final_answer"
+    ],
+    "num_steps": 19,
+    "agents_called": [
+      "user",
+      "planner",
+      "researcher",
+      "browser",
+      "analyzer"
+    ],
+    "memory_state": {
+      "plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Research flight options",
+            "completed": true
+          },
+          {
+            "id": 2,
+            "description": "Find hotel accommodations",
+            "completed": true
+          },
+          {
+            "id": 3,
+            "description": "Suggest activities",
+            "completed": true
+          },
+          {
+            "id": 4,
+            "description": "Compile itinerary",
+            "completed": true
+          }
+        ],
+        "current_objective": "Organize travel itinerary for New York City"
+      },
+      "shared_knowledge": "Trip planned for the weekend with flights, hotel, and activities aligned."
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can you help me plan a weekend trip to New York City?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "create_plan",
+      "content": "Creating initial plan for NYC weekend trip: 1) Research flights. 2) Find hotels. 3) Suggest activities."
+    },
+    {
+      "step_number": 3,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "decompose",
+      "content": "Decomposing task into sub-tasks: flight search, hotel search, activity suggestions."
+    },
+    {
+      "step_number": 4,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "assign",
+      "content": "Assigning flight search to researcher agent."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "researcher",
+      "tool": "search",
+      "content": "Searching for flight options to New York City."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "researcher",
+      "content": "Flights found: Multiple options available with major airlines, best price from AirlineX."
+    },
+    {
+      "step_number": 7,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "mark_step_completed",
+      "content": "Updating plan: Mark flight search as completed."
+    },
+    {
+      "step_number": 8,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "assign",
+      "content": "Assigning hotel search to browser agent."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "browser",
+      "tool": "search",
+      "content": "Browsing for hotel options in New York City."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "browser",
+      "content": "Hotels found: Downtown Hotel, Uptown Suites, Central Park Inn."
+    },
+    {
+      "step_number": 11,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "mark_step_completed",
+      "content": "Updating plan: Mark hotel search as completed."
+    },
+    {
+      "step_number": 12,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "assign",
+      "content": "Assigning activity suggestions to analyzer agent."
+    },
+    {
+      "step_number": 13,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "analyzer",
+      "tool": "search",
+      "content": "Analyzing top activities for the weekend in NYC."
+    },
+    {
+      "step_number": 14,
+      "type": "observation",
+      "role": "agent",
+      "agent": "analyzer",
+      "content": "Activities suggested: Central Park tour, Broadway show, Museum of Modern Art."
+    },
+    {
+      "step_number": 15,
+      "type": "feedback",
+      "role": "agent",
+      "agent": "analyzer",
+      "tool": "feedback",
+      "content": "Providing feedback to planner: All components ready for itinerary compilation."
+    },
+    {
+      "step_number": 16,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "update_plan",
+      "content": "Updating plan: All sub-tasks completed, preparing final itinerary."
+    },
+    {
+      "step_number": 17,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Compiling itinerary: Flights booked with AirlineX, stay at Downtown Hotel, activities include Central Park tour and Broadway show."
+    },
+    {
+      "step_number": 18,
+      "type": "observation",
+      "role": "agent",
+      "agent": "planner",
+      "content": "Task completed successfully."
+    },
+    {
+      "step_number": 19,
+      "type": "memory_update",
+      "role": "agent",
+      "agent": "planner",
+      "content": "Updating memory with planned itinerary for future reference."
+    }
+  ]
+}

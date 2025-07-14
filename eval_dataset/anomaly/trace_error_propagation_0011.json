@@ -1,0 +1,119 @@
+{
+  "trace_id": "trace_error_propagation_0011",
+  "question": "What monthly payment can I expect for a $300,000 home loan with a 4% interest rate over 30 years?",
+  "true_answer": "Approximately $1,432 per month for a standard fixed-rate mortgage.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Error propagation due to incorrect initial calculation and failure to rectify subsequent steps."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "calculator",
+      "retrieve_knowledge",
+      "final_answer"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Error Propagation"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What monthly payment can I expect for a $300,000 home loan with a 4% interest rate over 30 years?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate monthly payment. 2) Validate with loan agent. 3) Return answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating monthly payment using $300,000, 4% interest rate, 30 years."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Initial calculation: $1,500 per month."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Validate calculation with home_loan_agent. 2) Return answer."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving standard calculation for home loan payments."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Common method shows around $1,432 for similar terms."
+    },
+    {
+      "step_number": 8,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Recalculate to confirm. 2) Ask supervisor if discrepancy persists."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Re-calculating monthly payment."
+    },
+    {
+      "step_number": 10,
+      "type": "error",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Persisting error in initial setup unnoticed, result still $1,500."
+    },
+    {
+      "step_number": 11,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Consulting supervisor on error."
+    },
+    {
+      "step_number": 12,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Monthly payment appears to be $1,500, though further validation might be needed."
+    }
+  ]
+}

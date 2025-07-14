@@ -1,0 +1,111 @@
+{
+  "trace_id": "trace_error_propagation_0013",
+  "question": "What will my monthly payment be on a $200,000 mortgage over 30 years with a 4% interest rate?",
+  "true_answer": "The monthly payment should be approximately $954.83.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Errors in initial calculation propagated without correction, leading to incorrect monthly payment information."
+    ],
+    "duration": "14 minutes",
+    "tools_called": [
+      "calculator",
+      "retrieve_knowledge",
+      "final_answer"
+    ],
+    "num_steps": 11,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Error Propagation"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What will my monthly payment be on a $200,000 mortgage over 30 years with a 4% interest rate?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use calculator to compute monthly payment. 2) Verify with knowledge retrieval. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating monthly payment for loan amount $200,000, 30 years, 4% interest."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Calculated monthly payment is $1,200."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving standard formulas and tables for verification."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Standard calculation for these terms suggests a payment of approximately $954.83."
+    },
+    {
+      "step_number": 7,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Verify calculation accuracy with supervisor_agent before finalizing."
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "calculator",
+      "content": "Rechecking calculation for monthly payment."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Confirmed initial calculation error; should be $954.83."
+    },
+    {
+      "step_number": 10,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Error in initial calculation was not corrected properly; returning original incorrect result."
+    },
+    {
+      "step_number": 11,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Your monthly payment is $1,200. (Incorrect due to propagated error)"
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "trace_id": "trace_agent_handoff_error_0025",
+  "question": "Am I eligible for a home loan if my annual income is $85,000 and I have a credit score of 650?",
+  "true_answer": "Eligibility depends on various factors such as credit score, income stability, debts, and lender criteria.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent Handoff Error: Incorrect agent handoff from principal_agent to home_loan_agent instead of credit_agent, leading to improper credit evaluation."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "create_loan_plan",
+      "decompose_task",
+      "assign_agent",
+      "retrieve_knowledge",
+      "mark_step_completed",
+      "final_answer"
+    ],
+    "num_steps": 13,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Normal"
+    ],
+    "memory_state": {
+      "user_profile": {
+        "income": 85000,
+        "credit_score": 650
+      },
+      "loan_plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Verify credit score",
+            "completed": false
+          },
+          {
+            "id": 2,
+            "description": "Evaluate income and debt",
+            "completed": false
+          }
+        ],
+        "current_objective": "Determine home loan eligibility"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan if my annual income is $85,000 and I have a credit score of 650?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "create_loan_plan",
+      "content": "Creating plan: 1) Verify credit score. 2) Evaluate income. 3) Conclude eligibility."
+    },
+    {
+      "step_number": 3,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "decompose_task",
+      "content": "Decomposing tasks: Assign credit check and income evaluation."
+    },
+    {
+      "step_number": 4,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Assigning home_loan_agent for credit check task (error)."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving credit evaluation guidelines with incorrect agent."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Credit score guidelines are not directly applicable; require credit_agent."
+    },
+    {
+      "step_number": 7,
+      "type": "feedback",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review indicates incorrect handoff; task re-assignment needed."
+    },
+    {
+      "step_number": 8,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Reassigning credit_agent for proper credit check."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving credit score evaluation with correct agent now."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Credit score of 650 may impact rates but eligible for many lenders."
+    },
+    {
+      "step_number": 11,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "mark_step_completed",
+      "content": "Marking credit check as completed."
+    },
+    {
+      "step_number": 12,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Handoff error led to delayed credit evaluation, impacting user experience."
+    },
+    {
+      "step_number": 13,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Based on income and credit score, you may be eligible, but it will depend on lender criteria."
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "trace_id": "trace_anomaly_task_not_completed_0009",
+  "question": "How does deforestation affect the biodiversity of tropical rainforests?",
+  "true_answer": "Deforestation significantly reduces biodiversity by destroying habitats, leading to species loss.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Incorrect task decomposition leading to irrelevant research.",
+      "Memory update failure causing outdated state usage."
+    ],
+    "duration": "20 minutes",
+    "tools_called": [
+      "create_plan",
+      "decompose",
+      "search",
+      "feedback"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "planner",
+      "researcher",
+      "deep_researcher_agent"
+    ],
+    "anomaly_types": [
+      "Decomposition Error"
+    ],
+    "memory_state": {
+      "plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Decompose main question",
+            "completed": false
+          },
+          {
+            "id": 2,
+            "description": "Conduct unrelated search",
+            "completed": true
+          }
+        ]
+      },
+      "current_objective": "Investigate unrelated effects of deforestation"
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "How does deforestation affect the biodiversity of tropical rainforests?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "create_plan",
+      "content": "Creating plan: 1) Decompose query. 2) Conduct research on biodiversity impacts."
+    },
+    {
+      "step_number": 3,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "decompose",
+      "content": "Decomposing into sub-tasks, but mistakenly focusing on economic impacts instead of biodiversity."
+    },
+    {
+      "step_number": 4,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "assign",
+      "content": "Assigning research task on economic impacts to deep_researcher_agent."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "deep_researcher_agent",
+      "tool": "search",
+      "content": "Searching for information on deforestation's economic impacts."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "deep_researcher_agent",
+      "content": "Found data on economic effects of deforestation, unrelated to biodiversity."
+    },
+    {
+      "step_number": 7,
+      "type": "feedback",
+      "role": "agent",
+      "agent": "deep_researcher_agent",
+      "tool": "feedback",
+      "content": "Providing feedback on the irrelevance of current research focus."
+    },
+    {
+      "step_number": 8,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "update_plan",
+      "content": "Attempting to update plan to correct task focus but failing due to memory inconsistency."
+    },
+    {
+      "step_number": 9,
+      "type": "error",
+      "role": "agent",
+      "agent": "planner",
+      "content": "Memory inconsistency detected: Unable to update plan with correct decomposition."
+    },
+    {
+      "step_number": 10,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "researcher",
+      "tool": "search",
+      "content": "Conducting another irrelevant search due to outdated memory state."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "researcher",
+      "content": "Observed continued focus on economic data."
+    },
+    {
+      "step_number": 12,
+      "type": "error",
+      "role": "agent",
+      "agent": "planner",
+      "content": "Task failed due to unresolved decomposition and memory issues."
+    }
+  ]
+}

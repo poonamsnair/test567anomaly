@@ -1,0 +1,129 @@
+{
+  "trace_id": "trace_normal_0347",
+  "question": "Can I afford a mortgage on a house worth $350,000 with a $75,000 annual income and $40,000 down payment?",
+  "true_answer": "Yes, with a $40,000 down payment and a DTI of 33%, the mortgage is affordable.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "6 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 15,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": []
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can I afford a mortgage on a house worth $350,000 with a $75,000 annual income and $40,000 down payment?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Hand off to home_loan_agent to assess affordability. 2) Calculate required mortgage after down payment. 3) Use credit_agent to check DTI. 4) Supervisor review. 5) Provide final answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on mortgage affordability criteria."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Affordability depends on DTI below 43% and income stability."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating remaining mortgage after $40,000 down payment."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "$310,000 mortgage needed after down payment."
+    },
+    {
+      "step_number": 7,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating DTI based on annual income and mortgage."
+    },
+    {
+      "step_number": 8,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "DTI calculated as 33%, which is manageable."
+    },
+    {
+      "step_number": 9,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "What interest rate should I expect?"
+    },
+    {
+      "step_number": 10,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving current interest rate information."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Current average interest rate is around 3.5%."
+    },
+    {
+      "step_number": 12,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review complete, all factors verified."
+    },
+    {
+      "step_number": 13,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Assemble final response with consolidated information."
+    },
+    {
+      "step_number": 14,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Yes, with a $40,000 down payment and a DTI of 33%, the mortgage is affordable. Expect an interest rate around 3.5%."
+    }
+  ]
+}

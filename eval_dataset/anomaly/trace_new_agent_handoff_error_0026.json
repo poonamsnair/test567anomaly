@@ -1,0 +1,158 @@
+{
+  "trace_id": "trace_agent_handoff_error_0026",
+  "question": "What is the maximum home loan I can get with a credit score of 720?",
+  "true_answer": "Based on a credit score of 720, the maximum loan amount depends on income and other factors.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent Handoff Error: Credit check was handed off to home_loan_agent, causing delays and missteps."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "create_loan_plan",
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer",
+      "interpret_query"
+    ],
+    "num_steps": 14,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ],
+    "memory_state": {
+      "user_profile": {
+        "credit_score": 720
+      },
+      "loan_plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Assess credit score",
+            "completed": false
+          },
+          {
+            "id": 2,
+            "description": "Calculate maximum loan",
+            "completed": false
+          }
+        ],
+        "current_objective": "Determine maximum loan amount based on credit score and income"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is the maximum home loan I can get with a credit score of 720?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "create_loan_plan",
+      "content": "Creating plan: 1) Assess credit score. 2) Calculate maximum loan. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Assigning credit check to credit_agent."
+    },
+    {
+      "step_number": 4,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "interpret_query",
+      "content": "Misguidedly handling credit check due to handoff error."
+    },
+    {
+      "step_number": 5,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Unable to properly assess credit score; inappropriate agent for task."
+    },
+    {
+      "step_number": 6,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "update_loan_plan",
+      "content": "Updating plan: Correct agent assignment for credit check."
+    },
+    {
+      "step_number": 7,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Reassigning credit check to credit_agent."
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Checking credit score impact on loan eligibility."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Credit score 720 allows for favorable loan terms."
+    },
+    {
+      "step_number": 10,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating maximum loan based on credit and income."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Estimated maximum loan: $350,000 but requires confirmation."
+    },
+    {
+      "step_number": 12,
+      "type": "feedback",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review indicates initial error in agent assignment causing inconsistency."
+    },
+    {
+      "step_number": 13,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Memory inconsistency: Plan steps not accurately marked or completed."
+    },
+    {
+      "step_number": 14,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Due to an error, I'm unable to accurately determine the maximum loan amount at this moment."
+    }
+  ]
+}

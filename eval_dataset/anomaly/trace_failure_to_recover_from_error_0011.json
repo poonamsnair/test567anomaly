@@ -1,0 +1,116 @@
+{
+  "trace_id": "trace_failure_to_recover_from_error_0011",
+  "question": "What is the monthly payment for a $400,000 home loan at 4% for 30 years?",
+  "true_answer": "The correct monthly payment is approximately $1,910.24.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent failed to recover from calculation error, leading to incorrect output."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Inadequate Validation of Tool Results"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is the monthly payment for a $400,000 home loan at 4% for 30 years?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use the calculator to determine the monthly payment. 2) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating monthly payment for $400,000 loan at 4% over 30 years."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Calculated monthly payment: $2,000 (mistaken calculation)."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Validate the calculation. 2) Return the answer."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "calculator",
+      "content": "Validating calculation of monthly payment."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Validation confirms $2,000, but error in verification process."
+    },
+    {
+      "step_number": 8,
+      "type": "error",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Error: Incorrect verification due to failure in calculation logic."
+    },
+    {
+      "step_number": 9,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Re-attempt calculation. 2) Return the answer."
+    },
+    {
+      "step_number": 10,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Recalculating monthly payment."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Re-calculated monthly payment: $2,000 (same mistake)."
+    },
+    {
+      "step_number": 12,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "The calculated monthly payment is $2,000."
+    }
+  ]
+}

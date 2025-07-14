@@ -1,0 +1,147 @@
+{
+  "trace_id": "trace_anomaly_task_not_completed_0006",
+  "question": "Investigate the effects of urbanization on local climate patterns.",
+  "true_answer": "Urbanization affects local climate by increasing temperatures due to heat islands and altering precipitation patterns.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Incorrect assignment of sub-tasks leading to missed objectives.",
+      "Failure to update memory state with new urban data."
+    ],
+    "duration": "20 minutes",
+    "tools_called": [
+      "create_plan",
+      "decompose",
+      "assign",
+      "search",
+      "feedback"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "planner",
+      "deep_researcher_agent",
+      "browser",
+      "analyzer"
+    ],
+    "anomaly_types": [
+      "Decomposition Error"
+    ],
+    "memory_state": {
+      "plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Gather urban climate data",
+            "completed": false
+          },
+          {
+            "id": 2,
+            "description": "Analyze temperature trends",
+            "completed": true
+          },
+          {
+            "id": 3,
+            "description": "Outdated analysis approach",
+            "completed": false
+          }
+        ],
+        "current_objective": "Analyze urban impact on climate without updated data."
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Investigate the effects of urbanization on local climate patterns."
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "create_plan",
+      "content": "Creating plan: 1) Collect data. 2) Analyze trends. 3) Report findings."
+    },
+    {
+      "step_number": 3,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "decompose",
+      "content": "Decomposing into: a) Data gathering, b) Temperature analysis, c) Precipitation impact."
+    },
+    {
+      "step_number": 4,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign",
+      "content": "Assigning data gathering to deep_researcher_agent, but erroneously skips precipitation impact."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "deep_researcher_agent",
+      "tool": "search",
+      "content": "Searching for urban climate data."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "deep_researcher_agent",
+      "content": "Found data on temperature but missing recent urban developments."
+    },
+    {
+      "step_number": 7,
+      "type": "feedback",
+      "role": "agent",
+      "agent": "analyzer",
+      "tool": "feedback",
+      "content": "Feedback loop breaks due to outdated data reliance."
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "browser",
+      "tool": "search",
+      "content": "Attempting to find updated urban climate impact data."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "browser",
+      "content": "Fails to find comprehensive updates; memory inconsistency not addressed."
+    },
+    {
+      "step_number": 10,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "update_plan",
+      "content": "Attempts to update plan; overlooks missing precipitation analysis task."
+    },
+    {
+      "step_number": 11,
+      "type": "error",
+      "role": "agent",
+      "agent": "planner",
+      "content": "Plan remains incomplete and inconsistent due to assignment errors."
+    },
+    {
+      "step_number": 12,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Task failed due to incomplete data and feedback loop issues."
+    }
+  ]
+}

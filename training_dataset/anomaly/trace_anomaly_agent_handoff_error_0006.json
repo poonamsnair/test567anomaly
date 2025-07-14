@@ -1,0 +1,146 @@
+{
+  "trace_id": "trace_anomaly_agent_handoff_error_0006",
+  "question": "What are the effects of deforestation on local climate patterns?",
+  "true_answer": "Deforestation can lead to changes in local climate patterns by altering rainfall, increasing temperatures, and changing wind patterns.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent handed off task to wrong sub-agent, causing incorrect research direction.",
+      "Memory state not updated with new task objectives."
+    ],
+    "duration": "21 minutes",
+    "tools_called": [
+      "create_plan",
+      "decompose",
+      "assign",
+      "search",
+      "feedback"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "planner",
+      "researcher",
+      "analyzer",
+      "deep_analyzer_agent"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ],
+    "memory_state": {
+      "plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Decompose task into research areas",
+            "completed": true
+          },
+          {
+            "id": 2,
+            "description": "Research effects of deforestation on temperature",
+            "completed": false
+          },
+          {
+            "id": 3,
+            "description": "Research effects of deforestation on rainfall",
+            "completed": false
+          }
+        ],
+        "current_objective": "Research effects of deforestation on local climate patterns"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What are the effects of deforestation on local climate patterns?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "create_plan",
+      "content": "Creating plan: 1) Decompose task into specific climate impacts."
+    },
+    {
+      "step_number": 3,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "decompose",
+      "content": "Decomposing into sub-tasks: temperature change, rainfall alteration, wind pattern changes."
+    },
+    {
+      "step_number": 4,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "assign",
+      "content": "Assigning temperature research to researcher."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "researcher",
+      "tool": "search",
+      "content": "Searching for effects of deforestation on temperature."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "researcher",
+      "content": "Collected data on temperature increase due to loss of canopy."
+    },
+    {
+      "step_number": 7,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "assign",
+      "content": "Incorrectly handing off rainfall research to deep_analyzer_agent."
+    },
+    {
+      "step_number": 8,
+      "type": "observation",
+      "role": "agent",
+      "agent": "deep_analyzer_agent",
+      "content": "Analyzing data, but focused on irrelevant wind pattern changes."
+    },
+    {
+      "step_number": 9,
+      "type": "feedback",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "feedback",
+      "content": "Feedback received: Task handed to wrong agent, leading to incorrect data focus."
+    },
+    {
+      "step_number": 10,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Error identified: Incorrect agent handoff caused misaligned research."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "analyzer",
+      "content": "Attempting to re-align task focus, but memory state not updated."
+    },
+    {
+      "step_number": 12,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Task failed due to handoff errors and memory inconsistencies."
+    }
+  ]
+}

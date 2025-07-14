@@ -1,0 +1,128 @@
+{
+  "trace_id": "trace_normal_0074",
+  "question": "What is the estimated monthly mortgage payment on a $300,000 loan with a 4% interest rate over 30 years?",
+  "true_answer": "The estimated monthly mortgage payment is approximately $1,432.25.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "7 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 14,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": []
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is the estimated monthly mortgage payment on a $300,000 loan with a 4% interest rate over 30 years?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Hand off to home_loan_agent for mortgage calculation. 2) Retrieve relevant formulas. 3) Use calculator. 4) Supervisor review. 5) Return answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving formula for monthly mortgage calculation."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Formula retrieved: M = P[r(1+r)^n]/[(1+r)^n – 1], where M is the total monthly mortgage payment, P is the principal loan amount, r is the monthly interest rate, and n is the number of payments."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating using P=$300,000, r=0.003333 (4% annual), n=360 (30 years)."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Calculation complete: Monthly payment is approximately $1,432.25."
+    },
+    {
+      "step_number": 7,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Does this include taxes and insurance?"
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving info on typical inclusions in mortgage payments."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Typically, taxes and insurance are not included in the basic mortgage calculation. They are additional."
+    },
+    {
+      "step_number": 10,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Can you confirm this calculation?"
+    },
+    {
+      "step_number": 11,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "calculator",
+      "content": "Re-calculating for confirmation."
+    },
+    {
+      "step_number": 12,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Recalculated: Monthly payment confirmed at $1,432.25."
+    },
+    {
+      "step_number": 13,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review complete, calculation is accurate."
+    },
+    {
+      "step_number": 14,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "The estimated monthly mortgage payment is approximately $1,432.25. Note that taxes and insurance are not included."
+    }
+  ]
+}

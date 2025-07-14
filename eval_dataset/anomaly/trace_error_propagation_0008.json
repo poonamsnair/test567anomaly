@@ -1,0 +1,109 @@
+{
+  "trace_id": "trace_error_propagation_0008",
+  "question": "Can you calculate my monthly payments for a $300,000 home loan at 5% over 30 years?",
+  "true_answer": "The monthly payment should be around $1,610 excluding taxes and insurance.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Error in initial calculation propagated through further steps, leading to incorrect monthly payment estimation."
+    ],
+    "duration": "14 minutes",
+    "tools_called": [
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 11,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent"
+    ],
+    "anomaly_types": [
+      "Error Propagation"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can you calculate my monthly payments for a $300,000 home loan at 5% over 30 years?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use the calculator to compute monthly payments. 2) Validate the result. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating monthly payment for $300,000 loan at 5% over 30 years."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Initial calculation shows a monthly payment of $1,610.03."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Confirm with credit_agent for validation. 2) Return the answer."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Re-evaluating the monthly payment calculation."
+    },
+    {
+      "step_number": 7,
+      "type": "error",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Error: Calculation did not factor in correct interest conversion, propagating incorrect monthly payment."
+    },
+    {
+      "step_number": 8,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retry calculation with the same formula. 2) Finalize answer without revalidation."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Re-calculating monthly payment using previous formula."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Re-confirmed monthly payment as $1,610.03, despite uncorrected error."
+    },
+    {
+      "step_number": 11,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Your monthly payment would be approximately $1,610.03."
+    }
+  ]
+}

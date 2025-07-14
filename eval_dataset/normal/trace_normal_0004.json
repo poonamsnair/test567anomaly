@@ -1,0 +1,136 @@
+{
+  "trace_id": "trace_normal_0004",
+  "question": "Can I afford a mortgage for a $300,000 house with a $50,000 annual income?",
+  "true_answer": "Yes, assuming a DTI of 35% and down payment of 20%, it is affordable.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "6 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 14,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": []
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can I afford a mortgage for a $300,000 house with a $50,000 annual income?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate affordability with home_loan_agent. 2) Validate with credit_agent. 3) Use calculator for in-depth analysis. 4) Supervisor review. 5) Provide final answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on mortgage affordability calculations."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Common affordability guideline is a DTI of 36% or less."
+    },
+    {
+      "step_number": 5,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "What about the interest rate impact?"
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving current interest rate data."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Current average interest rate is around 3.5%."
+    },
+    {
+      "step_number": 8,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Assuming a standard credit score is adequate for this rate."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating monthly payment and DTI based on $50,000 income, $300,000 house, and 3.5% interest."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Monthly payment estimated at $1,347. DTI calculated at 35%, which is acceptable."
+    },
+    {
+      "step_number": 11,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "How much would the down payment be?"
+    },
+    {
+      "step_number": 12,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on down payment standards."
+    },
+    {
+      "step_number": 13,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "A typical down payment is 20%, or $60,000 for this house price."
+    },
+    {
+      "step_number": 14,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Review complete, calculations verified."
+    },
+    {
+      "step_number": 15,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Yes, assuming a DTI of 35% and down payment of 20%, it is affordable."
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "trace_id": "trace_failure_to_recover_from_error_0012",
+  "question": "What monthly payment should I expect for a $300,000 mortgage over 20 years at a 4% interest rate?",
+  "true_answer": "The monthly payment should be approximately $1,815.47.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Calculation mistake led to incorrect payment suggestion and subsequent failure to correct it."
+    ],
+    "duration": "15 minutes",
+    "tools_called": [
+      "calculator",
+      "retrieve_knowledge",
+      "final_answer"
+    ],
+    "num_steps": 11,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent"
+    ],
+    "anomaly_types": [
+      "Normal"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What monthly payment should I expect for a $300,000 mortgage over 20 years at a 4% interest rate?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use calculator to compute monthly payment. 2) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "calculator",
+      "content": "Calculating monthly payment for $300,000 mortgage over 20 years at 4% interest."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Calculated monthly payment is $1,388.92."
+    },
+    {
+      "step_number": 5,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "The monthly payment is $1,388.92."
+    },
+    {
+      "step_number": 6,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "That seems too low. Can you check again?"
+    },
+    {
+      "step_number": 7,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Verify calculation with additional knowledge retrieval. 2) Recalculate if necessary."
+    },
+    {
+      "step_number": 8,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving formula for accurate monthly mortgage calculation."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Formula confirms standard calculation methods."
+    },
+    {
+      "step_number": 10,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Trust initial calculation. 2) Reaffirm answer."
+    },
+    {
+      "step_number": 11,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "The monthly payment is confirmed to be $1,388.92."
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "metadata": {
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "code_agent"
+    ],
+    "duration": "5 minutes",
+    "errors": [
+      "Used code tool for lookup instead of search tool",
+      "Calculation error when no data is applicable"
+    ],
+    "num_steps": 7,
+    "task_completed": false,
+    "tools_called": [
+      "code",
+      "error",
+      "final_answer"
+    ],
+    "anomaly_types": [
+      "Tool Calling Error"
+    ]
+  },
+  "question": "Find the population of the moon",
+  "steps": [
+    {
+      "agent": "user",
+      "content": "Find the population of the moon",
+      "role": "user",
+      "step_number": 1,
+      "type": "task"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Look up the population of the moon using available tools. 2) Return the information.",
+      "role": "agent",
+      "step_number": 2,
+      "type": "plan"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Attempting to calculate population statistics for the moon",
+      "role": "agent",
+      "step_number": 3,
+      "tool": "code",
+      "type": "tool_call"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Cannot calculate population without data.",
+      "role": "agent",
+      "step_number": 4,
+      "type": "observation"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Error: No population data available for calculations",
+      "role": "agent",
+      "step_number": 5,
+      "type": "error"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Unable to determine the population of the moon with available tools.",
+      "role": "agent",
+      "step_number": 6,
+      "tool": "final_answer",
+      "type": "answer"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Task failed due to incorrect tool usage and data error.",
+      "role": "agent",
+      "step_number": 7,
+      "type": "observation"
+    }
+  ],
+  "trace_id": "trace_obvious_anomaly_006",
+  "true_answer": "The moon has no permanent human population."
+}

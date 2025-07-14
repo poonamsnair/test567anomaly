@@ -1,0 +1,79 @@
+{
+  "trace_id": "trace_inadequate_validation_of_tool_results_0008",
+  "question": "What is my monthly payment for a $300,000 home loan at 4% interest over 30 years?",
+  "true_answer": "Approximately $1,432 assuming a standard 30-year fixed mortgage.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Inadequate validation of calculator output led to incorrect payment estimate."
+    ],
+    "duration": "9 minutes",
+    "tools_called": [
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 7,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Inadequate Validation of Tool Results"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What is my monthly payment for a $300,000 home loan at 4% interest over 30 years?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Calculate monthly payment. 2) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating monthly payment using loan amount $300,000, interest rate 4%, term 30 years."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Calculator output: $2,000 per month."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use calculator output directly for the final answer."
+    },
+    {
+      "step_number": 6,
+      "type": "answer",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "tool": "final_answer",
+      "content": "Your monthly payment is $2,000."
+    },
+    {
+      "step_number": 7,
+      "type": "error",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Error: The payment estimate was incorrect due to inadequate validation of the tool's output."
+    }
+  ]
+}

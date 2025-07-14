@@ -1,0 +1,78 @@
+{
+  "trace_id": "trace_partial_or_incomplete_answer_0008",
+  "question": "Am I eligible for a home loan if my credit score is 720 and I earn $50,000 annually?",
+  "true_answer": "Based on a credit score of 720 and annual income of $50,000, you might be eligible, but other factors like debt-to-income ratio must be considered.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent provided credit score info but did not assess complete eligibility criteria."
+    ],
+    "duration": "9 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "final_answer"
+    ],
+    "num_steps": 7,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "credit_agent"
+    ],
+    "anomaly_types": [
+      "Partial or Incomplete Answer"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan if my credit score is 720 and I earn $50,000 annually?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Retrieve knowledge about loan eligibility based on credit score. 2) Check income requirements. 3) Provide eligibility answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving eligibility info based on credit score 720."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Typical credit score of 720 is considered good and usually qualifies for favorable loan terms."
+    },
+    {
+      "step_number": 5,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use credit score info as basis for eligibility. 2) Return this as final answer."
+    },
+    {
+      "step_number": 6,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "With a credit score of 720, you are generally in a good position for a home loan."
+    },
+    {
+      "step_number": 7,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Error: Did not assess full eligibility criteria including income and debt-to-income ratio."
+    }
+  ]
+}

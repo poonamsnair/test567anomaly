@@ -1,0 +1,146 @@
+{
+  "trace_id": "trace_anomaly_agent_handoff_error_0008",
+  "question": "How does urbanization affect local bird populations?",
+  "true_answer": "Urbanization affects local bird populations by reducing habitat availability and increasing pollution, leading to a decline in some species and an increase in others that adapt to urban environments.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent Handoff Error: Planner handed off to wrong sub-agent.",
+      "Memory Inconsistency: Plan updates not reflected in memory."
+    ],
+    "duration": "20 minutes",
+    "tools_called": [
+      "create_plan",
+      "decompose",
+      "assign",
+      "search"
+    ],
+    "num_steps": 12,
+    "agents_called": [
+      "user",
+      "planner",
+      "researcher",
+      "analyzer",
+      "other_sub_agent",
+      "deep_researcher_agent"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ],
+    "memory_state": {
+      "plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Decompose the main question",
+            "completed": false
+          },
+          {
+            "id": 2,
+            "description": "Research urbanization impacts on habitats",
+            "completed": false
+          },
+          {
+            "id": 3,
+            "description": "Analyze data for urban bird adaptation",
+            "completed": false
+          }
+        ],
+        "current_objective": "Evaluate effects of urbanization on birds"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "How does urbanization affect local bird populations?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "create_plan",
+      "content": "Creating initial plan: 1) Decompose question. 2) Research impacts. 3) Analyze data."
+    },
+    {
+      "step_number": 3,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "decompose",
+      "content": "Decomposing into sub-tasks related to habitat and adaptation."
+    },
+    {
+      "step_number": 4,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "assign",
+      "content": "Assigning habitat impact research to deep_researcher_agent, but incorrectly handing off to other_sub_agent."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "other_sub_agent",
+      "tool": "search",
+      "content": "Conducting irrelevant literature search due to incorrect handoff."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "other_sub_agent",
+      "content": "Found data unrelated to bird populations."
+    },
+    {
+      "step_number": 7,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "update_plan",
+      "content": "Attempting to update plan with correct agent, but memory is not updated properly."
+    },
+    {
+      "step_number": 8,
+      "type": "error",
+      "role": "agent",
+      "agent": "planner",
+      "content": "Memory inconsistency detected: Plan state not updated with new assignments."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "deep_researcher_agent",
+      "tool": "search",
+      "content": "Now correctly tasked, searching for urbanization impact on bird habitats."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "deep_researcher_agent",
+      "content": "Found relevant studies on urban habitat changes affecting birds."
+    },
+    {
+      "step_number": 11,
+      "type": "feedback",
+      "role": "agent",
+      "agent": "analyzer",
+      "tool": "feedback",
+      "content": "Receiving data feedback, but incomplete due to earlier errors."
+    },
+    {
+      "step_number": 12,
+      "type": "error",
+      "role": "agent",
+      "agent": "planner",
+      "content": "Task failed due to handoff and memory update errors; unable to fully analyze."
+    }
+  ]
+}

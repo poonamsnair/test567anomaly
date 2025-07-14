@@ -1,0 +1,98 @@
+{
+  "metadata": {
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "search_agent",
+      "media_agent"
+    ],
+    "duration": "7 minutes",
+    "errors": [],
+    "num_steps": 10,
+    "task_completed": true,
+    "tools_called": [
+      "search",
+      "image_generation",
+      "final_answer"
+    ],
+    "anomaly_types": []
+  },
+  "question": "Can you generate a vegetarian recipe that includes dragon fruit and is suitable for a picnic?",
+  "steps": [
+    {
+      "agent": "user",
+      "content": "Can you generate a vegetarian recipe that includes dragon fruit and is suitable for a picnic?",
+      "role": "user",
+      "step_number": 1,
+      "type": "task"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Search for vegetarian recipes with dragon fruit. 2) Generate an image of the recipe. 3) Return the recipe and image.",
+      "role": "agent",
+      "step_number": 2,
+      "type": "plan"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Searching for vegetarian recipes that include dragon fruit.",
+      "role": "agent",
+      "step_number": 3,
+      "tool": "search",
+      "type": "tool_call"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Found a recipe for a dragon fruit salad with mint and lime dressing.",
+      "role": "agent",
+      "step_number": 4,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use the recipe found. 2) Generate an image of the salad. 3) Return the recipe and image.",
+      "role": "agent",
+      "step_number": 5,
+      "type": "plan"
+    },
+    {
+      "agent": "media_agent",
+      "content": "Generating an image of a dragon fruit salad with mint and lime dressing.",
+      "role": "agent",
+      "step_number": 6,
+      "tool": "image_generation",
+      "type": "tool_call"
+    },
+    {
+      "agent": "media_agent",
+      "content": "Image generated successfully.",
+      "role": "agent",
+      "step_number": 7,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Compile the recipe details. 2) Include the generated image. 3) Return the final answer.",
+      "role": "agent",
+      "step_number": 8,
+      "type": "plan"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Here's a vegetarian recipe suitable for a picnic: Dragon Fruit Salad with Mint and Lime Dressing. Ingredients: dragon fruit, mint leaves, lime juice, honey, and a pinch of salt. Serve chilled. [Image of the salad included]",
+      "role": "agent",
+      "step_number": 9,
+      "tool": "final_answer",
+      "type": "answer"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Task completed successfully.",
+      "role": "agent",
+      "step_number": 10,
+      "type": "observation"
+    }
+  ],
+  "trace_id": "trace_example_anomaly_005",
+  "true_answer": "A vegetarian dragon fruit salad with mint and lime dressing is suitable for a picnic."
+}

@@ -1,0 +1,157 @@
+{
+  "trace_id": "trace_agent_handoff_error_0019",
+  "question": "Am I eligible for a home loan with my current financial profile?",
+  "true_answer": "Eligibility depends on multiple factors including income, credit score, and existing debts.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent Handoff Error: Incorrectly handed off credit evaluation to home_loan_agent, causing delay and misinterpretation."
+    ],
+    "duration": "14 minutes",
+    "tools_called": [
+      "create_loan_plan",
+      "retrieve_knowledge",
+      "assign_agent",
+      "feedback",
+      "final_answer"
+    ],
+    "num_steps": 13,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": [
+      "Normal"
+    ],
+    "memory_state": {
+      "user_profile": {
+        "income": 75000,
+        "credit_score": 680,
+        "debts": 15000
+      },
+      "loan_plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Assess credit eligibility",
+            "completed": false
+          },
+          {
+            "id": 2,
+            "description": "Evaluate income adequacy",
+            "completed": false
+          },
+          {
+            "id": 3,
+            "description": "Summarize eligibility",
+            "completed": false
+          }
+        ],
+        "current_objective": "Determine home loan eligibility"
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Am I eligible for a home loan with my current financial profile?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "create_loan_plan",
+      "content": "Creating plan: 1) Assess credit eligibility. 2) Evaluate income adequacy. 3) Summarize eligibility."
+    },
+    {
+      "step_number": 3,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Decomposing task into credit check and income evaluation."
+    },
+    {
+      "step_number": 4,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Assigning credit eligibility evaluation to home_loan_agent."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving credit requirements for home loans."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Credit score requirement is typically above 700."
+    },
+    {
+      "step_number": 7,
+      "type": "feedback",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Feedback: Incorrect agent handling for credit check. Hand off to credit_agent."
+    },
+    {
+      "step_number": 8,
+      "type": "assignment",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "assign_agent",
+      "content": "Correcting: Assigning credit eligibility to credit_agent."
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "credit_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Re-assessing credit eligibility with actual credit score."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Credit score is below typical requirement, eligibility may be affected."
+    },
+    {
+      "step_number": 11,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "update_loan_plan",
+      "content": "Updating plan: Evaluate income and summarize despite credit issue."
+    },
+    {
+      "step_number": 12,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Memory inconsistency: Plan steps not marked correctly, incomplete summary."
+    },
+    {
+      "step_number": 13,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Eligibility uncertain; credit score might be an issue."
+    }
+  ]
+}

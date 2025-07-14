@@ -1,0 +1,90 @@
+{
+  "trace_id": "trace_normal_0170",
+  "question": "What's the weather like today in New York City, and can you generate a picture of a sunny day in Central Park?",
+  "true_answer": "The weather in New York City today is sunny with a high of 75°F. A picture of a sunny day in Central Park has been generated.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "5 minutes",
+    "tools_called": [
+      "search",
+      "image_generation",
+      "final_answer"
+    ],
+    "num_steps": 9,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "search_agent",
+      "media_agent"
+    ]
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "What's the weather like today in New York City, and can you generate a picture of a sunny day in Central Park?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Search for the current weather in New York City. 2) Generate an image of a sunny day in Central Park. 3) Return the answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "search_agent",
+      "tool": "search",
+      "content": "Searching for the current weather in New York City."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "search_agent",
+      "content": "The weather in New York City today is sunny with a high of 75°F."
+    },
+    {
+      "step_number": 5,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "media_agent",
+      "tool": "image_generation",
+      "content": "Generating an image of a sunny day in Central Park."
+    },
+    {
+      "step_number": 6,
+      "type": "observation",
+      "role": "agent",
+      "agent": "media_agent",
+      "content": "Image of a sunny day in Central Park generated."
+    },
+    {
+      "step_number": 7,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Does this image reflect the current weather as you reported?"
+    },
+    {
+      "step_number": 8,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Yes, the image reflects the sunny weather reported for New York City today."
+    },
+    {
+      "step_number": 9,
+      "type": "observation",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Task completed successfully."
+    }
+  ]
+}

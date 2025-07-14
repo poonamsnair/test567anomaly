@@ -1,0 +1,116 @@
+{
+  "trace_id": "trace_anomaly_hallucination_0003",
+  "question": "Explain the potential effects of 5G technology on urban biodiversity.",
+  "true_answer": "There is limited evidence on the direct effects of 5G on urban biodiversity, but potential impacts could include changes in electromagnetic field exposure affecting some species.",
+  "metadata": {
+    "task_completed": false,
+    "errors": [
+      "Agent hallucinated a correlation between 5G technology and bird migration patterns without evidence."
+    ],
+    "duration": "12 minutes",
+    "tools_called": [
+      "create_plan",
+      "decompose",
+      "search",
+      "update_plan"
+    ],
+    "num_steps": 9,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "planner",
+      "researcher",
+      "deep_researcher_agent"
+    ],
+    "anomaly_types": [
+      "Hallucination"
+    ],
+    "memory_state": {
+      "plan": {
+        "steps": [
+          {
+            "id": 1,
+            "description": "Create initial plan",
+            "completed": true
+          },
+          {
+            "id": 2,
+            "description": "Decompose task into researchable parts",
+            "completed": false
+          }
+        ],
+        "current_objective": "Research 5G effects on urban wildlife, incorrectly including bird migration patterns."
+      }
+    }
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Explain the potential effects of 5G technology on urban biodiversity."
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "create_plan",
+      "content": "Creating plan: 1) Decompose task. 2) Research electromagnetic effects on wildlife."
+    },
+    {
+      "step_number": 3,
+      "type": "decomposition",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "decompose",
+      "content": "Decomposing task into: a) Research 5G technology effects. b) Investigate wildlife current studies."
+    },
+    {
+      "step_number": 4,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "researcher",
+      "tool": "search",
+      "content": "Searching for effects of electromagnetic fields on urban wildlife."
+    },
+    {
+      "step_number": 5,
+      "type": "observation",
+      "role": "agent",
+      "agent": "researcher",
+      "content": "Found general studies on electromagnetic fields, but no specific 5G impacts."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "deep_researcher_agent",
+      "tool": "search",
+      "content": "Searching deep databases for 5G-specific wildlife impacts."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "deep_researcher_agent",
+      "content": "No concrete evidence found connecting 5G and directly impacting urban biodiversity."
+    },
+    {
+      "step_number": 8,
+      "type": "plan_update",
+      "role": "agent",
+      "agent": "planner",
+      "tool": "update_plan",
+      "content": "Updating plan to include speculative effects on bird migration, despite lack of evidence."
+    },
+    {
+      "step_number": 9,
+      "type": "error",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Hallucinated a correlation between 5G and bird migration patterns. Task incomplete with memory inconsistency."
+    }
+  ]
+}

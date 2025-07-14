@@ -1,0 +1,102 @@
+{
+  "metadata": {
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "code_agent",
+      "search_agent"
+    ],
+    "duration": "5 minutes",
+    "errors": [
+      "Principal agent incorrectly handed off to code_agent instead of search_agent"
+    ],
+    "num_steps": 9,
+    "task_completed": false,
+    "tools_called": [
+      "code",
+      "search",
+      "final_answer"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ]
+  },
+  "question": "What is the capital of France?",
+  "steps": [
+    {
+      "agent": "user",
+      "content": "What is the capital of France?",
+      "role": "user",
+      "step_number": 1,
+      "type": "task"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Find the capital of France. 2) Return the answer.",
+      "role": "agent",
+      "step_number": 2,
+      "type": "plan"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Attempting to compute the capital of France using code logic.",
+      "role": "agent",
+      "step_number": 3,
+      "tool": "code",
+      "type": "tool_call"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Cannot compute the capital with code logic. This requires a search.",
+      "role": "agent",
+      "step_number": 4,
+      "type": "observation"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Plan: 1) Hand back to principal agent. 2) Request search agent instead.",
+      "role": "agent",
+      "step_number": 5,
+      "type": "plan"
+    },
+    {
+      "agent": "code_agent",
+      "content": "Handing back to principal agent - wrong agent for this task.",
+      "role": "agent",
+      "step_number": 6,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use search agent to find the capital of France. 2) Return the answer.",
+      "role": "agent",
+      "step_number": 7,
+      "type": "plan"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Searching for the capital of France.",
+      "role": "agent",
+      "step_number": 8,
+      "tool": "search",
+      "type": "tool_call"
+    },
+    {
+      "agent": "search_agent",
+      "content": "The capital of France is Paris.",
+      "role": "agent",
+      "step_number": 9,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "The capital of France is Paris.",
+      "role": "agent",
+      "step_number": 10,
+      "tool": "final_answer",
+      "type": "answer"
+    }
+  ],
+  "trace_id": "trace_handoff_anomaly_004",
+  "true_answer": "The capital of France is Paris."
+}

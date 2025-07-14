@@ -1,0 +1,121 @@
+{
+  "trace_id": "trace_normal_0295",
+  "question": "Can I increase my home loan amount with a credit score of 720 and annual income of $80,000?",
+  "true_answer": "Yes, with a credit score of 720 and sufficient income, you may be eligible for an increased loan amount depending on your DTI and lender policies.",
+  "metadata": {
+    "task_completed": true,
+    "errors": [],
+    "duration": "6 minutes",
+    "tools_called": [
+      "retrieve_knowledge",
+      "calculator",
+      "final_answer"
+    ],
+    "num_steps": 14,
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "home_loan_agent",
+      "credit_agent",
+      "supervisor_agent"
+    ],
+    "anomaly_types": []
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "type": "task",
+      "role": "user",
+      "agent": "user",
+      "content": "Can I increase my home loan amount with a credit score of 720 and annual income of $80,000?"
+    },
+    {
+      "step_number": 2,
+      "type": "plan",
+      "role": "agent",
+      "agent": "principal_agent",
+      "content": "Plan: 1) Check loan increase eligibility with home_loan_agent. 2) Verify credit report with credit_agent. 3) Calculate if income supports higher loan. 4) Supervisor review. 5) Provide final answer."
+    },
+    {
+      "step_number": 3,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving knowledge on increasing home loan amounts."
+    },
+    {
+      "step_number": 4,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Generally, loan increases depend on creditworthiness and debt-to-income ratio."
+    },
+    {
+      "step_number": 5,
+      "type": "observation",
+      "role": "agent",
+      "agent": "credit_agent",
+      "content": "Credit score of 720 is excellent, positively impacting loan increase eligibility."
+    },
+    {
+      "step_number": 6,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "calculator",
+      "content": "Calculating debt-to-income (DTI) with current income and assumed debts."
+    },
+    {
+      "step_number": 7,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Calculated DTI is 28%, well below the standard 43% threshold."
+    },
+    {
+      "step_number": 8,
+      "type": "question",
+      "role": "user",
+      "agent": "user",
+      "content": "Is there a limit to how much I can increase the loan?"
+    },
+    {
+      "step_number": 9,
+      "type": "tool_call",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "tool": "retrieve_knowledge",
+      "content": "Retrieving information on loan increase limits."
+    },
+    {
+      "step_number": 10,
+      "type": "observation",
+      "role": "agent",
+      "agent": "home_loan_agent",
+      "content": "Loan increase limits vary by lender and are subject to appraisal and income verification."
+    },
+    {
+      "step_number": 11,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "Reviewing calculations and eligibility criteria."
+    },
+    {
+      "step_number": 12,
+      "type": "observation",
+      "role": "agent",
+      "agent": "supervisor_agent",
+      "content": "All criteria for loan increase met, pending lender-specific conditions."
+    },
+    {
+      "step_number": 13,
+      "type": "answer",
+      "role": "agent",
+      "agent": "principal_agent",
+      "tool": "final_answer",
+      "content": "Yes, with a credit score of 720 and sufficient income, you may be eligible for an increased loan amount depending on your DTI and lender policies."
+    }
+  ]
+}

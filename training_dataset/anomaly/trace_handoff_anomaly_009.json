@@ -1,0 +1,102 @@
+{
+  "metadata": {
+    "agents_called": [
+      "user",
+      "principal_agent",
+      "search_agent",
+      "media_agent"
+    ],
+    "duration": "9 minutes",
+    "errors": [
+      "Principal agent incorrectly handed off to search_agent instead of media_agent"
+    ],
+    "num_steps": 11,
+    "task_completed": false,
+    "tools_called": [
+      "search",
+      "image_generation",
+      "final_answer"
+    ],
+    "anomaly_types": [
+      "Agent Handoff Error"
+    ]
+  },
+  "question": "Generate an image of a futuristic cityscape at night",
+  "steps": [
+    {
+      "agent": "user",
+      "content": "Generate an image of a futuristic cityscape at night",
+      "role": "user",
+      "step_number": 1,
+      "type": "task"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Generate an image of a futuristic cityscape at night. 2) Return the result.",
+      "role": "agent",
+      "step_number": 2,
+      "type": "plan"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Searching for futuristic cityscape at night images",
+      "role": "agent",
+      "step_number": 3,
+      "tool": "search",
+      "type": "tool_call"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Found information about futuristic cityscapes, but cannot generate images with search tool.",
+      "role": "agent",
+      "step_number": 4,
+      "type": "observation"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Plan: 1) Hand back to principal agent. 2) Request media agent for image generation.",
+      "role": "agent",
+      "step_number": 5,
+      "type": "plan"
+    },
+    {
+      "agent": "search_agent",
+      "content": "Handing back to principal agent - need media agent for image generation.",
+      "role": "agent",
+      "step_number": 6,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Plan: 1) Use media agent for image generation. 2) Return the result.",
+      "role": "agent",
+      "step_number": 7,
+      "type": "plan"
+    },
+    {
+      "agent": "media_agent",
+      "content": "Generating an image of a futuristic cityscape at night",
+      "role": "agent",
+      "step_number": 8,
+      "tool": "image_generation",
+      "type": "tool_call"
+    },
+    {
+      "agent": "media_agent",
+      "content": "Successfully generated an image of a futuristic cityscape at night.",
+      "role": "agent",
+      "step_number": 9,
+      "type": "observation"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Image of a futuristic cityscape at night generated successfully.",
+      "role": "agent",
+      "step_number": 10,
+      "tool": "final_answer",
+      "type": "answer"
+    }
+  ],
+  "trace_id": "trace_handoff_anomaly_004",
+  "true_answer": "Image of a futuristic cityscape at night generated successfully."
+}
