@@ -427,7 +427,7 @@ class DGIEncoder(nn.Module):
         return self.discriminator(x)
 
 class ImprovedAutoencoder(nn.Module):
-    def __init__(self, input_dim, hidden_dim=256, latent_dim=128, dropout=0.3, denoising=False):
+    def __init__(self, input_dim, hidden_dim=256, latent_dim=128, dropout=0.3, denoising=True):
         super().__init__()
         self.denoising = denoising
         self.encoder = nn.Sequential(
@@ -662,7 +662,7 @@ def evaluate_anomaly_detection_with_threshold(y_true, y_scores, threshold):
         'threshold_method': 'pre_computed'
     }
 
-def generate_visualizations(dgi_losses, ae_losses, X_train, X_test, results, all_scores, y_true, normal_train_embeddings, normal_test_embeddings, anomaly_embeddings, normal_train_motifs, anomaly_motifs, normal_test_graphs, anomaly_graphs, embedder, autoencoder, encoder, device, keep, scaler, normal_train_graphs=None):
+def generate_visualizations(dgi_losses, ae_losses, X_train, X_test, results, all_scores, y_true, normal_train_embeddings, normal_test_embeddings, anomaly_embeddings, normal_train_motifs, anomaly_motifs, normal_test_graphs, anomaly_graphs, embedder, autoencoder, encoder, device, keep, scaler, normal_train_graphs=None, gmm=None):
     print(f"   📊 Creating training loss curves...")
     sns.set_style("whitegrid")
     sns.set_palette("deep")
@@ -1275,7 +1275,7 @@ def main():
     print(f"✅ Graphs: train {len(normal_train_graphs)}, test {len(normal_test_graphs)}, anomaly {len(anomaly_graphs)}")
     
     print(f"\n🔄 Loading sentence embedder...")
-    embedder = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+    embedder = SentenceTransformer('models/all-MiniLM-L6-v2')
     print(f"✅ SentenceTransformer loaded successfully")
     
     print(f"\n🔄 Extracting motifs from graphs...")
@@ -1390,7 +1390,7 @@ def main():
     print(f"✅ Evaluation completed")
     
     print(f"\n🔄 Generating visualizations...")
-    generate_visualizations(dgi_losses, ae_losses, X_train, X_test, results, test_scores, y_true, normal_train_embeddings, normal_test_embeddings, anomaly_embeddings, normal_train_motifs, anomaly_motifs, normal_test_graphs, anomaly_graphs, embedder, autoencoder, encoder, device, keep, scaler, normal_train_graphs)
+    generate_visualizations(dgi_losses, ae_losses, X_train, X_test, results, test_scores, y_true, normal_train_embeddings, normal_test_embeddings, anomaly_embeddings, normal_train_motifs, anomaly_motifs, normal_test_graphs, anomaly_graphs, embedder, autoencoder, encoder, device, keep, scaler, normal_train_graphs, gmm)
     print(f"✅ Visualizations generated")
     
     print(f"\n🎉 Pipeline completed successfully!")

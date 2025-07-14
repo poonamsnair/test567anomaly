@@ -39,13 +39,13 @@ FEWSHOT_NORMAL = '''
     "agents_called": [
       "user",
       "planner",
-      "researcher",
-      "browser",
-      "analyzer"
+      "deep_researcher_agent",
+      "browser_use_agent",
+      "deep_analyzer_agent"
     ],
-    "duration": "12 minutes",
+    "duration": "15 minutes",
     "errors": [],
-    "num_steps": 15,
+    "num_steps": 16,
     "task_completed": true,
     "tools_called": [
       "create_plan",
@@ -54,32 +54,34 @@ FEWSHOT_NORMAL = '''
       "search",
       "feedback",
       "update_plan",
+      "code",
       "final_answer"
     ],
     "memory_state": {
       "plan": {
         "steps": [
-          {"id": 1, "description": "Research topic", "completed": true},
-          {"id": 2, "description": "Analyze findings", "completed": true},
-          {"id": 3, "description": "Generate report", "completed": true}
+          {"id": 1, "description": "Research current market trends", "completed": true},
+          {"id": 2, "description": "Analyze historical data", "completed": true},
+          {"id": 3, "description": "Generate forecast model", "completed": true},
+          {"id": 4, "description": "Compile report", "completed": true}
         ],
-        "current_objective": "Complete analysis of underwater basket weaving"
+        "current_objective": "Forecast stock market trends for Q3"
       },
-      "shared_knowledge": "Underwater basket weaving originated in coastal communities; certifications include Aquatic Artistry."
+      "shared_knowledge": "Recent market data shows upward trend in tech sector; historical volatility noted in energy stocks. Forecast model uses linear regression with R^2=0.85."
     }
   },
-  "question": "Provide a detailed report on the history and certifications of underwater basket weaving.",
+  "question": "Provide a forecast for stock market trends in the next quarter, focusing on tech and energy sectors.",
   "steps": [
     {
       "agent": "user",
-      "content": "Provide a detailed report on the history and certifications of underwater basket weaving.",
+      "content": "Provide a forecast for stock market trends in the next quarter, focusing on tech and energy sectors.",
       "role": "user",
       "step_number": 1,
       "type": "task"
     },
     {
       "agent": "planner",
-      "content": "Creating initial plan: 1) Interpret query. 2) Decompose into research and analysis. 3) Assign to sub-agents.",
+      "content": "Interpreting forecast request. Creating initial plan: 1) Gather current market data. 2) Retrieve historical trends. 3) Perform analysis and modeling. 4) Synthesize findings.",
       "role": "agent",
       "step_number": 2,
       "tool": "create_plan",
@@ -87,7 +89,7 @@ FEWSHOT_NORMAL = '''
     },
     {
       "agent": "planner",
-      "content": "Decomposing task into sub-tasks: history research, certification lookup, synthesis.",
+      "content": "Decomposing into data collection for tech/energy, historical analysis, predictive modeling, and report generation.",
       "role": "agent",
       "step_number": 3,
       "tool": "decompose",
@@ -95,98 +97,107 @@ FEWSHOT_NORMAL = '''
     },
     {
       "agent": "planner",
-      "content": "Assigning history research to researcher agent.",
+      "content": "Assigning market data gathering to deep_researcher_agent.",
       "role": "agent",
       "step_number": 4,
       "tool": "assign",
       "type": "assignment"
     },
     {
-      "agent": "researcher",
-      "content": "Searching for history of underwater basket weaving.",
+      "agent": "deep_researcher_agent",
+      "content": "Executing web search for recent tech and energy stock trends.",
       "role": "agent",
       "step_number": 5,
       "tool": "search",
       "type": "tool_call"
     },
     {
-      "agent": "researcher",
-      "content": "History: Originated as artistic expression in coastal communities.",
+      "agent": "deep_researcher_agent",
+      "content": "Tech sector up 5% YTD due to AI advancements; energy volatile with oil price fluctuations.",
       "role": "agent",
       "step_number": 6,
       "type": "observation"
     },
     {
       "agent": "planner",
-      "content": "Updating plan: Mark history research as completed.",
+      "content": "Marking data collection complete. Updating shared knowledge with trends.",
       "role": "agent",
       "step_number": 7,
       "tool": "mark_step_completed",
       "type": "plan_update"
     },
     {
-      "agent": "browser",
-      "content": "Browsing for certifications.",
+      "agent": "planner",
+      "content": "Assigning historical analysis to browser_use_agent for detailed reports.",
       "role": "agent",
       "step_number": 8,
+      "tool": "assign",
+      "type": "assignment"
+    },
+    {
+      "agent": "browser_use_agent",
+      "content": "Navigating financial sites to pull historical stock data.",
+      "role": "agent",
+      "step_number": 9,
       "tool": "search",
       "type": "tool_call"
     },
     {
-      "agent": "browser",
-      "content": "Certifications: Aquatic Artistry Certification, Submerged Craftsmanship Diploma.",
+      "agent": "browser_use_agent",
+      "content": "Historical data: Tech averaged 8% annual growth; energy showed 3% with high variance.",
       "role": "agent",
-      "step_number": 9,
+      "step_number": 10,
       "type": "observation"
     },
     {
-      "agent": "analyzer",
-      "content": "Analyzing combined findings.",
-      "role": "agent",
-      "step_number": 10,
-      "type": "analysis"
-    },
-    {
-      "agent": "analyzer",
-      "content": "Providing feedback to planner: Analysis complete, ready for report.",
+      "agent": "deep_analyzer_agent",
+      "content": "Using code to build simple regression model on combined data.",
       "role": "agent",
       "step_number": 11,
+      "tool": "code",
+      "type": "tool_call"
+    },
+    {
+      "agent": "deep_analyzer_agent",
+      "content": "Model predicts moderate growth in tech, stability in energy.",
+      "role": "agent",
+      "step_number": 12,
+      "type": "observation"
+    },
+    {
+      "agent": "deep_analyzer_agent",
+      "content": "Feedback: Model fits well; suggest adding volatility metrics.",
+      "role": "agent",
+      "step_number": 13,
       "tool": "feedback",
       "type": "feedback"
     },
     {
       "agent": "planner",
-      "content": "Updating plan based on feedback.",
+      "content": "Incorporating feedback and updating plan for final synthesis.",
       "role": "agent",
-      "step_number": 12,
+      "step_number": 14,
       "tool": "update_plan",
       "type": "plan_update"
     },
     {
       "agent": "principal_agent",
-      "content": "Compiling final report: History and certifications detailed.",
+      "content": "Q3 forecast: Tech up 4-6%, energy flat with risks.",
       "role": "agent",
-      "step_number": 13,
+      "step_number": 15,
       "tool": "final_answer",
       "type": "answer"
     },
     {
       "agent": "planner",
-      "content": "Task completed successfully.",
+      "content": "Archiving key data in memory for future reference.",
       "role": "agent",
-      "step_number": 14,
-      "type": "observation"
-    },
-    {
-      "agent": "planner",
-      "content": "Updating memory with key insights.",
-      "role": "agent",
-      "step_number": 15,
+      "step_number": 16,
       "type": "memory_update"
     }
   ],
-  "trace_id": "trace_example_complex_003",
-  "true_answer": "Detailed report on history and certifications of underwater basket weaving provided."
+  "trace_id": "trace_normal_example_001",
+  "true_answer": "Forecast indicates moderate growth in tech and stability in energy for Q3."
 }
 '''
 
@@ -196,45 +207,51 @@ FEWSHOT_ANOMALY = '''
     "agents_called": [
       "user",
       "planner",
-      "researcher"
+      "deep_researcher_agent",
+      "browser_use_agent",
+      "deep_analyzer_agent"
     ],
-    "duration": "15 minutes",
+    "duration": "22 minutes",
     "errors": [
-      "Failed to update plan correctly, leading to inconsistency."
+      "Unnoticed drift in data interpretation leading to compounded inaccuracies."
     ],
-    "num_steps": 10,
+    "num_steps": 17,
     "task_completed": false,
     "tools_called": [
       "create_plan",
       "decompose",
-      "search"
+      "assign",
+      "search",
+      "update_plan",
+      "code"
     ],
     "anomaly_types": [
-      "Planning Failure",
-      "Memory Inconsistency"
+      "Error Propagation",
+      "Inadequate Validation of Tool Results"
     ],
     "memory_state": {
       "plan": {
         "steps": [
-          {"id": 1, "description": "Research topic", "completed": false},
-          {"id": 2, "description": "Outdated step", "completed": true}  // Inconsistent with updates
+          {"id": 1, "description": "Collect weather data", "completed": true},
+          {"id": 2, "description": "Analyze patterns", "completed": true},
+          {"id": 3, "description": "Model predictions", "completed": false}  // Validation skipped, leading to propagation
         ],
-        "current_objective": "Incomplete due to memory mismatch"
+        "current_objective": "Predict weather for next week"
       }
     }
   },
-  "question": "Analyze the impact of Arctic ice melting on ocean salinity.",
+  "question": "What's the weather forecast for Tokyo next week?",
   "steps": [
     {
       "agent": "user",
-      "content": "Analyze the impact of Arctic ice melting on ocean salinity.",
+      "content": "What's the weather forecast for Tokyo next week?",
       "role": "user",
       "step_number": 1,
       "type": "task"
     },
     {
       "agent": "planner",
-      "content": "Creating plan: 1) Decompose query. 2) Research effects.",
+      "content": "Handling weather forecast query. Plan: Retrieve current data, analyze trends, generate predictions.",
       "role": "agent",
       "step_number": 2,
       "tool": "create_plan",
@@ -242,67 +259,122 @@ FEWSHOT_ANOMALY = '''
     },
     {
       "agent": "planner",
-      "content": "Decomposing into sub-tasks, but incorrectly including irrelevant current effects.",
+      "content": "Decomposing into data retrieval, pattern analysis, and forecast modeling.",
       "role": "agent",
       "step_number": 3,
       "tool": "decompose",
       "type": "decomposition"
     },
     {
-      "agent": "researcher",
-      "content": "Searching for ice melting effects.",
+      "agent": "planner",
+      "content": "Assigning data retrieval to deep_researcher_agent.",
       "role": "agent",
       "step_number": 4,
+      "tool": "assign",
+      "type": "assignment"
+    },
+    {
+      "agent": "deep_researcher_agent",
+      "content": "Searching for Tokyo weather data.",
+      "role": "agent",
+      "step_number": 5,
       "tool": "search",
       "type": "tool_call"
     },
     {
-      "agent": "researcher",
-      "content": "Found info on currents, but not salinity.",
+      "agent": "deep_researcher_agent",
+      "content": "Current data: Mild temperatures, chance of rain mid-week.",
       "role": "agent",
-      "step_number": 5,
+      "step_number": 6,
       "type": "observation"
     },
     {
       "agent": "planner",
-      "content": "Attempting to update plan, but forgetting previous decomposition.",
+      "content": "Updating plan with retrieved data.",
       "role": "agent",
-      "step_number": 6,
+      "step_number": 7,
       "tool": "update_plan",
       "type": "plan_update"
     },
     {
-      "agent": "planner",
-      "content": "Memory inconsistency: Plan state not reflecting updates.",
-      "role": "agent",
-      "step_number": 7,
-      "type": "error"
-    },
-    {
-      "agent": "researcher",
-      "content": "Continuing with outdated plan, leading to irrelevant search.",
+      "agent": "browser_use_agent",
+      "content": "Accessing detailed forecast sites.",
       "role": "agent",
       "step_number": 8,
       "tool": "search",
       "type": "tool_call"
     },
     {
-      "agent": "planner",
-      "content": "Task failed due to planning and memory issues.",
+      "agent": "browser_use_agent",
+      "content": "Extended forecast: Increasing humidity, possible storms.",
       "role": "agent",
       "step_number": 9,
       "type": "observation"
     },
     {
-      "agent": "planner",
-      "content": "Failed to recover; inconsistent memory state.",
+      "agent": "deep_analyzer_agent",
+      "content": "Running code to model trends, but using partially mismatched data sets.",
       "role": "agent",
       "step_number": 10,
-      "type": "error"
+      "tool": "code",
+      "type": "tool_call"
+    },
+    {
+      "agent": "deep_analyzer_agent",
+      "content": "Model output: Predicted sunny days, but with unvalidated assumptions.",
+      "role": "agent",
+      "step_number": 11,
+      "type": "observation"
+    },
+    {
+      "agent": "planner",
+      "content": "Proceeding with analysis, overlooking need for data cross-check.",
+      "role": "agent",
+      "step_number": 12,
+      "tool": "update_plan",
+      "type": "plan_update"
+    },
+    {
+      "agent": "deep_analyzer_agent",
+      "content": "Further modeling incorporates earlier error, leading to optimistic forecast.",
+      "role": "agent",
+      "step_number": 13,
+      "tool": "code",
+      "type": "tool_call"
+    },
+    {
+      "agent": "deep_analyzer_agent",
+      "content": "Updated predictions: Clear weather throughout.",
+      "role": "agent",
+      "step_number": 14,
+      "type": "observation"
+    },
+    {
+      "agent": "planner",
+      "content": "Finalizing based on current outputs.",
+      "role": "agent",
+      "step_number": 15,
+      "tool": "mark_step_completed",
+      "type": "plan_update"
+    },
+    {
+      "agent": "principal_agent",
+      "content": "Forecast: Mostly sunny, but underlying data issues make it unreliable.",
+      "role": "agent",
+      "step_number": 16,
+      "tool": "final_answer",
+      "type": "answer"
+    },
+    {
+      "agent": "planner",
+      "content": "Storing forecast in memory, propagating the inconsistency.",
+      "role": "agent",
+      "step_number": 17,
+      "type": "memory_update"
     }
   ],
-  "trace_id": "trace_example_anomaly_005",
-  "true_answer": "The melting of Arctic ice decreases ocean salinity by adding freshwater."
+  "trace_id": "trace_anomaly_example_001",
+  "true_answer": "Tokyo forecast: Mix of sun and rain with increasing humidity."
 }
 '''
 
@@ -355,7 +427,14 @@ Generate a trace that follows the same structure and style as the examples, but 
 '''
 
 ANOMALY_PROMPT_TEMPLATE_BASE = '''
-You are an expert at generating synthetic agent traces for a reasoning pipeline in a hierarchical role-based multi-agent system like AgentOrchestra. Generate 1 synthetic trace in the following JSON schema, where:
+You are an expert at generating synthetic agent traces for a reasoning pipeline in a hierarchical role-based multi-agent system like AgentOrchestra. 
+
+To create realistic anomalies, think step-by-step:
+1. First, conceptualize what a normal, successful trace would look like for a similar query: outline the expected sequence of steps, agent interactions, tool calls, feedback, and memory updates that lead to task completion without issues.
+2. Then, subtly introduce the specified anomaly in a natural way. Make it appear plausible and not obviously erroneous – the agents should not explicitly acknowledge or "realize" the problem; it should only become apparent upon reviewing the logs, patterns, or outcomes (e.g., a suboptimal path might seem efficient at first but lead to inefficiencies, or a memory inconsistency might cause gradual misalignment without immediate failure).
+3. Draw from real-world examples of multi-agent anomalies: unexpected policy shifts in interactions, communication bottlenecks like message storms or deadlocks, resource underutilization leading to subtle bottlenecks, latency spikes as lagging indicators, emergent behaviors like unintended synchronization, misclassified data delaying actions, false alerts masking real issues, adversarial perturbations hidden until triggered, impersonation manipulating decisions, changes in communication frequency/timing, microscopic gradual degradations, sophisticated manipulations via unrelated actions, unusual access patterns, or coordination failures in hierarchies.
+
+Generate 1 synthetic trace in the following JSON schema, where:
 - The user asks a question leading to an anomalous trajectory with hierarchical issues.
 - Agents exhibit anomalies: e.g., planning failures, wrong decompositions, feedback breaks, memory inconsistencies (e.g., outdated state recall).
 - Include memory component: "memory_state" in metadata, but show inconsistencies or failures in updating it for anomalies.
@@ -526,11 +605,27 @@ if __name__ == "__main__":
             tasks.append(('normal', None, i))
 
     if generate_anomaly:
-        for category in ANOMALY_TYPES:
+        # Generate 10 anomaly traces, each with a unique anomaly type (if possible)
+        num_anomaly_traces = 10
+        used_types = set()
+        anomaly_types_list = ANOMALY_TYPES.copy()
+        # If fewer than 10 types, allow repeats
+        for i in range(num_anomaly_traces):
+            # Cycle through types if fewer than 10
+            if len(used_types) < len(anomaly_types_list):
+                # Pick a type not yet used
+                for t in anomaly_types_list:
+                    if t not in used_types:
+                        category = t
+                        used_types.add(t)
+                        break
+            else:
+                # All types used, start repeating from the beginning
+                category = anomaly_types_list[i % len(anomaly_types_list)]
             slug = re.sub(r'[^a-z0-9_]', '', category.lower().replace(' ', '_').replace('-', '_'))
             next_anomaly_id = get_next_id(ANOMALY_DIR, f'trace_anomaly_{slug}_')
-            for i in range(next_anomaly_id, next_anomaly_id + NUM_ANOMALY_PER_TYPE):
-                tasks.append(('anomaly', category, i))
+            # Only add if file does not exist (get_next_id ensures this)
+            tasks.append(('anomaly', category, next_anomaly_id))
 
     if not tasks:
         print("No tasks to generate. Use --normal and/or --anomaly flags.")

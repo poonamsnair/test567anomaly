@@ -416,7 +416,7 @@ def main():
     
     # Load embedder
     try:
-        embedder = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+        embedder = SentenceTransformer('models/bge-large-en-v1.5')
         print("Loaded SentenceTransformer successfully")
     except Exception as e:
         print(f"Error loading SentenceTransformer: {e}")
