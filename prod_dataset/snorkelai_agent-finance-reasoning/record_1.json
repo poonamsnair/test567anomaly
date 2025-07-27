@@ -1,0 +1,474 @@
+{
+  "user_question": "What is the company's lease financing strategy and how does it impact cash flow obligations?",
+  "final_answer": "The company primarily utilizes operating leases over finance leases, with finance leases representing only 3.4% of total undiscounted lease cash flows. This suggests a preference for off-balance-sheet financing through operating leases. The finance lease structure shows a high principal-to-interest payment ratio of 51.857 in 2022, indicating relatively low interest rates or short-term lease arrangements. Additionally, imputed interest represents 21.4% of operating lease cash flows, which is a significant component that affects the present value calculation of lease obligations.",
+  "steps": [
+    {
+      "content": "Here is the question : What is the company's lease financing strategy and how does it impact cash flow obligations?, Here are the companies name in the database to query for : meta",
+      "id": "51c5dd2d-e943-46c2-8b09-300f539a52af",
+      "type": "human",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "I'll help you analyze Meta's lease financing strategy and its impact on cash flow obligations. Let me start by exploring the available data.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01CspYegFDjM4s8przUSrbtB",
+          "input": {
+            "company_name": "meta"
+          },
+          "name": "get_descriptions",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--df6f68cb-c592-4bab-9d45-140963203a3c-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[\"us_gaap_ScheduleOfComponentsOfIncomeTaxExpenseBenefitTableTextBlock\", \"us_gaap_ScheduleOfOtherNonoperatingIncomeExpenseTableTextBlock\", \"us_gaap_ScheduleOfEarningsPerShareBasicAndDilutedTableTextBlock\", \"us_gaap_ScheduleOfMaturitiesOfLongTermDebtTableTextBlock\", \"meta_LeaseBalanceSheetInformationTableTextBlock\", \"us_gaap_LeaseCostTableTextBlock\", \"us_gaap_DisaggregationOfRevenueTableTextBlock\", \"us_gaap_ScheduleOfDeferredTaxAssetsAndLiabilitiesTableTextBlock\", \"meta_ScheduleOfFiniteLivedAndIndefiniteLivedIntangibleAssetsTableTextBlock\", \"us_gaap_LesseeOperatingLeaseLiabilityMaturityTableTextBlock\", \"us_gaap_ScheduleOfEffectiveIncomeTaxRateReconciliationTableTextBlock\", \"us_gaap_ScheduleofFiniteLivedIntangibleAssetsFutureAmortizationExpenseTableTextBlock\", \"us_gaap_ScheduleOfShareBasedCompensationRestrictedStockUnitsAwardActivityTableTextBlock\", \"us_gaap_ScheduleOfAccruedLiabilitiesTableTextBlock\", \"us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock\", \"us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock\", \"us_gaap_FinanceLeaseLiabilityMaturityTableTextBlock\", \"us_gaap_DebtSecuritiesAvailableForSaleUnrealizedLossPositionFairValueTableTextBlock\", \"us_gaap_InvestmentsClassifiedByContractualMaturityDateTableTextBlock\", \"rt_ContractualObligationFiscalYearMaturityScheduleTableTextBlock\", \"us_gaap_ScheduleOfUnrecognizedTaxBenefitsRollForwardTableTextBlock\", \"meta_PropertyPlantandEquipmentUsefulLifeTableTextBlock\", \"meta_LeaseCashFlowsInformationTableTextBlock\", \"us_gaap_EquitySecuritiesWithoutReadilyDeterminableFairValueTableTextBlock\"]",
+      "id": "76c076ef-c9b0-4835-9c2b-bb5637e41233",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Let me examine the lease-related tables to understand Meta's lease financing strategy:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01LaD9vVqU2mQoYSwgP3zWY5",
+          "input": {
+            "company_name": "meta",
+            "table_name": "meta_LeaseBalanceSheetInformationTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--261531c6-b661-4ab7-b1b8-6e0fee72f714-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"supplemental_balance_sheet_information_related_to_lease_liabilities\",\"column_names\": [\"item\",\"lease_type\",\"2024\",\"2023\"],\"unique_vals_per_col\": {\"item\": [\"weighted_average_remaining_lease_term\",\"weighted_average_discount_rate\"],\"lease_type\": [\"finance_leases\",\"operating_leases\"],\"2024\": [\"13.7 years\",\"11.5 years\",\"3.6%\",\"3.9%\"],\"2023\": [\"14.0 years\",\"11.6 years\",\"3.4%\",\"3.7%\"]},\"company\": \"meta\",\"column_dtypes\": {\"item\": \"object\",\"lease_type\": \"object\",\"2024\": \"object\",\"2023\": \"object\"}}",
+      "id": "b90ed23a-77d0-4e70-b9a9-ffea55cacf3d",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01T18PyPjthcwav9bsdoDvyT",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_LeaseCostTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--ffb2f5a5-c824-4e14-b54b-ba87f7e5aa44-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"the_components_of_lease_costs_are_as_follows_(in_millions):\",\"column_names\": [\"component\",\"2024\",\"2023\",\"2022\"],\"unique_vals_per_col\": {\"component\": [\"amortization_of_right_of_use_assets\",\"interest\",\"operating_lease_cost\",\"variable_lease_cost_and_other\",\"total\"]},\"company\": \"meta\",\"column_dtypes\": {\"component\": \"object\",\"2024\": \"object\",\"2023\": \"object\",\"2022\": \"object\"}}",
+      "id": "45342839-9b79-48c5-ac8e-65471ad23254",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01UvwW9S7NjBvAqcWAvY9Sc8",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_LeaseCostTableTextBlock",
+            "query": "SELECT * FROM us_gaap_LeaseCostTableTextBlock"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--e39a8ee7-0a73-4ed0-a513-33ed667eeba8-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Error : select * is not allowed, highly inefficient!",
+      "id": "22bc4ff5-ad6e-4327-a5cd-7990ac92ac0e",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_018As5uBEU3sFRxt4fr29Qm9",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_LeaseCostTableTextBlock",
+            "query": "SELECT component, 2024, 2023, 2022 FROM us_gaap_LeaseCostTableTextBlock WHERE component IN ('amortization_of_right_of_use_assets', 'interest', 'operating_lease_cost', 'variable_lease_cost_and_other', 'total')"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--ac52e056-7306-43f7-af43-f20925014326-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"component\":\"amortization_of_right_of_use_assets\",\"2024\":2024,\"2023\":2023,\"2022\":2022},{\"component\":\"interest\",\"2024\":2024,\"2023\":2023,\"2022\":2022},{\"component\":\"operating_lease_cost\",\"2024\":2024,\"2023\":2023,\"2022\":2022},{\"component\":\"variable_lease_cost_and_other\",\"2024\":2024,\"2023\":2023,\"2022\":2022},{\"component\":\"total\",\"2024\":2024,\"2023\":2023,\"2022\":2022}]",
+      "id": "459f6afb-a358-4e90-b513-e74567042d07",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "It seems the years are being interpreted as column names. Let me correct this:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_015em8PXC2Q4p7YRvVxR1cGg",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_LeaseCostTableTextBlock",
+            "query": "SELECT component, \"2024\", \"2023\", \"2022\" FROM us_gaap_LeaseCostTableTextBlock"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--e3bbeffc-d9f5-468f-8938-2259a5764723-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Error : You are trying to query without any kind of filters, which is not allowed!",
+      "id": "457f01ee-1f58-4d94-9f0a-62aa7375fa36",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01RNuCJtKhgTh85juTaizH4z",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_LeaseCostTableTextBlock",
+            "query": "SELECT component, \"2024\", \"2023\", \"2022\" FROM us_gaap_LeaseCostTableTextBlock WHERE component = 'total'"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--5dd67753-ba30-43a1-9bee-89e9293b6668-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"component\":\"total\",\"2024\":\"$3,613\",\"2023\":\"$3,040\",\"2022\":\"$2,616\"}]",
+      "id": "e27f5df3-ce99-4810-b7d2-9c934af6b07e",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01CWopbTcMBnPEMvvtPDJ5EJ",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_LeaseCostTableTextBlock",
+            "query": "SELECT component, \"2024\", \"2023\", \"2022\" FROM us_gaap_LeaseCostTableTextBlock WHERE component IN ('amortization_of_right_of_use_assets', 'interest', 'operating_lease_cost')"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--ce14ccde-f84d-4ce7-87ac-784db57582da-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"component\":\"amortization_of_right_of_use_assets\",\"2024\":\"$387\",\"2023\":\"$349\",\"2022\":\"$380\"},{\"component\":\"interest\",\"2024\":\"23\",\"2023\":\"20\",\"2022\":\"16\"},{\"component\":\"operating_lease_cost\",\"2024\":\"2,359\",\"2023\":\"2,091\",\"2022\":\"1,857\"}]",
+      "id": "46a9e993-555f-4fb1-ada1-97561bddc4d7",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Now let me look at the lease liability maturity schedules:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_014MkJMWTbXcKrdugCFT4hFp",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_LesseeOperatingLeaseLiabilityMaturityTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--27b5a71e-b285-481d-a748-705168d9aa1d-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"the_following_is_a_schedule_by_years_of_maturities_of_lease_liabilities_as_of_december_31_2024_(in_millions)\",\"column_names\": [\"year_period\",\"operating_leases\",\"finance_leases\"],\"unique_vals_per_col\": {\"year_period\": [\"2025\",\"2026\",\"2027\",\"2028\",\"2029\",\"thereafter\",\"total_undiscounted_cash_flows\",\"less:_imputed_interest\",\"present_value_of_lease_liabilities\",\"lease_liabilities_current\",\"lease_liabilities_non-current\"]},\"company\": \"meta\",\"column_dtypes\": {\"year_period\": \"object\",\"operating_leases\": \"object\",\"finance_leases\": \"object\"}}",
+      "id": "989731a4-926a-4084-92b7-e3ee1d5697b9",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01NYER62q4Mks1KyG6uhWppr",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_LesseeOperatingLeaseLiabilityMaturityTableTextBlock",
+            "query": "SELECT year_period, operating_leases, finance_leases FROM us_gaap_LesseeOperatingLeaseLiabilityMaturityTableTextBlock WHERE year_period IN ('2025', '2026', '2027', '2028', '2029', 'thereafter', 'total_undiscounted_cash_flows', 'present_value_of_lease_liabilities')"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--894549e0-6097-4bbd-9548-039d5e4c5b1a-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"year_period\":\"2025\",\"operating_leases\":\"$2,657\",\"finance_leases\":\"$96\"},{\"year_period\":\"2026\",\"operating_leases\":\"2,625\",\"finance_leases\":\"68\"},{\"year_period\":\"2027\",\"operating_leases\":\"2,575\",\"finance_leases\":\"68\"},{\"year_period\":\"2028\",\"operating_leases\":\"2,459\",\"finance_leases\":\"68\"},{\"year_period\":\"2029\",\"operating_leases\":\"2,391\",\"finance_leases\":\"64\"},{\"year_period\":\"thereafter\",\"operating_leases\":\"13,022\",\"finance_leases\":\"528\"},{\"year_period\":\"total_undiscounted_cash_flows\",\"operating_leases\":\"25,729\",\"finance_leases\":\"892\"},{\"year_period\":\"present_value_of_lease_liabilities\",\"operating_leases\":\"$20,234\",\"finance_leases\":\"$709\"},{\"year_period\":\"present_value_of_lease_liabilities\",\"operating_leases\":\"$20,234\",\"finance_leases\":\"$709\"}]",
+      "id": "2a557af7-5fd4-4941-8307-adfbd46f3e7c",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_019porKpxASuazWLypezkvpy",
+          "input": {
+            "company_name": "meta",
+            "table_name": "meta_LeaseCashFlowsInformationTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--87ce6bad-cb19-4d42-8e02-02d73c997e9e-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"supplemental_cash_flow_information_related_to_leases_is_as_follows_(in_millions):\",\"column_names\": [\"line_item\",\"2024\",\"2023\",\"2022\"],\"unique_vals_per_col\": {\"line_item\": [\"cash_paid_for_amounts_included_in_the_measurement_of_lease_liabilities:\",\"operating_cash_flows_for_operating_leases(1)\",\"operating_cash_flows_for_finance_leases\",\"financing_cash_flows_for_finance_leases\",\"lease_liabilities_arising_from_obtaining_right-of-use_assets:\",\"operating_leases\",\"finance_leases\"]},\"company\": \"meta\",\"column_dtypes\": {\"line_item\": \"object\",\"2024\": \"object\",\"2023\": \"object\",\"2022\": \"object\"}}",
+      "id": "05f154d1-3d2f-4343-9a4a-7b9b39ed1874",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_014FWgaVQvbvqgCVzAMnHjqH",
+          "input": {
+            "company_name": "meta",
+            "table_name": "meta_LeaseCashFlowsInformationTableTextBlock",
+            "query": "SELECT line_item, \"2024\", \"2023\", \"2022\" FROM meta_LeaseCashFlowsInformationTableTextBlock WHERE line_item LIKE '%cash_flows%'"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--e5c5af8b-7bd9-491f-8847-12437efdb0dd-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"line_item\":\"operating_cash_flows_for_operating_leases(1)\",\"2024\":\"$2,830\",\"2023\":\"$2,233\",\"2022\":\"$1,654\"},{\"line_item\":\"operating_cash_flows_for_finance_leases\",\"2024\":\"$23\",\"2023\":\"$20\",\"2022\":\"$16\"},{\"line_item\":\"financing_cash_flows_for_finance_leases\",\"2024\":\"$1,969\",\"2023\":\"$1,058\",\"2022\":\"$850\"}]",
+      "id": "97e2230f-8ba7-4c34-bc36-cf1434283b71",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01YXNT5hoLKn87GdDcEdZjWV",
+          "input": {
+            "company_name": "meta",
+            "table_name": "meta_LeaseCashFlowsInformationTableTextBlock",
+            "query": "SELECT line_item, \"2024\", \"2023\", \"2022\" FROM meta_LeaseCashFlowsInformationTableTextBlock WHERE line_item LIKE '%right-of-use_assets%'"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--34f3e321-bb43-4e34-840c-3f9b4114698e-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"line_item\":\"lease_liabilities_arising_from_obtaining_right-of-use_assets:\",\"2024\":\"\",\"2023\":\"\",\"2022\":\"\"}]",
+      "id": "791b927d-d4d8-4d17-863f-25039976a0ae",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01AZsBjQSm9wUcu4DFvT647k",
+          "input": {
+            "company_name": "meta",
+            "table_name": "meta_LeaseCashFlowsInformationTableTextBlock",
+            "query": "SELECT line_item, \"2024\", \"2023\", \"2022\" FROM meta_LeaseCashFlowsInformationTableTextBlock WHERE line_item IN ('operating_leases', 'finance_leases')"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--9c5b22e3-ae0e-47f7-8272-5e04a8a646b0-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"line_item\":\"operating_leases\",\"2024\":\"$3,784\",\"2023\":\"$4,370\",\"2022\":\"$4,366\"},{\"line_item\":\"finance_leases\",\"2024\":\"$181\",\"2023\":\"$588\",\"2022\":\"$223\"}]",
+      "id": "1da7e9bc-8452-4cf0-a8c9-6a67751ebd06",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Let me also check the contractual obligations table:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01GVQcVWFbYFkAhqjx49FzQg",
+          "input": {
+            "company_name": "meta",
+            "table_name": "rt_ContractualObligationFiscalYearMaturityScheduleTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--cbae93d3-1b55-4e2c-9e00-d9fc8747673a-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Error: KeyError('meta/rt_ContractualObligationFiscalYearMaturityScheduleTableTextBlock')\n Please fix your mistakes.",
+      "id": "ae0585a4-1b53-499c-b5db-805b24c18712",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Let me calculate some key metrics:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01WY2EGr48Y9KczoLWRzrK5m",
+          "input": {
+            "expression": "20234 + 709"
+          },
+          "name": "calculator",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--41216633-dc98-4ad7-a41c-396f1c7e3e5a-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[20943, \"To convert the mathematical expression 20234 + 709 to Python code, I need to simply write the addition expression in Python syntax. Addition in Python uses the \\\"+\\\" operator just like in standard mathematical notation.\"]",
+      "id": "9f14f8df-4973-48bf-8135-4fbb7999bbd0",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01M4wCzN59P21vpaMdDAUnEQ",
+          "input": {
+            "expression": "2657 + 96"
+          },
+          "name": "calculator",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--934fd683-1c67-4ce7-8006-23e97ab0f236-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[2753, \"This expression is a simple addition of two numbers: 2657 + 96. In Python, I can directly use the addition operator (+) to calculate the sum.\"]",
+      "id": "0d671b3b-5ea9-4b19-a67c-7bfa0f1ab245",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01RfwkgGqDmHe2hAZhb5tTCk",
+          "input": {
+            "expression": "25729 + 892"
+          },
+          "name": "calculator",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--7ca6105d-6a10-4d36-9848-6166ee64bada-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[26621, \"To convert the expression \\\"25729 + 892\\\" to Python code, I'll create a simple addition operation. The Python code will add these two numbers together and store the result in a variable called `return_me`.\"]",
+      "id": "2409871b-efe1-46fd-9279-b53473fb6947",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Based on my analysis of Meta's lease financing data, I can now provide a comprehensive answer about their lease financing strategy and its impact on cash flow obligations.\n\n## Meta's Lease Financing Strategy and Cash Flow Impact\n\nMeta employs a mixed lease financing strategy utilizing both operating and finance leases, with operating leases comprising the vast majority of their lease portfolio. As of December 31, 2024, Meta has $20.2 billion in operating lease liabilities and $709 million in finance lease liabilities, totaling $20.9 billion in present value of lease obligations. The company's operating leases have a weighted average remaining term of 11.5 years with a 3.9% discount rate, while finance leases have a longer weighted average term of 13.7 years with a 3.6% discount rate. In terms of cash flow impact, Meta faces total undiscounted future lease payments of $26.6 billion ($25.7 billion for operating leases and $892 million for finance leases), with annual obligations of approximately $2.8 billion in 2025 declining gradually to $2.4 billion by 2029, and $13.6 billion thereafter. The company's total lease costs increased from $2.6 billion in 2022 to $3.6 billion in 2024, with operating lease costs representing the largest component at $2.4 billion in 2024. This lease structure allows Meta to preserve capital while maintaining operational flexibility, though it creates significant long-term cash flow commitments that must be carefully managed within their overall financial planning.",
+      "id": "run--23d50748-72f6-4648-bd15-56ac777fa7ce-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    }
+  ],
+  "tools_used": [
+    "calculator",
+    "get_table_info",
+    "get_descriptions",
+    "sql_query"
+  ],
+  "errors": [
+    "Error : select * is not allowed, highly inefficient!",
+    "Error : You are trying to query without any kind of filters, which is not allowed!"
+  ],
+  "agents_called": null,
+  "agent_actions": [
+    "{'id': 'toolu_015em8PXC2Q4p7YRvVxR1cGg', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_LeaseCostTableTextBlock', 'query': 'SELECT component, \"2024\", \"2023\", \"2022\" FROM us_gaap_LeaseCostTableTextBlock'}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01GVQcVWFbYFkAhqjx49FzQg', 'input': {'company_name': 'meta', 'table_name': 'rt_ContractualObligationFiscalYearMaturityScheduleTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_01T18PyPjthcwav9bsdoDvyT', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_LeaseCostTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_014MkJMWTbXcKrdugCFT4hFp', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_LesseeOperatingLeaseLiabilityMaturityTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_01YXNT5hoLKn87GdDcEdZjWV', 'input': {'company_name': 'meta', 'table_name': 'meta_LeaseCashFlowsInformationTableTextBlock', 'query': 'SELECT line_item, \"2024\", \"2023\", \"2022\" FROM meta_LeaseCashFlowsInformationTableTextBlock WHERE line_item LIKE \\'%right-of-use_assets%\\''}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01M4wCzN59P21vpaMdDAUnEQ', 'input': {'expression': '2657 + 96'}, 'name': 'calculator', 'type': 'tool_use'}",
+    "{'id': 'toolu_01NYER62q4Mks1KyG6uhWppr', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_LesseeOperatingLeaseLiabilityMaturityTableTextBlock', 'query': \"SELECT year_period, operating_leases, finance_leases FROM us_gaap_LesseeOperatingLeaseLiabilityMaturityTableTextBlock WHERE year_period IN ('2025', '2026', '2027', '2028', '2029', 'thereafter', 'total_undiscounted_cash_flows', 'present_value_of_lease_liabilities')\"}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01WY2EGr48Y9KczoLWRzrK5m', 'input': {'expression': '20234 + 709'}, 'name': 'calculator', 'type': 'tool_use'}",
+    "{'id': 'toolu_01RfwkgGqDmHe2hAZhb5tTCk', 'input': {'expression': '25729 + 892'}, 'name': 'calculator', 'type': 'tool_use'}",
+    "{'id': 'toolu_01LaD9vVqU2mQoYSwgP3zWY5', 'input': {'company_name': 'meta', 'table_name': 'meta_LeaseBalanceSheetInformationTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_018As5uBEU3sFRxt4fr29Qm9', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_LeaseCostTableTextBlock', 'query': \"SELECT component, 2024, 2023, 2022 FROM us_gaap_LeaseCostTableTextBlock WHERE component IN ('amortization_of_right_of_use_assets', 'interest', 'operating_lease_cost', 'variable_lease_cost_and_other', 'total')\"}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01AZsBjQSm9wUcu4DFvT647k', 'input': {'company_name': 'meta', 'table_name': 'meta_LeaseCashFlowsInformationTableTextBlock', 'query': 'SELECT line_item, \"2024\", \"2023\", \"2022\" FROM meta_LeaseCashFlowsInformationTableTextBlock WHERE line_item IN (\\'operating_leases\\', \\'finance_leases\\')'}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01UvwW9S7NjBvAqcWAvY9Sc8', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_LeaseCostTableTextBlock', 'query': 'SELECT * FROM us_gaap_LeaseCostTableTextBlock'}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_014FWgaVQvbvqgCVzAMnHjqH', 'input': {'company_name': 'meta', 'table_name': 'meta_LeaseCashFlowsInformationTableTextBlock', 'query': 'SELECT line_item, \"2024\", \"2023\", \"2022\" FROM meta_LeaseCashFlowsInformationTableTextBlock WHERE line_item LIKE \\'%cash_flows%\\''}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01CspYegFDjM4s8przUSrbtB', 'input': {'company_name': 'meta'}, 'name': 'get_descriptions', 'type': 'tool_use'}",
+    "{'id': 'toolu_01RNuCJtKhgTh85juTaizH4z', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_LeaseCostTableTextBlock', 'query': 'SELECT component, \"2024\", \"2023\", \"2022\" FROM us_gaap_LeaseCostTableTextBlock WHERE component = \\'total\\''}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01CWopbTcMBnPEMvvtPDJ5EJ', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_LeaseCostTableTextBlock', 'query': 'SELECT component, \"2024\", \"2023\", \"2022\" FROM us_gaap_LeaseCostTableTextBlock WHERE component IN (\\'amortization_of_right_of_use_assets\\', \\'interest\\', \\'operating_lease_cost\\')'}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_019porKpxASuazWLypezkvpy', 'input': {'company_name': 'meta', 'table_name': 'meta_LeaseCashFlowsInformationTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}"
+  ]
+}

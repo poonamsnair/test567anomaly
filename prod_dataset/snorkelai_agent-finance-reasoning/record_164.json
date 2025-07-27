@@ -1,0 +1,539 @@
+{
+  "user_question": "How significant is the company's international operations footprint in terms of asset allocation and income generation as of 2022-2024?",
+  "final_answer": "The company has a moderate international presence with 13.8% of long-lived assets located in the Rest of the World as of December 31, 2024. However, foreign operations contributed only 13.2% of total income before income taxes in 2022, suggesting that while the company has established international asset base, the income generation from foreign operations is proportionally aligned with the asset allocation, indicating efficient but not dominant international operations.",
+  "steps": [
+    {
+      "content": "Here is the question : How significant is the company's international operations footprint in terms of asset allocation and income generation as of 2022-2024?, Here are the companies name in the database to query for : meta",
+      "id": "6a96cab5-849b-49b6-b513-74f909d9ac7c",
+      "type": "human",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "I'll help you analyze Meta's international operations footprint in terms of asset allocation and income generation for 2022-2024. Let me start by exploring what data is available.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01CbMhoboQkNVRzKvPAGHtQT",
+          "input": {
+            "company_name": "meta"
+          },
+          "name": "get_descriptions",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--1155d8df-68c4-4c5b-a611-8d053302caad-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[\"us_gaap_ScheduleOfComponentsOfIncomeTaxExpenseBenefitTableTextBlock\", \"us_gaap_ScheduleOfOtherNonoperatingIncomeExpenseTableTextBlock\", \"us_gaap_ScheduleOfEarningsPerShareBasicAndDilutedTableTextBlock\", \"us_gaap_ScheduleOfMaturitiesOfLongTermDebtTableTextBlock\", \"meta_LeaseBalanceSheetInformationTableTextBlock\", \"us_gaap_LeaseCostTableTextBlock\", \"us_gaap_DisaggregationOfRevenueTableTextBlock\", \"us_gaap_ScheduleOfDeferredTaxAssetsAndLiabilitiesTableTextBlock\", \"meta_ScheduleOfFiniteLivedAndIndefiniteLivedIntangibleAssetsTableTextBlock\", \"us_gaap_LesseeOperatingLeaseLiabilityMaturityTableTextBlock\", \"us_gaap_ScheduleOfEffectiveIncomeTaxRateReconciliationTableTextBlock\", \"us_gaap_ScheduleofFiniteLivedIntangibleAssetsFutureAmortizationExpenseTableTextBlock\", \"us_gaap_ScheduleOfShareBasedCompensationRestrictedStockUnitsAwardActivityTableTextBlock\", \"us_gaap_ScheduleOfAccruedLiabilitiesTableTextBlock\", \"us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock\", \"us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock\", \"us_gaap_FinanceLeaseLiabilityMaturityTableTextBlock\", \"us_gaap_DebtSecuritiesAvailableForSaleUnrealizedLossPositionFairValueTableTextBlock\", \"us_gaap_InvestmentsClassifiedByContractualMaturityDateTableTextBlock\", \"rt_ContractualObligationFiscalYearMaturityScheduleTableTextBlock\", \"us_gaap_ScheduleOfUnrecognizedTaxBenefitsRollForwardTableTextBlock\", \"meta_PropertyPlantandEquipmentUsefulLifeTableTextBlock\", \"meta_LeaseCashFlowsInformationTableTextBlock\", \"us_gaap_EquitySecuritiesWithoutReadilyDeterminableFairValueTableTextBlock\"]",
+      "id": "b024e1f9-0e2d-4f28-bdc5-2bedea910d31",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Now let me look for tables that would contain information about international operations, particularly focusing on revenue disaggregation and long-lived assets by geographic areas, which are key indicators of international footprint.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01K195aRckrP5og1Sk9UkRWg",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_DisaggregationOfRevenueTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--657c3b3a-13d3-4e46-b517-96dfce9d1f53-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"revenue_disaggregated_by_revenue_source_and_by_segment_consists_of_the_following_(in_millions)\",\"column_names\": [\"revenue_source_or_segment\",\"2024\",\"2023\",\"2022\"],\"unique_vals_per_col\": {\"revenue_source_or_segment\": [\"advertising\",\"other_revenue\",\"family_of_apps\",\"reality_labs\",\"total_revenue\"]},\"company\": \"meta\",\"column_dtypes\": {\"revenue_source_or_segment\": \"object\",\"2024\": \"object\",\"2023\": \"object\",\"2022\": \"object\"}}",
+      "id": "776686f2-92c7-45ee-8e79-a9232f6a7dd2",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "This table shows revenue by segment but not by geography. Let me check the long-lived assets by geographic areas table, which should show asset allocation by region.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01TtHPn3ju7KGjBsKTG1sJdf",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--c5a3ddb9-c8bf-4897-bdc4-bd5372743d5d-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"the_following_table_sets_forth_our_long-lived_assets_by_geographic_area,_which_consist_of_property_and_equipment,_net_and_operating_lease_right-of-use_assets_(in_millions):\",\"column_names\": [\"geographic_area\",\"december_31_2024\",\"december_31_2023\"],\"unique_vals_per_col\": {\"geographic_area\": [\"united_states\",\"rest_of_the_world_(1)\",\"total_long-lived_assets\"]},\"company\": \"meta\",\"column_dtypes\": {\"geographic_area\": \"object\",\"december_31_2024\": \"object\",\"december_31_2023\": \"object\"}}",
+      "id": "404e521a-f5f8-4e9b-a1c5-e61db5733633",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Great! This table shows long-lived assets by geographic area. Let me get the data from this table to understand the asset allocation.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01EEnE5TCVY9a8qjfj3Wk498",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock",
+            "query": "SELECT * FROM us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--9bcc8445-835f-4ec9-8db5-fea720bdbe49-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Error : select * is not allowed, highly inefficient!",
+      "id": "61b9a9b3-7c12-45f9-8350-d52c19019398",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Let me query the specific data from this table:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01T41tDWaD4jBYtUQRorw1NL",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock",
+            "query": "SELECT geographic_area, december_31_2024, december_31_2023 FROM us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--f96703ba-c24c-44ce-a438-0d47db9e0c46-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Error : You are trying to query without any kind of filters, which is not allowed!",
+      "id": "b1db923c-91df-4b20-816f-68c5a3980c9c",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Let me query each geographic area separately:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01FTQqrSzBRtq45ELFDFyCag",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock",
+            "query": "SELECT geographic_area, december_31_2024, december_31_2023 FROM us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock WHERE geographic_area = 'united_states'"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--efa70ea5-0687-4491-8c01-da540f9e6ce1-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"geographic_area\":\"united_states\",\"december_31_2024\":\"$117,478\",\"december_31_2023\":\"$91,940\"}]",
+      "id": "c891fd06-7d77-462e-94e8-94d8e6326ad1",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_019cMmVAWfJ61w2aKzP3ufo8",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock",
+            "query": "SELECT geographic_area, december_31_2024, december_31_2023 FROM us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock WHERE geographic_area = 'rest_of_the_world_(1)'"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--479c4f4f-39cb-449a-be5c-12d4be3c51ca-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"geographic_area\":\"rest_of_the_world_(1)\",\"december_31_2024\":\"18,790\",\"december_31_2023\":\"17,941\"}]",
+      "id": "0ce91ce3-0fb1-4dec-8b35-d093cabde803",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01StGuJVzwFnwtZsU5Jz3F85",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock",
+            "query": "SELECT geographic_area, december_31_2024, december_31_2023 FROM us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock WHERE geographic_area = 'total_long-lived_assets'"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--deed8004-d72b-423f-9f65-de0e133a892f-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"geographic_area\":\"total_long-lived_assets\",\"december_31_2024\":\"$136,268\",\"december_31_2023\":\"$109,881\"}]",
+      "id": "1151a885-1b80-4e10-99ae-a516daeee852",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Now let me look for revenue information. Let me check if there's another table that might contain geographic revenue breakdown. Let me look at the income before income tax table to see if it has geographic breakdowns:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_018T1NdfQKMv4NvuHKb7HXV8",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--a837594a-b54d-427c-a897-7c1750ac04c8-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"the_components_of_income_before_provision_for_income_taxes_are_as_follows_(in_millions)\",\"column_names\": [\"component\",\"2024\",\"2023\",\"2022\"],\"unique_vals_per_col\": {\"component\": [\"domestic\",\"foreign\",\"income_before_provision_for_income_taxes\"]},\"company\": \"meta\",\"column_dtypes\": {\"component\": \"object\",\"2024\": \"object\",\"2023\": \"object\",\"2022\": \"object\"}}",
+      "id": "62f11b1c-c4c7-49d2-93d1-8b4b1cb60109",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Excellent! This table shows income before taxes broken down by domestic and foreign components. Let me get this data:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01FHCSs5y8Gp811CKiZdf7RR",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock",
+            "query": "SELECT component, \"2024\", \"2023\", \"2022\" FROM us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock WHERE component = 'domestic'"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--c0c4eafb-bc25-436f-af06-35ee4ed50622-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"component\":\"domestic\",\"2024\":\"$66,342\",\"2023\":\"$43,499\",\"2022\":\"$25,025\"}]",
+      "id": "0de114cb-8ddc-429c-9d28-0bbd2ebf5674",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01DAraguGzvYgLZynX3fdkeU",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock",
+            "query": "SELECT component, \"2024\", \"2023\", \"2022\" FROM us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock WHERE component = 'foreign'"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--caf853b9-e4c8-4a9b-9e23-0885a01585f8-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"component\":\"foreign\",\"2024\":\"$4,321\",\"2023\":\"$3,929\",\"2022\":\"$3,794\"}]",
+      "id": "5b172567-30fe-4145-afa0-c52c3019789b",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01Mfu26byqmnbN7vjpN9MtUh",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock",
+            "query": "SELECT component, \"2024\", \"2023\", \"2022\" FROM us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock WHERE component = 'income_before_provision_for_income_taxes'"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--ea857fc7-9a13-4b9f-a135-79810feddf03-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"component\":\"income_before_provision_for_income_taxes\",\"2024\":\"$70,663\",\"2023\":\"$47,428\",\"2022\":\"$28,819\"}]",
+      "id": "3a835fb8-a31e-40f0-b124-76f3c0e921c2",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Now let me get the total revenue data to better understand the scale:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01TjvevmxGGZtWAWXu6DVpjs",
+          "input": {
+            "company_name": "meta",
+            "table_name": "us_gaap_DisaggregationOfRevenueTableTextBlock",
+            "query": "SELECT revenue_source_or_segment, \"2024\", \"2023\", \"2022\" FROM us_gaap_DisaggregationOfRevenueTableTextBlock WHERE revenue_source_or_segment = 'total_revenue'"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--fdecc831-6780-48c2-9bbf-bb08e134aa92-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"revenue_source_or_segment\":\"total_revenue\",\"2024\":\"$164,501\",\"2023\":\"$134,902\",\"2022\":\"$116,609\"}]",
+      "id": "ede9be96-23e5-487c-8804-a8fa80d60a12",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Now let me calculate the percentages to understand the significance of international operations. Let me start with the asset allocation:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01TkdiSUfnNeAi88fQVYvyC4",
+          "input": {
+            "expression": "18790 / 136268 * 100"
+          },
+          "name": "calculator",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--4c001583-9194-475e-b410-5806b8ed414b-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[13.78900402148707, \"To convert the expression 18790 / 136268 * 100 to Python code, I need to implement the division and multiplication operations in the correct order. In this case, we're dividing 18790 by 136268, then multiplying the result by 100, which gives us a percentage.\"]",
+      "id": "61473be1-3e6b-49bc-ba1f-812158c83aba",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01Hp7SUXABjaPnCNiuuXdbYT",
+          "input": {
+            "expression": "17941 / 109881 * 100"
+          },
+          "name": "calculator",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--5b12b276-1662-4606-801c-c56e25b19114-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[16.3276635633094, \"To convert the mathematical expression 17941 / 109881 * 100 to Python code, I'll:\\n1. Perform the division 17941 / 109881\\n2. Multiply the result by 100\\n3. Store the final value in a variable called return_me\"]",
+      "id": "7eb66484-f386-4373-bfe6-defb77de304c",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Now let me calculate the income generation percentages:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01AWyjQJcjdY2MxPyPgnqHwU",
+          "input": {
+            "expression": "4321 / 70663 * 100"
+          },
+          "name": "calculator",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--ed75f350-46c2-419f-86d5-e4828591a888-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[6.114939926128242, \"To convert the expression \\\"4321 / 70663 * 100\\\" to Python code, I'll perform the division of 4321 by 70663, then multiply the result by 100. This will give us the percentage that 4321 is of 70663.\"]",
+      "id": "fe4e9bcf-76c2-45dc-942e-40da20fd668c",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01APbqgzrT3om1kTq7CTLywj",
+          "input": {
+            "expression": "3929 / 47428 * 100"
+          },
+          "name": "calculator",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--4e86764e-fe66-4b8c-b3d2-5a26ae5387ae-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[8.284135953445222, \"I need to convert the mathematical expression \\\"3929 / 47428 * 100\\\" to Python code. This expression involves division of 3929 by 47428, followed by multiplication with 100. In Python, we can directly implement this calculation using the standard arithmetic operators.\"]",
+      "id": "1c849ae8-72ec-4ee1-94dc-dfad03c6a73b",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01FQF4ScU5emyu15Yiyvpqee",
+          "input": {
+            "expression": "3794 / 28819 * 100"
+          },
+          "name": "calculator",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--a310bbf9-85bb-4534-843d-1740336b5248-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[13.164925916929803, \"To convert the mathematical expression \\\"3794 / 28819 * 100\\\" to Python code, I need to:\\n1. Perform the division of 3794 by 28819\\n2. Multiply the result by 100\\nThis will give us the percentage that 3794 is of 28819.\"]",
+      "id": "442cbb6a-521c-4360-8570-21e5389212ba",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Let me also calculate the growth rates for international assets and income:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_016zUY42TzjJSXRbJM6a3psM",
+          "input": {
+            "expression": "(18790 - 17941) / 17941 * 100"
+          },
+          "name": "calculator",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--7e5d8701-04e1-4698-894e-ce741f3c084a-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[4.732177693551084, \"To convert the expression (18790 - 17941) / 17941 * 100 to Python code, I'll follow these steps:\\n1. Calculate the difference between 18790 and 17941\\n2. Divide this difference by 17941\\n3. Multiply the result by 100\\nThis calculation represents a percentage change formula, often used to find the percent increase or decrease.\"]",
+      "id": "7dda50b4-fb7c-440a-8c1e-ce91a873bda3",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_019AWHHftN8VPFjeN2QHuZpZ",
+          "input": {
+            "expression": "(4321 - 3929) / 3929 * 100"
+          },
+          "name": "calculator",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--9d9e28ac-d90d-4e5c-8411-4bbf77f3335e-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[9.977093407991855, \"To convert the expression (4321 - 3929) / 3929 * 100 to Python code:\\n1. First calculate the difference: 4321 - 3929\\n2. Divide the result by 3929\\n3. Multiply by 100 to get percentage change\\n4. Store the final result in the variable 'return_me'\"]",
+      "id": "807388c9-9214-40f6-9abf-3a7488dd9b4a",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Based on my analysis of Meta's financial data for 2022-2024, I can now provide a comprehensive assessment of the company's international operations footprint.\n\n## Summary\n\nMeta's international operations represent a relatively modest but strategically important component of the company's overall footprint. In terms of asset allocation, international long-lived assets account for approximately 13.8% of total long-lived assets as of December 2024 ($18.8 billion out of $136.3 billion), showing a slight decline from 16.3% in 2023. However, international assets grew by 4.7% year-over-year from 2023 to 2024. Regarding income generation, foreign operations contribute a smaller proportion of pre-tax income, accounting for only 6.1% in 2024 ($4.3 billion out of $70.7 billion), down from 8.3% in 2023 and 13.2% in 2022, though foreign income grew by 10.0% from 2023 to 2024. This pattern suggests that while Meta maintains a significant international presence in terms of assets and operations, the company's income generation remains predominantly concentrated in domestic markets, likely reflecting the company's primary revenue base in the United States despite its global user base and infrastructure investments worldwide.",
+      "id": "run--919eafb4-3d22-4659-a2ce-de1f47fd02da-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    }
+  ],
+  "tools_used": [
+    "calculator",
+    "get_table_info",
+    "get_descriptions",
+    "sql_query"
+  ],
+  "errors": [
+    "HTTP error code detected"
+  ],
+  "agents_called": null,
+  "agent_actions": [
+    "{'id': 'toolu_01TtHPn3ju7KGjBsKTG1sJdf', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_01EEnE5TCVY9a8qjfj3Wk498', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock', 'query': 'SELECT * FROM us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock'}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01DAraguGzvYgLZynX3fdkeU', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock', 'query': 'SELECT component, \"2024\", \"2023\", \"2022\" FROM us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock WHERE component = \\'foreign\\''}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_019AWHHftN8VPFjeN2QHuZpZ', 'input': {'expression': '(4321 - 3929) / 3929 * 100'}, 'name': 'calculator', 'type': 'tool_use'}",
+    "{'id': 'toolu_01APbqgzrT3om1kTq7CTLywj', 'input': {'expression': '3929 / 47428 * 100'}, 'name': 'calculator', 'type': 'tool_use'}",
+    "{'id': 'toolu_01Hp7SUXABjaPnCNiuuXdbYT', 'input': {'expression': '17941 / 109881 * 100'}, 'name': 'calculator', 'type': 'tool_use'}",
+    "{'id': 'toolu_01Mfu26byqmnbN7vjpN9MtUh', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock', 'query': 'SELECT component, \"2024\", \"2023\", \"2022\" FROM us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock WHERE component = \\'income_before_provision_for_income_taxes\\''}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01K195aRckrP5og1Sk9UkRWg', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_DisaggregationOfRevenueTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_016zUY42TzjJSXRbJM6a3psM', 'input': {'expression': '(18790 - 17941) / 17941 * 100'}, 'name': 'calculator', 'type': 'tool_use'}",
+    "{'id': 'toolu_01T41tDWaD4jBYtUQRorw1NL', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock', 'query': 'SELECT geographic_area, december_31_2024, december_31_2023 FROM us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock'}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_018T1NdfQKMv4NvuHKb7HXV8', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_01FTQqrSzBRtq45ELFDFyCag', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock', 'query': \"SELECT geographic_area, december_31_2024, december_31_2023 FROM us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock WHERE geographic_area = 'united_states'\"}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01StGuJVzwFnwtZsU5Jz3F85', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock', 'query': \"SELECT geographic_area, december_31_2024, december_31_2023 FROM us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock WHERE geographic_area = 'total_long-lived_assets'\"}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01AWyjQJcjdY2MxPyPgnqHwU', 'input': {'expression': '4321 / 70663 * 100'}, 'name': 'calculator', 'type': 'tool_use'}",
+    "{'id': 'toolu_01TjvevmxGGZtWAWXu6DVpjs', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_DisaggregationOfRevenueTableTextBlock', 'query': 'SELECT revenue_source_or_segment, \"2024\", \"2023\", \"2022\" FROM us_gaap_DisaggregationOfRevenueTableTextBlock WHERE revenue_source_or_segment = \\'total_revenue\\''}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01FHCSs5y8Gp811CKiZdf7RR', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock', 'query': 'SELECT component, \"2024\", \"2023\", \"2022\" FROM us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock WHERE component = \\'domestic\\''}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01CbMhoboQkNVRzKvPAGHtQT', 'input': {'company_name': 'meta'}, 'name': 'get_descriptions', 'type': 'tool_use'}",
+    "{'id': 'toolu_019cMmVAWfJ61w2aKzP3ufo8', 'input': {'company_name': 'meta', 'table_name': 'us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock', 'query': \"SELECT geographic_area, december_31_2024, december_31_2023 FROM us_gaap_LongLivedAssetsByGeographicAreasTableTextBlock WHERE geographic_area = 'rest_of_the_world_(1)'\"}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01FQF4ScU5emyu15Yiyvpqee', 'input': {'expression': '3794 / 28819 * 100'}, 'name': 'calculator', 'type': 'tool_use'}",
+    "{'id': 'toolu_01TkdiSUfnNeAi88fQVYvyC4', 'input': {'expression': '18790 / 136268 * 100'}, 'name': 'calculator', 'type': 'tool_use'}"
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "user_question": "Can you find the current weather in Paris and generate an image of a rainy day there?",
+  "final_answer": "The current weather in Paris is partly cloudy with a temperature of 18\u00b0C. There is a 30% chance of rain later today. An image of a rainy day in Paris has been generated.",
+  "steps": [
+    {
+      "content": "Can you find the current weather in Paris and generate an image of a rainy day there?",
+      "id": "3a971a5e-845a-4a87-beba-64cd0d0cc9c9",
+      "type": "human",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Plan: 1) Search for the current weather in Paris. 2) Generate an image of a rainy day in Paris. 3) Return the answer.",
+      "id": "9b3a439d-5642-4c7e-a1a9-699dd9890402",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Searching for the current weather in Paris.",
+      "id": "a07f9090-9598-43ea-976f-0afabd123fb9",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "search",
+              "arguments": "Searching for the current weather in Paris."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "content": "The current weather in Paris is partly cloudy with a temperature of 18\u00b0C.",
+      "id": "94eb2ca1-b8ad-452b-8917-89b3d14a694a",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Generating an image of a rainy day in Paris.",
+      "id": "ac9645d1-42a7-4508-8fe0-cce77ed75c12",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "image_generation",
+              "arguments": "Generating an image of a rainy day in Paris."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "content": "Image of a rainy day in Paris has been generated.",
+      "id": "51f7eddc-6563-4195-940e-3e7075f50b64",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Can you also check if it's expected to rain today?",
+      "id": "c2c18e1f-750e-4040-a9b1-7f77f8afb730",
+      "type": "human",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Checking if it is expected to rain today in Paris.",
+      "id": "e75e4b3e-e668-4110-8ffa-c2911acf30dd",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "search",
+              "arguments": "Checking if it is expected to rain today in Paris."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "content": "There is a 30% chance of rain in Paris later today.",
+      "id": "ee665dfc-7fcb-4896-ad4a-2903f168b4bd",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "The current weather in Paris is partly cloudy with a temperature of 18\u00b0C. There is a 30% chance of rain later today. An image of a rainy day in Paris has been generated.",
+      "id": "f18c2bf7-cf9c-4cc2-8b76-5c2a3e553875",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "final_answer",
+              "arguments": "The current weather in Paris is partly cloudy with a temperature of 18\u00b0C. There is a 30% chance of rain later today. An image of a rainy day in Paris has been generated."
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tools_used": [
+    "image_generation",
+    "search",
+    "final_answer"
+  ],
+  "errors": [],
+  "agents_called": [
+    "search_agent",
+    "media_agent",
+    "user",
+    "principal_agent"
+  ],
+  "agent_actions": [
+    "Think/Plan",
+    "Tool: search",
+    "Tool: image_generation",
+    "Tool: search",
+    "Tool: final_answer"
+  ]
+}

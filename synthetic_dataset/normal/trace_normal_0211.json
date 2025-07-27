@@ -1,0 +1,128 @@
+{
+  "user_question": "Can you tell me what the weather is like in Paris today and generate an image of a rainy Paris street?",
+  "final_answer": "The weather in Paris today is partly cloudy with a chance of rain. Image of a rainy Paris street generated. The hourly forecast shows intermittent showers throughout the day.",
+  "steps": [
+    {
+      "content": "Can you tell me what the weather is like in Paris today and generate an image of a rainy Paris street?",
+      "id": "c2cf792a-4e5a-4d55-88ec-ed43905d5d21",
+      "type": "human",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Plan: 1) Search for current weather in Paris. 2) Generate an image of a rainy Paris street. 3) Return the answer.",
+      "id": "6b4b52b8-b629-4d24-969d-efbe98ae410d",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Searching for current weather in Paris.",
+      "id": "04bf8861-b7dd-483a-902a-7d1046f21263",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "search",
+              "arguments": "Searching for current weather in Paris."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "content": "The weather in Paris today is partly cloudy with a chance of rain.",
+      "id": "7230c1dd-8471-44b6-a7c5-f476f04deb8a",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Generating an image of a rainy Paris street.",
+      "id": "334108a8-9be2-4db8-941a-8bf89f40cdda",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "image_generation",
+              "arguments": "Generating an image of a rainy Paris street."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "content": "Image of a rainy Paris street generated.",
+      "id": "31d074ae-87b8-4453-a0ab-271a7f61a7fd",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Is it likely to rain throughout the day?",
+      "id": "be907a4b-7e1f-4d5f-b35c-0ad714e375ec",
+      "type": "human",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Plan: 1) Search for hourly weather forecast for Paris. 2) Return the answer.",
+      "id": "fc2e96db-33c6-488e-ac9e-1b20029d08eb",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Searching for hourly weather forecast for Paris.",
+      "id": "e8cde70a-eb23-4b96-a4c5-ebf5e1a99fc5",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "search",
+              "arguments": "Searching for hourly weather forecast for Paris."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "content": "The hourly forecast shows intermittent showers throughout the day.",
+      "id": "1bbbb8ca-5d2f-486f-92b9-50218abb93b8",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "The weather in Paris today is partly cloudy with a chance of rain. Image of a rainy Paris street generated. The hourly forecast shows intermittent showers throughout the day.",
+      "id": "c334665c-ad37-4555-ba84-f4fcc818027e",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "final_answer",
+              "arguments": "The weather in Paris today is partly cloudy with a chance of rain. Image of a rainy Paris street generated. The hourly forecast shows intermittent showers throughout the day."
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tools_used": [
+    "image_generation",
+    "search",
+    "final_answer"
+  ],
+  "errors": [],
+  "agents_called": [
+    "search_agent",
+    "media_agent",
+    "user",
+    "principal_agent"
+  ],
+  "agent_actions": [
+    "Think/Plan",
+    "Tool: search",
+    "Tool: image_generation",
+    "Think/Plan",
+    "Tool: search",
+    "Tool: final_answer"
+  ]
+}

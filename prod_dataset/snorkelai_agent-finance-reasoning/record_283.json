@@ -1,0 +1,355 @@
+{
+  "user_question": "How is the company's lease obligation structured in terms of near-term versus long-term payment requirements?",
+  "final_answer": "The company has a relatively balanced lease payment structure with a ratio of 1.091 between payments due within the next twelve months versus those due after. This indicates that near-term lease obligations are only slightly higher than long-term obligations, suggesting manageable cash flow requirements for lease payments without excessive front-loading of obligations.",
+  "steps": [
+    {
+      "content": "Here is the question : How is the company's lease obligation structured in terms of near-term versus long-term payment requirements?, Here are the companies name in the database to query for : gm",
+      "id": "c0935187-545d-4875-ac92-295b34dd5016",
+      "type": "human",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "I'll help you analyze GM's lease obligation structure in terms of near-term versus long-term payment requirements. Let me start by exploring what tables are available for GM.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01SXw8cYk1hTc5754fr3LTP6",
+          "input": {
+            "company_name": "gm"
+          },
+          "name": "get_descriptions",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--eb8151ae-fd4e-4c50-8c79-cb6d5c295290-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[\"us_gaap_ScheduleOfComponentsOfIncomeTaxExpenseBenefitTableTextBlock\", \"us_gaap_ScheduleOfDebtTableTextBlock\", \"us_gaap_ScheduleOfMaturitiesOfLongTermDebtTableTextBlock\", \"us_gaap_ScheduleOfDeferredTaxAssetsAndLiabilitiesTableTextBlock\", \"us_gaap_ScheduleOfRelatedPartyTransactionsTableTextBlock\", \"us_gaap_ScheduleOfEffectiveIncomeTaxRateReconciliationTableTextBlock\", \"us_gaap_LessorOperatingLeasePaymentsToBeReceivedMaturityTableTextBlock\", \"acf_LessorOperatingLeaseCarryingValueofAssetsSubjecttoLeasesTableTextBlock\", \"us_gaap_FinancingReceivableCreditQualityIndicatorsTableTextBlock\", \"us_gaap_ScheduleOfAccumulatedOtherComprehensiveIncomeLossTableTextBlock\", \"us_gaap_PastDueFinancingReceivablesTableTextBlock\", \"us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock\", \"us_gaap_ScheduleOfFairValueHedgingInstrumentsStatementsOfFinancialPerformanceAndFinancialPositionLocationTableTextBlock\", \"us_gaap_ScheduleOfCashFlowHedgingInstrumentsStatementsOfFinancialPerformanceAndFinancialPositionLocationTableTextBlock\", \"us_gaap_ScheduleOfUnrecognizedTaxBenefitsRollForwardTableTextBlock\", \"us_gaap_ScheduleOfRevenuesFromExternalCustomersAndLongLivedAssetsByGeographicalAreasTableTextBlock\", \"us_gaap_AllowanceForCreditLossesOnFinancingReceivablesTableTextBlock\", \"us_gaap_ScheduleOfCashFlowSupplementalDisclosuresTableTextBlock\", \"us_gaap_ScheduleOfNonvestedRestrictedStockUnitsActivityTableTextBlock\"]",
+      "id": "eba79df1-a112-4276-ae16-0cf9ce10a1b9",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "I notice there's a table related to operating lease payments: \"us_gaap_LessorOperatingLeasePaymentsToBeReceivedMaturityTableTextBlock\". However, this appears to be for lessor (GM as a lessor) rather than lessee obligations. Let me examine this table to see if it contains relevant information, and also look for any debt-related tables that might include lease obligations.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01NqJKdMeAsbq8AnvywJiUma",
+          "input": {
+            "company_name": "gm",
+            "table_name": "us_gaap_LessorOperatingLeasePaymentsToBeReceivedMaturityTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--0d8b3000-920a-4479-8bcc-4978ff63b65c-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"the_following_table_summarizes_minimum_rental_payments_due_to_us_as_lessor_under_operating_leases_at_december_31_2024\",\"column_names\": [\"lease_type\",\"2025\",\"2026\",\"2027\",\"2028\",\"2029\",\"total\"],\"unique_vals_per_col\": {\"lease_type\": [\"lease_payments_under_operating_leases\"]},\"company\": \"gm\",\"column_dtypes\": {\"lease_type\": \"object\",\"2025\": \"object\",\"2026\": \"object\",\"2027\": \"object\",\"2028\": \"object\",\"2029\": \"object\",\"total\": \"object\"}}",
+      "id": "a0c7c7a3-cda2-48d2-84c3-4f359e64c812",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "This table shows GM as a lessor (receiving payments), not as a lessee (making payments). Let me check the debt maturity table as lease obligations are often included in debt schedules.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01YDiuJmpZJ1n4sGWRJTLhuq",
+          "input": {
+            "company_name": "gm",
+            "table_name": "us_gaap_ScheduleOfMaturitiesOfLongTermDebtTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--a77bfb8c-9835-4b89-b64b-433d16e92a01-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"the_following_table_presents_the_expected_scheduled_principal_and_interest_payments_under_our_contractual_debt_obligations\",\"column_names\": [],\"unique_vals_per_col\": {},\"company\": \"gm\",\"column_dtypes\": {}}",
+      "id": "67f7903c-2201-4a4a-9c47-8aec9c9a4050",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "This table appears to be empty. Let me check the general debt schedule table.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01LSpzYrVo9CSZ9FpPZ9KDXx",
+          "input": {
+            "company_name": "gm",
+            "table_name": "us_gaap_ScheduleOfDebtTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--d4177e50-0762-45bf-b6dc-b69fd24734c7-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"schedule_of_debt_showing_carrying_amount_and_fair_value_as_of_december_31_2024_and_december_31_2023\",\"column_names\": [\"type_of_debt\",\"december_31_2024_carrying_amount\",\"december_31_2024_fair_value\",\"december_31_2023_carrying_amount\",\"december_31_2023_fair_value\"],\"unique_vals_per_col\": {\"type_of_debt\": [\"secured_debt_revolving_credit_facilities\",\"secured_debt_securitization_notes_payable\",\"total_secured_debt\",\"unsecured_debt_senior_notes\",\"unsecured_debt_credit_facilities\",\"unsecured_debt_other_unsecured_debt\",\"total_unsecured_debt\",\"total_secured_and_unsecured_debt\",\"fair_value_utilizing_level_2_inputs\",\"fair_value_utilizing_level_3_inputs\"]},\"company\": \"gm\",\"column_dtypes\": {\"type_of_debt\": \"object\",\"december_31_2024_carrying_amount\": \"object\",\"december_31_2024_fair_value\": \"object\",\"december_31_2023_carrying_amount\": \"object\",\"december_31_2023_fair_value\": \"object\"}}",
+      "id": "8f550ef3-e54d-4cf4-a7a5-72e8c63f8b2f",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "This table shows debt information but doesn't appear to include lease obligations. Let me query this table to see its contents and check if lease obligations might be included elsewhere.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01PPDer6227mR34rTrobUvqT",
+          "input": {
+            "company_name": "gm",
+            "table_name": "us_gaap_ScheduleOfDebtTableTextBlock",
+            "query": "SELECT * FROM us_gaap_ScheduleOfDebtTableTextBlock"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--af48adc9-9d07-469d-b262-8245f0773e99-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Error : select * is not allowed, highly inefficient!",
+      "id": "b02ab79a-3832-4979-84be-4b6b86297a16",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_0171Lgj981BXgfsXrGgvFWFx",
+          "input": {
+            "company_name": "gm",
+            "table_name": "us_gaap_ScheduleOfDebtTableTextBlock",
+            "query": "SELECT type_of_debt, december_31_2024_carrying_amount FROM us_gaap_ScheduleOfDebtTableTextBlock"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--69fc58c8-3c60-4d56-a9c4-09b3fde5d70f-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Error : You are trying to query without any kind of filters, which is not allowed!",
+      "id": "75bda57a-2e61-478d-9dd4-ac6597e6e3f5",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Let me query with a filter to see the debt types:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01M8BVin6uJpsHi3Pwxcrm1E",
+          "input": {
+            "company_name": "gm",
+            "table_name": "us_gaap_ScheduleOfDebtTableTextBlock",
+            "query": "SELECT type_of_debt, december_31_2024_carrying_amount FROM us_gaap_ScheduleOfDebtTableTextBlock WHERE type_of_debt LIKE '%total%'"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--e2ab1cba-a201-4d0d-b028-8bd978df130b-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"type_of_debt\":\"total_secured_debt\",\"december_31_2024_carrying_amount\":\"$49,573\"},{\"type_of_debt\":\"total_unsecured_debt\",\"december_31_2024_carrying_amount\":\"$64,691\"},{\"type_of_debt\":\"total_secured_and_unsecured_debt\",\"december_31_2024_carrying_amount\":\"$114,264\"}]",
+      "id": "73907f8a-d6f6-433b-beef-79603d718eeb",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "This table only shows traditional debt instruments, not lease obligations. Let me check if there are any other tables that might contain lease obligation information by looking at the lessor table to see if it has any lessee-related information:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01NkqJdS8KrXuMhdrEVf2dJu",
+          "input": {
+            "company_name": "gm",
+            "table_name": "us_gaap_LessorOperatingLeasePaymentsToBeReceivedMaturityTableTextBlock",
+            "query": "SELECT * FROM us_gaap_LessorOperatingLeasePaymentsToBeReceivedMaturityTableTextBlock WHERE lease_type = 'lease_payments_under_operating_leases'"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--ca2ab2c2-2746-4def-91f0-b91d522fd80e-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Error : select * is not allowed, highly inefficient!",
+      "id": "47278fdf-3483-44be-be32-9b68d4a67147",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "id": "toolu_01LsFnZR9Va574AUMLphs5gn",
+          "input": {
+            "company_name": "gm",
+            "table_name": "us_gaap_LessorOperatingLeasePaymentsToBeReceivedMaturityTableTextBlock",
+            "query": "SELECT lease_type, \"2025\", \"2026\", \"2027\", \"2028\", \"2029\", total FROM us_gaap_LessorOperatingLeasePaymentsToBeReceivedMaturityTableTextBlock WHERE lease_type = 'lease_payments_under_operating_leases'"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--386b6ef2-d590-41a3-8148-baad9d71fa10-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"lease_type\":\"lease_payments_under_operating_leases\",\"2025\":\"$5,195\",\"2026\":\"$3,371\",\"2027\":\"$1,257\",\"2028\":\"$135\",\"2029\":\"$1\",\"total\":\"$9,959\"}]",
+      "id": "89b21b66-4bd5-4f9f-b96a-29b25829f843",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "This shows GM as a lessor receiving lease payments, not as a lessee making payments. Let me check if there are any other tables that might contain lessee lease obligation information. Sometimes this information is included in supplemental cash flow disclosures or other comprehensive income tables.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01SdUNq3HxJfaVbxKWgxTxHj",
+          "input": {
+            "company_name": "gm",
+            "table_name": "us_gaap_ScheduleOfCashFlowSupplementalDisclosuresTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--1909f5fa-ae63-48fc-81a7-fe27ad9af2bb-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"cash_payments_for_interest_costs_and_income_taxes_consist_of_the_following\",\"column_names\": [\"item\",\"2024\",\"2023\",\"2022\"],\"unique_vals_per_col\": {\"item\": [\"interest_costs_(none_capitalized)\",\"income_taxes\"]},\"company\": \"gm\",\"column_dtypes\": {\"item\": \"object\",\"2024\": \"object\",\"2023\": \"object\",\"2022\": \"object\"}}",
+      "id": "6f6bb40c-1f30-4140-904a-806a92648390",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "This table only contains interest and tax payments. Let me also check the table for other comprehensive income to see if it might contain lease-related information:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01AYGGftvhMRa9dzT1S9XRqT",
+          "input": {
+            "company_name": "gm",
+            "table_name": "us_gaap_ScheduleOfAccumulatedOtherComprehensiveIncomeLossTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--5522a23a-9671-4ac7-a77c-cfd4368d22ee-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"the_following_table_summarizes_the_significant_components_of_accumulated_other_comprehensive_income_(loss)\",\"column_names\": [\"component\",\"item\",\"year_2024\",\"year_2023\",\"year_2022\"],\"unique_vals_per_col\": {\"component\": [\"unrealized_gain_(loss)_on_hedges\",\"foreign_currency_translation_adjustment\"],\"item\": [\"beginning_balance\",\"change_in_value_of_hedges,_net_of_tax\",\"ending_balance\",\"translation_gain_(loss)\"]},\"company\": \"gm\",\"column_dtypes\": {\"component\": \"object\",\"item\": \"object\",\"year_2024\": \"object\",\"year_2023\": \"object\",\"year_2022\": \"object\"}}",
+      "id": "9736d775-b55a-4a58-b34a-aa97595eaa8b",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "This doesn't contain lease information either. Let me check the related party transactions table as sometimes lease obligations to related parties are disclosed there:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_017m4mBkBmhggJdKn2nXLvh5",
+          "input": {
+            "company_name": "gm",
+            "table_name": "us_gaap_ScheduleOfRelatedPartyTransactionsTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--38489192-28dc-4a98-b239-9502b6490a75-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"the_following_tables_present_related_party_transactions\",\"column_names\": [\"balance_sheet_data\",\"december_31_2024\",\"december_31_2023\"],\"unique_vals_per_col\": {\"balance_sheet_data\": [\"commercial_finance_receivables_due_from_dealers_consolidated_by_gm\",\"commercial_finance_receivables_due_from_cruise\",\"subvention_receivable_from_gm\",\"commercial_loan_funding_payable_to_gm\",\"taxes_receivable_from_(payable_to)_gm\"]},\"company\": \"gm\",\"column_dtypes\": {\"balance_sheet_data\": \"object\",\"december_31_2024\": \"object\",\"december_31_2023\": \"object\"}}",
+      "id": "10ea6c7e-9a05-4dad-9e65-a60da1ee13fe",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "This also doesn't contain lease obligation information. Based on my exploration of the available tables for GM, it appears that the specific lessee lease obligation maturity schedule is not included in the available dataset. The tables primarily contain:\n\n1. Traditional debt obligations (secured and unsecured debt)\n2. GM's position as a lessor (receiving lease payments)\n3. Various other financial disclosures\n\nHowever, the data does not include GM's obligations as a lessee, which would show their lease payment obligations structured by maturity periods.\n\nBased on my analysis of the available GM financial data tables, I was unable to locate specific information about GM's lease obligations as a lessee (their payment obligations under leases). The available data primarily shows GM in the role of a lessor, where they receive lease payments from others totaling $9.959 million over the next five years, with the majority ($5.195 million) due in 2025 and declining amounts in subsequent years ($3.371 million in 2026, $1.257 million in 2027, $135,000 in 2028, and $1,000 in 2029). However, the database does not contain tables that detail GM's own lease obligations as a lessee, which would typically show their near-term versus long-term lease payment commitments for facilities, equipment, and other leased assets. This information would normally be found in a lessee operating lease payment obligations maturity schedule, which is not present in the available dataset.",
+      "id": "run--8175938c-9d06-43d8-bd6e-c02a52f2e22a-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    }
+  ],
+  "tools_used": [
+    "get_table_info",
+    "get_descriptions",
+    "sql_query"
+  ],
+  "errors": [
+    "Error : select * is not allowed, highly inefficient!",
+    "Error : You are trying to query without any kind of filters, which is not allowed!"
+  ],
+  "agents_called": null,
+  "agent_actions": [
+    "{'id': 'toolu_01PPDer6227mR34rTrobUvqT', 'input': {'company_name': 'gm', 'table_name': 'us_gaap_ScheduleOfDebtTableTextBlock', 'query': 'SELECT * FROM us_gaap_ScheduleOfDebtTableTextBlock'}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01LSpzYrVo9CSZ9FpPZ9KDXx', 'input': {'company_name': 'gm', 'table_name': 'us_gaap_ScheduleOfDebtTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_01M8BVin6uJpsHi3Pwxcrm1E', 'input': {'company_name': 'gm', 'table_name': 'us_gaap_ScheduleOfDebtTableTextBlock', 'query': \"SELECT type_of_debt, december_31_2024_carrying_amount FROM us_gaap_ScheduleOfDebtTableTextBlock WHERE type_of_debt LIKE '%total%'\"}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01AYGGftvhMRa9dzT1S9XRqT', 'input': {'company_name': 'gm', 'table_name': 'us_gaap_ScheduleOfAccumulatedOtherComprehensiveIncomeLossTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_0171Lgj981BXgfsXrGgvFWFx', 'input': {'company_name': 'gm', 'table_name': 'us_gaap_ScheduleOfDebtTableTextBlock', 'query': 'SELECT type_of_debt, december_31_2024_carrying_amount FROM us_gaap_ScheduleOfDebtTableTextBlock'}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01SdUNq3HxJfaVbxKWgxTxHj', 'input': {'company_name': 'gm', 'table_name': 'us_gaap_ScheduleOfCashFlowSupplementalDisclosuresTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_01SXw8cYk1hTc5754fr3LTP6', 'input': {'company_name': 'gm'}, 'name': 'get_descriptions', 'type': 'tool_use'}",
+    "{'id': 'toolu_01NkqJdS8KrXuMhdrEVf2dJu', 'input': {'company_name': 'gm', 'table_name': 'us_gaap_LessorOperatingLeasePaymentsToBeReceivedMaturityTableTextBlock', 'query': \"SELECT * FROM us_gaap_LessorOperatingLeasePaymentsToBeReceivedMaturityTableTextBlock WHERE lease_type = 'lease_payments_under_operating_leases'\"}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01YDiuJmpZJ1n4sGWRJTLhuq', 'input': {'company_name': 'gm', 'table_name': 'us_gaap_ScheduleOfMaturitiesOfLongTermDebtTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_017m4mBkBmhggJdKn2nXLvh5', 'input': {'company_name': 'gm', 'table_name': 'us_gaap_ScheduleOfRelatedPartyTransactionsTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_01NqJKdMeAsbq8AnvywJiUma', 'input': {'company_name': 'gm', 'table_name': 'us_gaap_LessorOperatingLeasePaymentsToBeReceivedMaturityTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_01LsFnZR9Va574AUMLphs5gn', 'input': {'company_name': 'gm', 'table_name': 'us_gaap_LessorOperatingLeasePaymentsToBeReceivedMaturityTableTextBlock', 'query': 'SELECT lease_type, \"2025\", \"2026\", \"2027\", \"2028\", \"2029\", total FROM us_gaap_LessorOperatingLeasePaymentsToBeReceivedMaturityTableTextBlock WHERE lease_type = \\'lease_payments_under_operating_leases\\''}, 'name': 'sql_query', 'type': 'tool_use'}"
+  ],
+  "anomaly_label": "anomaly",
+  "anomaly_reason": "The trace contains explicit evidence of tool failures, as indicated by error messages stating 'Error : select * is not allowed, highly inefficient!' and 'Error : You are trying to query without any kind of filters, which is not allowed!'. These errors occurred during attempts to use the 'sql_query' tool, demonstrating that the tool did not execute as expected due to inefficient or incorrect query formats.",
+  "anomaly_categories": [
+    "tool_failure"
+  ]
+}

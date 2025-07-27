@@ -1,0 +1,128 @@
+{
+  "user_question": "Can you tell me what the weather is like in Paris today and generate an image of a sunny day in Paris?",
+  "final_answer": "The weather in Paris today is mostly sunny with a high of 18\u00b0C. No rain expected later in the evening. Here is an image of a sunny day in Paris.",
+  "steps": [
+    {
+      "content": "Can you tell me what the weather is like in Paris today and generate an image of a sunny day in Paris?",
+      "id": "954b783d-4fba-4644-a4d7-0f1788d80bb1",
+      "type": "human",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Plan: 1) Search for current weather in Paris. 2) Generate an image of a sunny day in Paris. 3) Return the answer.",
+      "id": "e0824d0c-89c9-485e-b12a-3d18f920e44b",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Searching for current weather in Paris.",
+      "id": "cdffaae9-1477-43bc-b146-4d93866bc826",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "search",
+              "arguments": "Searching for current weather in Paris."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "content": "The weather in Paris today is mostly sunny with a high of 18\u00b0C.",
+      "id": "5f2b84e1-4fb5-4f23-b47a-36c8c18f3b0a",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Generating an image of a sunny day in Paris.",
+      "id": "f8596e64-b2be-4b48-a17d-02720ae72ef5",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "image_generation",
+              "arguments": "Generating an image of a sunny day in Paris."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "content": "Image of a sunny day in Paris generated.",
+      "id": "8a3a1f98-9bde-4e1e-8d75-538b78e84866",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Is it going to rain later in the evening?",
+      "id": "58904543-21c7-4764-99fc-d5cba5461a10",
+      "type": "human",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Plan: Search for evening weather forecast in Paris. 2) Return the answer.",
+      "id": "ab8bd4e6-bbbb-419c-8fd9-391dc8d91e29",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Searching for evening weather forecast in Paris.",
+      "id": "de39da1e-1391-4dd9-af57-9d6885b3d165",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "search",
+              "arguments": "Searching for evening weather forecast in Paris."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "content": "No rain expected later in the evening in Paris.",
+      "id": "fbed6e53-d3b4-49e0-91bc-35ab3b392324",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "The weather in Paris today is mostly sunny with a high of 18\u00b0C. No rain expected later in the evening. Here is an image of a sunny day in Paris.",
+      "id": "e155a458-ce27-446a-9d44-79c69f662b24",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "final_answer",
+              "arguments": "The weather in Paris today is mostly sunny with a high of 18\u00b0C. No rain expected later in the evening. Here is an image of a sunny day in Paris."
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tools_used": [
+    "image_generation",
+    "search",
+    "final_answer"
+  ],
+  "errors": [],
+  "agents_called": [
+    "search_agent",
+    "media_agent",
+    "user",
+    "principal_agent"
+  ],
+  "agent_actions": [
+    "Think/Plan",
+    "Tool: search",
+    "Tool: image_generation",
+    "Think/Plan",
+    "Tool: search",
+    "Tool: final_answer"
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "user_question": "Can you check my credit score and tell me the best mortgage rate I can get?",
+  "final_answer": "With your credit score of 720, you may find mortgage rates between 5.8% and 6.2%. Apologies for the earlier delay.",
+  "steps": [
+    {
+      "content": "Can you check my credit score and tell me the best mortgage rate I can get?",
+      "id": "1f6e0c98-9504-4d1a-a0c3-a066f540dfa6",
+      "type": "human",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Plan: 1) Hand off to credit_agent for credit check. 2) Retrieve mortgage rates. 3) Provide answer.",
+      "id": "ac3f3956-425e-4ec6-b1e1-7eef53b85bba",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Requesting credit check from home_loan_agent (incorrect handoff).",
+      "id": "4149f611-5dd0-40af-9110-918c44ea043b",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "retrieve_knowledge",
+              "arguments": "Requesting credit check from home_loan_agent (incorrect handoff)."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "content": "Unable to perform credit check. Directing task back to principal_agent.",
+      "id": "bfdbf8d3-336a-4c20-a5c7-631be569242b",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Error: Incorrect handoff detected. Adjusting plan.",
+      "id": "484a4766-892b-481f-9edb-131791e39869",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Plan: 1) Correct handoff to credit_agent. 2) Retrieve mortgage rates once credit is assessed.",
+      "id": "437c75a3-6e27-4952-b7e0-0a1b52c71d2d",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Performing credit score check.",
+      "id": "5a90a67d-bb82-4f31-8633-0bb722557f9c",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "retrieve_knowledge",
+              "arguments": "Performing credit score check."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "content": "Credit score is 720.",
+      "id": "e3c55ac6-12d6-42aa-aa6f-e274357340c6",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Retrieving available mortgage rates for credit score 720.",
+      "id": "088e10cc-4d84-48de-afc5-b61095dd2ff8",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "retrieve_knowledge",
+              "arguments": "Retrieving available mortgage rates for credit score 720."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "content": "Average rates are 5.8% to 6.2% for a credit score of 720.",
+      "id": "5b776d81-c7ce-4a94-8878-9d34414f6935",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Plan: 1) Combine information from steps. 2) Provide final answer.",
+      "id": "b65699ea-d2fb-4641-b9ca-cdf60f9e37a6",
+      "type": "agent",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "With your credit score of 720, you may find mortgage rates between 5.8% and 6.2%. Apologies for the earlier delay.",
+      "id": "f0ff3e7e-ab3f-44c1-bf4b-a0459b4ea18b",
+      "type": "agent",
+      "additional_kwargs": {
+        "tool_calls": [
+          {
+            "function": {
+              "name": "final_answer",
+              "arguments": "With your credit score of 720, you may find mortgage rates between 5.8% and 6.2%. Apologies for the earlier delay."
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tools_used": [
+    "final_answer",
+    "retrieve_knowledge"
+  ],
+  "errors": [
+    "Error: Incorrect handoff detected. Adjusting plan."
+  ],
+  "agents_called": [
+    "home_loan_agent",
+    "credit_agent",
+    "user",
+    "principal_agent"
+  ],
+  "agent_actions": [
+    "Think/Plan",
+    "Tool: retrieve_knowledge",
+    "Think/Plan",
+    "Tool: retrieve_knowledge",
+    "Tool: retrieve_knowledge",
+    "Think/Plan",
+    "Tool: final_answer"
+  ]
+}

@@ -1,0 +1,380 @@
+{
+  "user_question": "What is the company's debt maturity profile and how well-positioned is it to handle near-term debt obligations?",
+  "final_answer": "The company has a relatively manageable debt maturity profile with only 25.144% of total scheduled debt repayments due within the first five years (2025-2029). This suggests that the majority of debt obligations are spread over a longer time horizon, which provides the company with more flexibility in managing its debt servicing requirements and reduces near-term refinancing pressure.",
+  "steps": [
+    {
+      "content": "Here is the question : What is the company's debt maturity profile and how well-positioned is it to handle near-term debt obligations?, Here are the companies name in the database to query for : at_t",
+      "id": "13656f18-6ff8-44d7-ab17-8934162519ed",
+      "type": "human",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "I'll help you analyze AT&T's debt maturity profile and assess their position to handle near-term debt obligations. Let me start by exploring what data is available for AT&T.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01CFZ4xvrr2jYpGbELvGf4zL",
+          "input": {
+            "company_name": "at_t"
+          },
+          "name": "get_descriptions",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--9f9797a6-4c7e-40f7-9add-88fb3ca9b255-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[\"us_gaap_ScheduleOfComponentsOfIncomeTaxExpenseBenefitTableTextBlock\", \"us_gaap_ScheduleOfDebtTableTextBlock\", \"us_gaap_SupplierFinanceProgramTableTextBlock\", \"_AdditionalFinancialInformationConsolidatedStatementsOfIncomeTableTextBlock\", \"us_gaap_ScheduleOfEarningsPerShareBasicAndDilutedTableTextBlock\", \"us_gaap_LeaseCostTableTextBlock\", \"us_gaap_ScheduleOfDeferredTaxAssetsAndLiabilitiesTableTextBlock\", \"_ScheduleOfPensionAndPostretirementAssetsAndLiabilitiesAtFairValueByLevelTableTextBlock\", \"us_gaap_ScheduleOfFiniteLivedIntangibleAssetsTableTextBlock\", \"us_gaap_ScheduleOfRelatedPartyTransactionsTableTextBlock\", \"us_gaap_ContractWithCustomerAssetAndLiabilityTableTextBlock\", \"us_gaap_ScheduleOfAssumptionsUsedTableTextBlock\", \"us_gaap_LesseeOperatingLeaseLiabilityMaturityTableTextBlock\", \"us_gaap_CapitalizedContractCostTableTextBlock\", \"us_gaap_ScheduleOfEffectiveIncomeTaxRateReconciliationTableTextBlock\", \"us_gaap_ScheduleOfShareBasedCompensationActivityTableTextBlock\", \"_ScheduleOfPlanObligationsInExcessOfPlanAssetsTableTextBlock\", \"_AdditionalFinancialInformationConsolidatedBalanceSheetsTableTextBlock\", \"_LongTermDebtScheduledRepaymentsTableTextBlock\", \"us_gaap_ScheduleOfExpectedBenefitPaymentsTableTextBlock\", \"us_gaap_ScheduleOfAccumulatedOtherComprehensiveIncomeLossTableTextBlock\", \"us_gaap_ScheduleOfIncomeBeforeIncomeTaxDomesticAndForeignTableTextBlock\", \"us_gaap_FinanceLeaseLiabilityMaturityTableTextBlock\", \"us_gaap_TransferOfFinancialAssetsAccountedForAsSalesTableTextBlock\", \"us_gaap_ScheduleOfIndefiniteLivedIntangibleAssetsTableTextBlock\", \"us_gaap_ScheduleOfUnrecognizedTaxBenefitsRollForwardTableTextBlock\", \"us_gaap_ScheduleOfAllocationOfPlanAssetsTableTextBlock\", \"us_gaap_ScheduleOfRevenuesFromExternalCustomersAndLongLivedAssetsByGeographicalAreasTableTextBlock\", \"us_gaap_ScheduleOfCashFlowSupplementalDisclosuresTableTextBlock\", \"us_gaap_UnrealizedGainLossOnInvestmentsTableTextBlock\"]",
+      "id": "f9effd05-41f9-4526-a1c6-25661d1db305",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Perfect! I can see there are two key tables that will help analyze AT&T's debt maturity profile:\n1. \"us_gaap_ScheduleOfDebtTableTextBlock\" - This should contain detailed debt information\n2. \"_LongTermDebtScheduledRepaymentsTableTextBlock\" - This should show the debt maturity schedule\n\nLet me examine the debt schedule table first to understand the debt maturity profile:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01BVtsrReAKWywpvd785eRng",
+          "input": {
+            "company_name": "at_t",
+            "table_name": "_LongTermDebtScheduledRepaymentsTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--1332fab4-e6ac-4b8c-bf33-c48c3d97ba7e-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"scheduled_repayments_of_long_term_debt_with_interest_rates\",\"column_names\": [\"year\",\"debt_repayments\",\"weighted_average_interest_rate\"],\"unique_vals_per_col\": {\"year\": [\"2025\",\"2026\",\"2027\",\"2028\",\"2029\",\"thereafter\"]},\"company\": \"at_t\",\"column_dtypes\": {\"year\": \"object\",\"debt_repayments\": \"object\",\"weighted_average_interest_rate\": \"object\"}}",
+      "id": "6f1e4dea-9818-46c7-96df-5c2dd2a4387d",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Great! This table shows the scheduled debt repayments by year. Let me get the detailed data:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01V2oHMXWXWrRifBhxhyVbdd",
+          "input": {
+            "company_name": "at_t",
+            "table_name": "_LongTermDebtScheduledRepaymentsTableTextBlock",
+            "query": "SELECT * FROM _LongTermDebtScheduledRepaymentsTableTextBlock ORDER BY year"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--66869b77-a493-41c1-8011-ba857645f9f8-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Error : select * is not allowed, highly inefficient!",
+      "id": "3cb15448-096d-43b4-bfe6-c4f525429baf",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Let me query the specific data I need:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01R9V6wDj3ioTyEio3Ngzv3Q",
+          "input": {
+            "company_name": "at_t",
+            "table_name": "_LongTermDebtScheduledRepaymentsTableTextBlock",
+            "query": "SELECT year, debt_repayments, weighted_average_interest_rate FROM _LongTermDebtScheduledRepaymentsTableTextBlock ORDER BY CASE WHEN year = '2025' THEN 1 WHEN year = '2026' THEN 2 WHEN year = '2027' THEN 3 WHEN year = '2028' THEN 4 WHEN year = '2029' THEN 5 ELSE 6 END"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--061574c2-84c6-40a8-87d1-78023cbf9fcc-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"year\":\"2025\",\"debt_repayments\":\"$5,399\",\"weighted_average_interest_rate\":\"4.7%\"},{\"year\":\"2026\",\"debt_repayments\":\"$8,652\",\"weighted_average_interest_rate\":\"3.1%\"},{\"year\":\"2027\",\"debt_repayments\":\"$6,310\",\"weighted_average_interest_rate\":\"3.7%\"},{\"year\":\"2028\",\"debt_repayments\":\"$6,905\",\"weighted_average_interest_rate\":\"3.2%\"},{\"year\":\"2029\",\"debt_repayments\":\"$6,918\",\"weighted_average_interest_rate\":\"4.6%\"},{\"year\":\"thereafter\",\"debt_repayments\":\"$101,768\",\"weighted_average_interest_rate\":\"4.2%\"}]",
+      "id": "09c88b41-d9fd-4b40-960c-28ad7f11994f",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Now let me get more comprehensive debt information from the debt schedule table:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01XLvQSo155d5WQtq1L13Mtp",
+          "input": {
+            "company_name": "at_t",
+            "table_name": "us_gaap_ScheduleOfDebtTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--78526ea4-9e29-496c-9cb8-728342546cc9-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"our_debt_activity_during_2024_primarily_consisted_of_the_following\",\"column_names\": [],\"unique_vals_per_col\": {},\"company\": \"at_t\",\"column_dtypes\": {}}",
+      "id": "b09fd7a2-01f8-4fc6-8552-69ed0ec6f22c",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "The debt table appears to be empty or not structured. Let me look at the cash flow supplemental disclosures which might contain relevant debt information:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01WH3zShj1Q4hM7KvPXcZz8t",
+          "input": {
+            "company_name": "at_t",
+            "table_name": "us_gaap_ScheduleOfCashFlowSupplementalDisclosuresTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--b61b3b2c-35f7-4cce-836d-eea816df6969-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"the_following_table_summarizes_cash_and_cash_equivalents_and_restricted_cash_balances_contained_on_our_consolidated_balance_sheets\",\"column_names\": [\"cash_and_cash_equivalents_and_restricted_cash\",\"2024\",\"2023\",\"2022\",\"2021\"],\"unique_vals_per_col\": {\"cash_and_cash_equivalents_and_restricted_cash\": [\"cash_and_cash_equivalents_from_continuing_operations\",\"cash_and_cash_equivalents_from_discontinued_operations\",\"restricted_cash_in_prepaid_and_other_current_assets\",\"restricted_cash_in_other_assets\",\"cash_and_cash_equivalents_and_restricted_cash\"]},\"company\": \"at_t\",\"column_dtypes\": {\"cash_and_cash_equivalents_and_restricted_cash\": \"object\",\"2024\": \"object\",\"2023\": \"object\",\"2022\": \"object\",\"2021\": \"object\"}}",
+      "id": "59dfccbb-acad-413d-ad2b-bf60ac584498",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Let me get AT&T's cash position to understand their liquidity for handling near-term debt:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01M7dJsVW4EDy413PSTDx4KY",
+          "input": {
+            "company_name": "at_t",
+            "table_name": "us_gaap_ScheduleOfCashFlowSupplementalDisclosuresTableTextBlock",
+            "query": "SELECT cash_and_cash_equivalents_and_restricted_cash, \"2024\", \"2023\" FROM us_gaap_ScheduleOfCashFlowSupplementalDisclosuresTableTextBlock WHERE cash_and_cash_equivalents_and_restricted_cash = 'cash_and_cash_equivalents_and_restricted_cash'"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--660d5f19-20f3-4121-b2de-e29589f60343-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"cash_and_cash_equivalents_and_restricted_cash\":\"cash_and_cash_equivalents_and_restricted_cash\",\"2024\":\"$3,406\",\"2023\":\"$6,833\"}]",
+      "id": "8dba95df-804d-4540-a7f5-c21e6cda89b5",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Let me also check the balance sheet information for additional context:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_012NHcAhmPgC8Nq4EEHwsQA2",
+          "input": {
+            "company_name": "at_t",
+            "table_name": "_AdditionalFinancialInformationConsolidatedBalanceSheetsTableTextBlock"
+          },
+          "name": "get_table_info",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--650ff584-9af4-4e1f-9cc0-079d788313b3-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "{\"description\": \"accounts_payable_and_accrued_liabilities_as_of_december_31\",\"column_names\": [\"item\",\"december_31_2024\",\"december_31_2023\"],\"unique_vals_per_col\": {\"item\": [\"accounts_payable\",\"accrued_payroll_and_commissions\",\"current_portion_of_employee_benefit_obligation\",\"accrued_interest\",\"accrued_taxes\",\"other\",\"total_accounts_payable_and_accrued_liabilities\"]},\"company\": \"at_t\",\"column_dtypes\": {\"item\": \"object\",\"december_31_2024\": \"object\",\"december_31_2023\": \"object\"}}",
+      "id": "fb917f48-9a13-43d8-854b-62133f4555c8",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Let me get the accrued interest information which relates to debt obligations:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01RNPXfPd1apReJDaHp26nAh",
+          "input": {
+            "company_name": "at_t",
+            "table_name": "_AdditionalFinancialInformationConsolidatedBalanceSheetsTableTextBlock",
+            "query": "SELECT item, december_31_2024, december_31_2023 FROM _AdditionalFinancialInformationConsolidatedBalanceSheetsTableTextBlock WHERE item = 'accrued_interest'"
+          },
+          "name": "sql_query",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--5db3c132-40b6-4225-a2be-f4aefa3756b2-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[{\"item\":\"accrued_interest\",\"december_31_2024\":\"2,020\",\"december_31_2023\":\"2,187\"}]",
+      "id": "6ae3e623-e819-4845-ba22-6ccbf310c5a6",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Now let me calculate some key metrics to assess AT&T's position. First, let me calculate the total near-term debt (2025-2027):",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01Vfxv7n7BrthzWMndnHRj24",
+          "input": {
+            "expression": "5399 + 8652 + 6310"
+          },
+          "name": "calculator",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--c94cd1bd-c9ff-4d60-91c9-1d4c1d140419-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[20361, \"To convert the mathematical expression 5399 + 8652 + 6310 to Python code, I'll simply use the addition operator (+) to add these three numbers together and store the result in a variable called `return_me`.\"]",
+      "id": "ffd67c9d-2ec4-4cef-97ee-39d3bd4425b8",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Let me also calculate the total debt across all years:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01UdLxi2yppPWUfpsxnPTMc3",
+          "input": {
+            "expression": "5399 + 8652 + 6310 + 6905 + 6918 + 101768"
+          },
+          "name": "calculator",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--328213db-9113-4dfe-9213-24ea6d83f9ea-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[135952, \"This expression is a simple sum of several numbers: 5399 + 8652 + 6310 + 6905 + 6918 + 101768. I'll convert this into Python code that calculates the sum and stores the result in the variable \\\"return_me\\\".\"]",
+      "id": "af1d2781-1021-4a0a-8362-c613dc4ab8e6",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Let me calculate what percentage of total debt is due in the near term (2025-2027):",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01DcTUHYXsH1kNWQkmyEdm3S",
+          "input": {
+            "expression": "(20361 / 135952) * 100"
+          },
+          "name": "calculator",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--f65ac3b7-0ca9-4f92-9d7f-4ed6caecaa5a-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[14.976609391549959, \"This expression divides 20361 by 135952, then multiplies the result by 100 to calculate a percentage value. I'll convert this directly to Python code.\"]",
+      "id": "d4284b62-d184-4772-a80d-72ef9ef07cef",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": [
+        {
+          "text": "Now let me check the cash-to-near-term-debt ratio:",
+          "type": "text"
+        },
+        {
+          "id": "toolu_01VKwnvGryRFAJrevtdkSBWw",
+          "input": {
+            "expression": "3406 / 20361"
+          },
+          "name": "calculator",
+          "type": "tool_use"
+        }
+      ],
+      "id": "run--d320bb8a-c49c-4a5c-949f-5cc1971b0c16-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "[0.1672805854329355, \"I'll convert the mathematical expression 3406 / 20361 to Python code by creating a simple division operation. In Python, the / operator performs floating-point division, which is what we need for this calculation.\"]",
+      "id": "9828fb75-aca6-4e9a-8716-d3601a349baa",
+      "type": "tool",
+      "additional_kwargs": {}
+    },
+    {
+      "content": "Based on my analysis of AT&T's debt maturity profile and financial position, here's a comprehensive assessment:\n\n**AT&T's Debt Maturity Profile and Near-Term Debt Obligations Analysis:**\n\nAT&T faces a significant debt maturity profile with total outstanding debt of approximately $135.95 billion across all periods. The company has $20.36 billion in near-term debt obligations due between 2025-2027, representing about 15% of total debt. Specifically, AT&T must repay $5.4 billion in 2025 (4.7% weighted average interest rate), $8.7 billion in 2026 (3.1% rate), and $6.3 billion in 2027 (3.7% rate). The company's current cash and restricted cash position stands at $3.4 billion as of December 2024, down from $6.8 billion in 2023. This cash position covers only about 17% of near-term debt obligations, indicating potential refinancing needs. However, AT&T's debt maturity profile shows relatively manageable annual obligations in the near term, with the bulk of debt ($101.8 billion at 4.2% weighted average rate) not due until after 2029. The company will likely need to rely on refinancing capabilities, operating cash flow generation, and potential asset monetization to meet its 2025-2027 obligations, particularly given the significant cash balance decline year-over-year.",
+      "id": "run--06a87dbb-41af-4d02-b668-ec8a0ad5fcba-0",
+      "type": "ai",
+      "additional_kwargs": {}
+    }
+  ],
+  "tools_used": [
+    "calculator",
+    "get_table_info",
+    "get_descriptions",
+    "sql_query"
+  ],
+  "errors": [
+    "HTTP error code detected"
+  ],
+  "agents_called": null,
+  "agent_actions": [
+    "{'id': 'toolu_01CFZ4xvrr2jYpGbELvGf4zL', 'input': {'company_name': 'at_t'}, 'name': 'get_descriptions', 'type': 'tool_use'}",
+    "{'id': 'toolu_01M7dJsVW4EDy413PSTDx4KY', 'input': {'company_name': 'at_t', 'table_name': 'us_gaap_ScheduleOfCashFlowSupplementalDisclosuresTableTextBlock', 'query': 'SELECT cash_and_cash_equivalents_and_restricted_cash, \"2024\", \"2023\" FROM us_gaap_ScheduleOfCashFlowSupplementalDisclosuresTableTextBlock WHERE cash_and_cash_equivalents_and_restricted_cash = \\'cash_and_cash_equivalents_and_restricted_cash\\''}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01VKwnvGryRFAJrevtdkSBWw', 'input': {'expression': '3406 / 20361'}, 'name': 'calculator', 'type': 'tool_use'}",
+    "{'id': 'toolu_01Vfxv7n7BrthzWMndnHRj24', 'input': {'expression': '5399 + 8652 + 6310'}, 'name': 'calculator', 'type': 'tool_use'}",
+    "{'id': 'toolu_01DcTUHYXsH1kNWQkmyEdm3S', 'input': {'expression': '(20361 / 135952) * 100'}, 'name': 'calculator', 'type': 'tool_use'}",
+    "{'id': 'toolu_01V2oHMXWXWrRifBhxhyVbdd', 'input': {'company_name': 'at_t', 'table_name': '_LongTermDebtScheduledRepaymentsTableTextBlock', 'query': 'SELECT * FROM _LongTermDebtScheduledRepaymentsTableTextBlock ORDER BY year'}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01BVtsrReAKWywpvd785eRng', 'input': {'company_name': 'at_t', 'table_name': '_LongTermDebtScheduledRepaymentsTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_01WH3zShj1Q4hM7KvPXcZz8t', 'input': {'company_name': 'at_t', 'table_name': 'us_gaap_ScheduleOfCashFlowSupplementalDisclosuresTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_01RNPXfPd1apReJDaHp26nAh', 'input': {'company_name': 'at_t', 'table_name': '_AdditionalFinancialInformationConsolidatedBalanceSheetsTableTextBlock', 'query': \"SELECT item, december_31_2024, december_31_2023 FROM _AdditionalFinancialInformationConsolidatedBalanceSheetsTableTextBlock WHERE item = 'accrued_interest'\"}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01R9V6wDj3ioTyEio3Ngzv3Q', 'input': {'company_name': 'at_t', 'table_name': '_LongTermDebtScheduledRepaymentsTableTextBlock', 'query': \"SELECT year, debt_repayments, weighted_average_interest_rate FROM _LongTermDebtScheduledRepaymentsTableTextBlock ORDER BY CASE WHEN year = '2025' THEN 1 WHEN year = '2026' THEN 2 WHEN year = '2027' THEN 3 WHEN year = '2028' THEN 4 WHEN year = '2029' THEN 5 ELSE 6 END\"}, 'name': 'sql_query', 'type': 'tool_use'}",
+    "{'id': 'toolu_01XLvQSo155d5WQtq1L13Mtp', 'input': {'company_name': 'at_t', 'table_name': 'us_gaap_ScheduleOfDebtTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}",
+    "{'id': 'toolu_01UdLxi2yppPWUfpsxnPTMc3', 'input': {'expression': '5399 + 8652 + 6310 + 6905 + 6918 + 101768'}, 'name': 'calculator', 'type': 'tool_use'}",
+    "{'id': 'toolu_012NHcAhmPgC8Nq4EEHwsQA2', 'input': {'company_name': 'at_t', 'table_name': '_AdditionalFinancialInformationConsolidatedBalanceSheetsTableTextBlock'}, 'name': 'get_table_info', 'type': 'tool_use'}"
+  ]
+}
